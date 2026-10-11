@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Purchases - LADO Manufacturing</title>
+
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <div class="container header-inner">
+
+        <div class="brand">
+            <div class="brand-icon">L</div>
+
+            <div>
+                <div class="brand-name">LADO Manufacturing</div>
+                <div class="brand-subtitle">Management System</div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/categories.html">Categories</a>
+            <a href="/units.html">Units</a>
+            <a href="/products.html">Products</a>
+            <a href="/suppliers.html">Suppliers</a>
+            <a href="/customers.html">Customers</a>
+            <a href="/purchases.html" class="active">Purchases</a>
+            <a href="/sales.html">Sales</a>
+            <a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html">Accounts</a>
+            <a href="/payments.html">Payments</a>
+            <a href="/reports.html">Reports</a>
+            <a href="/users.html">Users</a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="container">
+
+    <!-- PAGE HEADER -->
+
+    <section class="page-header">
+
+        <div>
+            <h1 class="page-title">Purchases</h1>
+
+            <p class="page-subtitle">
+                Manage supplier purchases, purchased items and payment status.
+            </p>
+        </div>
+
+        <div class="page-actions">
+
+            <button
+                class="btn-primary"
+                onclick="showPurchaseForm()">
+                + New Purchase
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         SUMMARY CARDS
+    ================================================== -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card blue">
+
+            <div class="stat-label">
+                Total Purchases
+            </div>
+
+            <div class="stat-value">
+                286
+            </div>
+
+            <div class="stat-description">
+                All purchase transactions
+            </div>
+
+        </div>
+
+
+        <div class="stat-card green">
+
+            <div class="stat-label">
+                This Month
+            </div>
+
+            <div class="stat-value">
+                ₹4.82L
+            </div>
+
+            <div class="stat-description">
+                Purchase value this month
+            </div>
+
+        </div>
+
+
+        <div class="stat-card orange">
+
+            <div class="stat-label">
+                Pending Payments
+            </div>
+
+            <div class="stat-value">
+                ₹1.82L
+            </div>
+
+            <div class="stat-description">
+                Amount payable to suppliers
+            </div>
+
+        </div>
+
+
+        <div class="stat-card purple">
+
+            <div class="stat-label">
+                Items Purchased
+            </div>
+
+            <div class="stat-value">
+                1,428
+            </div>
+
+            <div class="stat-description">
+                Total quantity purchased
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         PURCHASE FORM
+    ================================================== -->
+
+    <section
+        id="purchaseForm"
+        class="card"
+        style="display: none;">
+
+        <div class="card-header">
+
+            <div>
+                <h2 class="card-title">
+                    New Purchase
+                </h2>
+
+                <p class="card-subtitle">
+                    Enter purchase details and add purchased products.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- PURCHASE HEADER -->
+
+        <div class="card">
+
+            <h3 class="card-title">
+                Purchase Information
+            </h3>
+
+            <br>
+
+            <div class="grid grid-2">
+
+                <div class="form-group">
+
+                    <label for="purchaseNumber">
+                        Purchase Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="purchaseNumber"
+                        placeholder="Example: PUR-2026-001"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="purchaseDate">
+                        Purchase Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="purchaseDate"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="supplier">
+                        Supplier
+                    </label>
+
+                    <select id="supplier">
+
+                        <option value="">
+                            Select Supplier
+                        </option>
+
+                        <option>
+                            ABC Electricals
+                        </option>
+
+                        <option>
+                            Gujarat Metals
+                        </option>
+
+                        <option>
+                            Precision Components
+                        </option>
+
+                        <option>
+                            Industrial Packaging
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="invoiceNumber">
+                        Supplier Invoice Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="invoiceNumber"
+                        placeholder="Example: INV-45821"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="paymentStatus">
+                        Payment Status
+                    </label>
+
+                    <select id="paymentStatus">
+
+                        <option value="Paid">
+                            Paid
+                        </option>
+
+                        <option value="Partial">
+                            Partial
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="paymentMethod">
+                        Payment Method
+                    </label>
+
+                    <select id="paymentMethod">
+
+                        <option value="">
+                            Select Payment Method
+                        </option>
+
+                        <option>
+                            Cash
+                        </option>
+
+                        <option>
+                            Bank Transfer
+                        </option>
+
+                        <option>
+                            UPI
+                        </option>
+
+                        <option>
+                            Cheque
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ADD PURCHASE ITEM
+        ================================================== -->
+
+        <div class="card">
+
+            <h3 class="card-title">
+                Add Purchase Item
+            </h3>
+
+            <p class="card-subtitle">
+                Add products purchased from the selected supplier.
+            </p>
+
+            <br>
+
+
+            <div class="grid grid-2">
+
+                <div class="form-group">
+
+                    <label for="product">
+                        Product
+                    </label>
+
+                    <select id="product">
+
+                        <option value="">
+                            Select Product
+                        </option>
+
+                        <option value="Control Panel">
+                            Control Panel
+                        </option>
+
+                        <option value="Motor Housing">
+                            Motor Housing
+                        </option>
+
+                        <option value="Copper Wire">
+                            Copper Wire
+                        </option>
+
+                        <option value="Terminal Connector">
+                            Terminal Connector
+                        </option>
+
+                        <option value="Mounting Bolt">
+                            Mounting Bolt
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="itemUnit">
+                        Unit
+                    </label>
+
+                    <select id="itemUnit">
+
+                        <option value="">
+                            Select Unit
+                        </option>
+
+                        <option value="pcs">
+                            Piece (pcs)
+                        </option>
+
+                        <option value="kg">
+                            Kilogram (kg)
+                        </option>
+
+                        <option value="g">
+                            Gram (g)
+                        </option>
+
+                        <option value="m">
+                            Meter (m)
+                        </option>
+
+                        <option value="set">
+                            Set
+                        </option>
+
+                        <option value="box">
+                            Box
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="quantity">
+                        Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        min="1"
+                        step="0.01"
+                        placeholder="Enter quantity"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="unitPrice">
+                        Unit Price (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="unitPrice"
+                        min="0"
+                        step="0.01"
+                        placeholder="Enter unit price"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="gst">
+                        GST (%)
+                    </label>
+
+                    <select id="gst">
+
+                        <option value="0">
+                            0%
+                        </option>
+
+                        <option value="5">
+                            5%
+                        </option>
+
+                        <option value="12">
+                            12%
+                        </option>
+
+                        <option value="18" selected>
+                            18%
+                        </option>
+
+                        <option value="28">
+                            28%
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="discount">
+                        Discount (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="discount"
+                        min="0"
+                        step="0.01"
+                        value="0"
+                        placeholder="Enter discount"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="btn-success"
+                    onclick="addPurchaseItem()">
+
+                    + Add Item
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PURCHASE ITEMS TABLE
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3 class="card-title">
+                        Purchase Items
+                    </h3>
+
+                    <p class="card-subtitle">
+                        Products currently added to this purchase.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table id="purchaseItemsTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Unit</th>
+                            <th>Unit Price</th>
+                            <th>GST</th>
+                            <th>Discount</th>
+                            <th>Total</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="purchaseItemsBody">
+
+                        <tr id="emptyItemsRow">
+
+                            <td colspan="9" style="text-align: center;">
+
+                                No items added yet.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PURCHASE TOTAL
+        ================================================== -->
+
+        <div class="card">
+
+            <h3 class="card-title">
+                Purchase Summary
+            </h3>
+
+            <br>
+
+
+            <div class="grid grid-2">
+
+                <div></div>
+
+                <div>
+
+                    <div class="summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong id="subtotal">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Discount
+                        </span>
+
+                        <strong id="totalDiscount">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            GST / Tax
+                        </span>
+
+                        <strong id="totalTax">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="summary-row total-row">
+
+                        <span>
+                            Grand Total
+                        </span>
+
+                        <strong id="grandTotal">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NOTES
+        ================================================== -->
+
+        <div class="form-group">
+
+            <label for="purchaseNotes">
+                Notes
+            </label>
+
+            <textarea
+                id="purchaseNotes"
+                rows="4"
+                placeholder="Enter additional purchase notes..."
+            ></textarea>
+
+        </div>
+
+
+        <!-- FORM ACTIONS -->
+
+        <div class="form-actions">
+
+            <button
+                type="button"
+                class="btn-primary"
+                onclick="savePurchase()">
+
+                Save Purchase
+
+            </button>
+
+            <button
+                type="button"
+                class="btn-secondary"
+                onclick="hidePurchaseForm()">
+
+                Cancel
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         PURCHASE HISTORY
+    ================================================== -->
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h2 class="card-title">
+                    Purchase History
+                </h2>
+
+                <p class="card-subtitle">
+                    View and manage previous purchase transactions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="purchaseSearch"
+                    placeholder="Search purchase number or supplier..."
+                    onkeyup="searchPurchases()"
+                >
+
+            </div>
+
+
+            <div>
+
+                <select
+                    id="statusFilter"
+                    onchange="filterPurchases()">
+
+                    <option value="all">
+                        All Payment Status
+                    </option>
+
+                    <option value="Paid">
+                        Paid
+                    </option>
+
+                    <option value="Partial">
+                        Partial
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- PURCHASE TABLE -->
+
+        <div class="table-container">
+
+            <table id="purchasesTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Purchase No.</th>
+                        <th>Date</th>
+                        <th>Supplier</th>
+                        <th>Items</th>
+                        <th>Subtotal</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            PUR-2026-001
+                        </td>
+
+                        <td>
+                            05-Oct-2026
+                        </td>
+
+                        <td>
+                            ABC Electricals
+                        </td>
+
+                        <td>
+                            8
+                        </td>
+
+                        <td>
+                            ₹42,500
+                        </td>
+
+                        <td>
+                            ₹7,650
+                        </td>
+
+                        <td>
+                            ₹50,150
+                        </td>
+
+                        <td>
+                            <span class="badge-success">
+                                Paid
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="viewPurchase('PUR-2026-001')">
+
+                                View
+
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deletePurchase('PUR-2026-001')">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            PUR-2026-002
+                        </td>
+
+                        <td>
+                            06-Oct-2026
+                        </td>
+
+                        <td>
+                            Gujarat Metals
+                        </td>
+
+                        <td>
+                            12
+                        </td>
+
+                        <td>
+                            ₹68,000
+                        </td>
+
+                        <td>
+                            ₹12,240
+                        </td>
+
+                        <td>
+                            ₹80,240
+                        </td>
+
+                        <td>
+                            <span class="badge-warning">
+                                Partial
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="viewPurchase('PUR-2026-002')">
+
+                                View
+
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deletePurchase('PUR-2026-002')">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            PUR-2026-003
+                        </td>
+
+                        <td>
+                            07-Oct-2026
+                        </td>
+
+                        <td>
+                            Precision Components
+                        </td>
+
+                        <td>
+                            6
+                        </td>
+
+                        <td>
+                            ₹31,500
+                        </td>
+
+                        <td>
+                            ₹5,670
+                        </td>
+
+                        <td>
+                            ₹37,170
+                        </td>
+
+                        <td>
+                            <span class="badge-danger">
+                                Pending
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="viewPurchase('PUR-2026-003')">
+
+                                View
+
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deletePurchase('PUR-2026-003')">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            PUR-2026-004
+                        </td>
+
+                        <td>
+                            07-Oct-2026
+                        </td>
+
+                        <td>
+                            Industrial Packaging
+                        </td>
+
+                        <td>
+                            15
+                        </td>
+
+                        <td>
+                            ₹24,800
+                        </td>
+
+                        <td>
+                            ₹4,464
+                        </td>
+
+                        <td>
+                            ₹29,264
+                        </td>
+
+                        <td>
+                            <span class="badge-success">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="viewPurchase('PUR-2026-004')">
+
+                                View
+
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deletePurchase('PUR-2026-004')">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        LADO Manufacturing Management System
+
+        <br>
+
+        <small>
+            Purchase Management Module
+        </small>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+    let purchaseItems = [];
+
+
+    /* =================================================
+       SHOW / HIDE PURCHASE FORM
+    ================================================= */
+
+    function showPurchaseForm() {
+
+        document.getElementById("purchaseForm").style.display = "block";
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        setDefaultDate();
+
+    }
+
+
+    function hidePurchaseForm() {
+
+        document.getElementById("purchaseForm").style.display = "none";
+
+        clearPurchaseForm();
+
+    }
+
+
+    /* =================================================
+       DEFAULT DATE
+    ================================================= */
+
+    function setDefaultDate() {
+
+        const dateInput =
+            document.getElementById("purchaseDate");
+
+        if (!dateInput.value) {
+
+            const today = new Date();
+
+            const year = today.getFullYear();
+
+            const month =
+                String(today.getMonth() + 1)
+                .padStart(2, "0");
+
+            const day =
+                String(today.getDate())
+                .padStart(2, "0");
+
+            dateInput.value =
+                `${year}-${month}-${day}`;
+
+        }
+
+    }
+
+
+    /* =================================================
+       ADD PURCHASE ITEM
+    ================================================= */
+
+    function addPurchaseItem() {
+
+        const product =
+            document.getElementById("product").value;
+
+        const unit =
+            document.getElementById("itemUnit").value;
+
+        const quantity =
+            parseFloat(
+                document.getElementById("quantity").value
+            );
+
+        const unitPrice =
+            parseFloat(
+                document.getElementById("unitPrice").value
+            );
+
+        const gst =
+            parseFloat(
+                document.getElementById("gst").value
+            );
+
+        const discount =
+            parseFloat(
+                document.getElementById("discount").value
+            ) || 0;
+
+
+        if (!product) {
+
+            alert("Please select a product.");
+
+            return;
+
+        }
+
+
+        if (!unit) {
+
+            alert("Please select a unit.");
+
+            return;
+
+        }
+
+
+        if (!quantity || quantity <= 0) {
+
+            alert("Please enter a valid quantity.");
+
+            return;
+
+        }
+
+
+        if (isNaN(unitPrice) || unitPrice < 0) {
+
+            alert("Please enter a valid unit price.");
+
+            return;
+
+        }
+
+
+        const grossAmount =
+            quantity * unitPrice;
+
+
+        const taxableAmount =
+            Math.max(
+                grossAmount - discount,
+                0
+            );
+
+
+        const taxAmount =
+            taxableAmount * gst / 100;
+
+
+        const total =
+            taxableAmount + taxAmount;
+
+
+        const item = {
+
+            product: product,
+
+            unit: unit,
+
+            quantity: quantity,
+
+            unitPrice: unitPrice,
+
+            gst: gst,
+
+            discount: discount,
+
+            subtotal: grossAmount,
+
+            tax: taxAmount,
+
+            total: total
+
+        };
+
+
+        purchaseItems.push(item);
+
+
+        renderPurchaseItems();
+
+
+        clearItemInputs();
+
+    }
+
+
+    /* =================================================
+       DISPLAY PURCHASE ITEMS
+    ================================================= */
+
+    function renderPurchaseItems() {
+
+        const body =
+            document.getElementById(
+                "purchaseItemsBody"
+            );
+
+
+        body.innerHTML = "";
+
+
+        if (purchaseItems.length === 0) {
+
+            body.innerHTML = `
+
+                <tr id="emptyItemsRow">
+
+                    <td colspan="9"
+                        style="text-align:center;">
+
+                        No items added yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            updateTotals();
+
+            return;
+
+        }
+
+
+        purchaseItems.forEach(
+            function(item, index) {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        ${item.product}
+                    </td>
+
+                    <td>
+                        ${item.quantity}
+                    </td>
+
+                    <td>
+                        ${item.unit}
+                    </td>
+
+                    <td>
+                        ₹${item.unitPrice.toFixed(2)}
+                    </td>
+
+                    <td>
+                        ${item.gst}%
+                    </td>
+
+                    <td>
+                        ₹${item.discount.toFixed(2)}
+                    </td>
+
+                    <td>
+                        ₹${item.total.toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            type="button"
+                            class="btn-danger btn-sm"
+                            onclick="removePurchaseItem(${index})">
+
+                            Remove
+
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                body.appendChild(row);
+
+            }
+        );
+
+
+        updateTotals();
+
+    }
+
+
+    /* =================================================
+       REMOVE ITEM
+    ================================================= */
+
+    function removePurchaseItem(index) {
+
+        purchaseItems.splice(index, 1);
+
+        renderPurchaseItems();
+
+    }
+
+
+    /* =================================================
+       UPDATE TOTALS
+    ================================================= */
+
+    function updateTotals() {
+
+        let subtotal = 0;
+
+        let discount = 0;
+
+        let tax = 0;
+
+        let grandTotal = 0;
+
+
+        purchaseItems.forEach(
+            function(item) {
+
+                subtotal += item.subtotal;
+
+                discount += item.discount;
+
+                tax += item.tax;
+
+                grandTotal += item.total;
+
+            }
+        );
+
+
+        document.getElementById("subtotal")
+            .textContent =
+            "₹" + subtotal.toFixed(2);
+
+
+        document.getElementById("totalDiscount")
+            .textContent =
+            "₹" + discount.toFixed(2);
+
+
+        document.getElementById("totalTax")
+            .textContent =
+            "₹" + tax.toFixed(2);
+
+
+        document.getElementById("grandTotal")
+            .textContent =
+            "₹" + grandTotal.toFixed(2);
+
+    }
+
+
+    /* =================================================
+       CLEAR ITEM INPUTS
+    ================================================= */
+
+    function clearItemInputs() {
+
+        document.getElementById("product").value = "";
+
+        document.getElementById("itemUnit").value = "";
+
+        document.getElementById("quantity").value = "";
+
+        document.getElementById("unitPrice").value = "";
+
+        document.getElementById("gst").value = "18";
+
+        document.getElementById("discount").value = "0";
+
+    }
+
+
+    /* =================================================
+       CLEAR COMPLETE PURCHASE FORM
+    ================================================= */
+
+    function clearPurchaseForm() {
+
+        purchaseItems = [];
+
+        document.getElementById("purchaseNumber").value = "";
+
+        document.getElementById("purchaseDate").value = "";
+
+        document.getElementById("supplier").value = "";
+
+        document.getElementById("invoiceNumber").value = "";
+
+        document.getElementById("paymentStatus").value = "Paid";
+
+        document.getElementById("paymentMethod").value = "";
+
+        document.getElementById("purchaseNotes").value = "";
+
+        clearItemInputs();
+
+        renderPurchaseItems();
+
+    }
+
+
+    /* =================================================
+       SAVE PURCHASE
+    ================================================= */
+
+    function savePurchase() {
+
+        const purchaseNumber =
+            document.getElementById(
+                "purchaseNumber"
+            ).value.trim();
+
+
+        const purchaseDate =
+            document.getElementById(
+                "purchaseDate"
+            ).value;
+
+
+        const supplier =
+            document.getElementById(
+                "supplier"
+            ).value;
+
+
+        if (!purchaseNumber) {
+
+            alert("Please enter purchase number.");
+
+            return;
+
+        }
+
+
+        if (!purchaseDate) {
+
+            alert("Please select purchase date.");
+
+            return;
+
+        }
+
+
+        if (!supplier) {
+
+            alert("Please select supplier.");
+
+            return;
+
+        }
+
+
+        if (purchaseItems.length === 0) {
+
+            alert("Please add at least one purchase item.");
+
+            return;
+
+        }
+
+
+        const grandTotal =
+            document.getElementById(
+                "grandTotal"
+            ).textContent;
+
+
+        alert(
+            "Purchase " +
+            purchaseNumber +
+            " saved successfully.\n\n" +
+            "Supplier: " +
+            supplier +
+            "\n" +
+            "Total: " +
+            grandTotal
+        );
+
+
+        hidePurchaseForm();
+
+    }
+
+
+    /* =================================================
+       SEARCH PURCHASES
+    ================================================= */
+
+    function searchPurchases() {
+
+        const search =
+            document.getElementById(
+                "purchaseSearch"
+            ).value.toLowerCase();
+
+
+        const rows =
+            document.querySelectorAll(
+                "#purchasesTable tbody tr"
+            );
+
+
+        rows.forEach(
+            function(row) {
+
+                const text =
+                    row.textContent.toLowerCase();
+
+
+                row.style.display =
+                    text.includes(search)
+                    ? ""
+                    : "none";
+
+            }
+        );
+
+    }
+
+
+    /* =================================================
+       FILTER PURCHASES
+    ================================================= */
+
+    function filterPurchases() {
+
+        const filter =
+            document.getElementById(
+                "statusFilter"
+            ).value;
+
+
+        const rows =
+            document.querySelectorAll(
+                "#purchasesTable tbody tr"
+            );
+
+
+        rows.forEach(
+            function(row) {
+
+                const status =
+                    row.cells[7]
+                        .textContent
+                        .trim();
+
+
+                if (
+                    filter === "all" ||
+                    status === filter
+                ) {
+
+                    row.style.display = "";
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =================================================
+       VIEW PURCHASE
+    ================================================= */
+
+    function viewPurchase(purchaseNumber) {
+
+        alert(
+            "Viewing purchase: " +
+            purchaseNumber +
+            "\n\n" +
+            "Detailed purchase view will be connected " +
+            "to the database later."
+        );
+
+    }
+
+
+    /* =================================================
+       DELETE PURCHASE
+    ================================================= */
+
+    function deletePurchase(purchaseNumber) {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete " +
+                purchaseNumber +
+                "?"
+            );
+
+
+        if (confirmed) {
+
+            alert(
+                "Purchase " +
+                purchaseNumber +
+                " deleted successfully."
+            );
+
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

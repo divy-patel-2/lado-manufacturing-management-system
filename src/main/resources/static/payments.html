@@ -1,0 +1,1155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - LADO Manufacturing</title>
+
+    <link rel="stylesheet" href="/css/common.css">
+
+    <style>
+        .payments-page {
+            padding: 20px;
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card,
+        .payment-section {
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 10px;
+        }
+
+        .summary-card {
+            padding: 18px;
+        }
+
+        .summary-card p {
+            color: #6b7280;
+            margin: 0 0 10px;
+            font-size: 14px;
+        }
+
+        .summary-card h2 {
+            margin: 0;
+            font-size: 24px;
+            overflow-wrap: anywhere;
+        }
+
+        .payment-section {
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .payment-section h2 {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea,
+        .filter-control {
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: #fff;
+            color: #111827;
+            font: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 75px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: 0;
+            border-radius: 6px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+        }
+
+        .btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .payments-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .payments-table th,
+        .payments-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .payments-table th {
+            background: #f9fafb;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .payments-table td {
+            font-size: 14px;
+        }
+
+        .payment-type {
+            display: inline-block;
+            padding: 4px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .type-receipt {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .type-payment {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .payment-edit-button,
+        .payment-delete-button {
+            padding: 6px 12px;
+            border: 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .payment-edit-button {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .payment-delete-button {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center !important;
+            padding: 30px !important;
+            color: #6b7280;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .filters {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .payments-page {
+                padding: 12px;
+            }
+
+            .form-grid,
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-section {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main class="payments-page">
+
+    <header class="page-header">
+        <div>
+            <h1>Payments &amp; Receipts</h1>
+            <p>Manage incoming receipts and outgoing payments.</p>
+        </div>
+
+        <button type="button" class="btn btn-secondary" id="refreshButton">
+            Refresh Data
+        </button>
+    </header>
+
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+    <section class="summary-grid">
+        <article class="summary-card">
+            <p>Total Receipts</p>
+            <h2 id="totalReceipts">₹0.00</h2>
+        </article>
+
+        <article class="summary-card">
+            <p>Total Payments</p>
+            <h2 id="totalPayments">₹0.00</h2>
+        </article>
+
+        <article class="summary-card">
+            <p>Net Cash Flow</p>
+            <h2 id="netCashFlow">₹0.00</h2>
+        </article>
+
+        <article class="summary-card">
+            <p>Total Transactions</p>
+            <h2 id="totalTransactions">0</h2>
+        </article>
+    </section>
+
+    <section class="payment-section" id="paymentFormSection">
+        <h2 id="formTitle">Add Payment / Receipt</h2>
+
+        <form id="paymentForm">
+            <input type="hidden" id="paymentId">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="paymentDate">
+                        Transaction Date <span class="required">*</span>
+                    </label>
+                    <input type="date" id="paymentDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentType">
+                        Transaction Type <span class="required">*</span>
+                    </label>
+                    <select id="paymentType" required>
+                        <option value="RECEIPT">Receipt (Money In)</option>
+                        <option value="PAYMENT">Payment (Money Out)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="partyType">
+                        Party Type <span class="required">*</span>
+                    </label>
+                    <select id="partyType" required>
+                        <option value="CUSTOMER">Customer</option>
+                        <option value="SUPPLIER">Supplier</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="partyId">
+                        Customer / Supplier <span class="required">*</span>
+                    </label>
+                    <select id="partyId" required>
+                        <option value="">Select party</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="accountId">
+                        Payment Account <span class="required">*</span>
+                    </label>
+                    <select id="accountId" required>
+                        <option value="">Select account</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentMode">
+                        Payment Method <span class="required">*</span>
+                    </label>
+                    <select id="paymentMode" required>
+                        <option value="CASH">Cash</option>
+                        <option value="BANK">Bank</option>
+                        <option value="UPI">UPI</option>
+                        <option value="CHEQUE">Cheque</option>
+                        <option value="CARD">Card</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="referenceNo">Reference / Cheque Number</label>
+                    <input
+                        type="text"
+                        id="referenceNo"
+                        maxlength="100"
+                        placeholder="Optional reference"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">
+                        Amount (₹) <span class="required">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="amount"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="Enter amount"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Description / Notes</label>
+                    <textarea
+                        id="notes"
+                        maxlength="500"
+                        placeholder="Transaction details or additional notes"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="saveButton">
+                    Save Transaction
+                </button>
+
+                <button type="button" class="btn btn-secondary" id="cancelButton">
+                    Clear / Cancel
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <section class="payment-section">
+        <h2>Transaction History</h2>
+
+        <div class="filters">
+            <input
+                type="search"
+                class="filter-control"
+                id="searchInput"
+                placeholder="Search party, reference, notes..."
+                aria-label="Search transactions"
+            >
+
+            <select class="filter-control" id="typeFilter">
+                <option value="">All Types</option>
+                <option value="RECEIPT">Receipts</option>
+                <option value="PAYMENT">Payments</option>
+            </select>
+
+            <input
+                type="date"
+                class="filter-control"
+                id="fromDate"
+                aria-label="From date"
+                title="From date"
+            >
+
+            <input
+                type="date"
+                class="filter-control"
+                id="toDate"
+                aria-label="To date"
+                title="To date"
+            >
+        </div>
+
+        <div class="table-wrapper">
+            <table class="payments-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Party</th>
+                        <th>Account</th>
+                        <th>Method</th>
+                        <th>Reference</th>
+                        <th>Amount</th>
+                        <th>Description / Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="paymentsTableBody">
+                    <tr>
+                        <td colspan="9" class="empty-state">
+                            Loading transactions...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script>
+"use strict";
+
+const API = {
+    customers: "/api/customers",
+    suppliers: "/api/suppliers",
+    accounts: "/api/accounts/payment-accounts",
+    payments: "/api/payments"
+};
+
+let payments = [];
+let customers = [];
+let suppliers = [];
+let accounts = [];
+let messageTimer = null;
+
+const $ = id => document.getElementById(id);
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+function money(value) {
+    const number = Number(value || 0);
+
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(Number.isFinite(number) ? number : 0);
+}
+
+function formatDate(value) {
+    if (!value) return "—";
+
+    const text = String(value).slice(0, 10);
+    const parts = text.split("-");
+
+    if (parts.length !== 3) return escapeHtml(text);
+
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+}
+
+function getToday() {
+    const now = new Date();
+    const localDate = new Date(
+        now.getTime() - now.getTimezoneOffset() * 60000
+    );
+
+    return localDate.toISOString().slice(0, 10);
+}
+
+function showMessage(text, type = "success") {
+    const element = $("message");
+
+    element.textContent = text;
+    element.className = `message ${type}`;
+
+    if (messageTimer) clearTimeout(messageTimer);
+
+    messageTimer = setTimeout(() => {
+        element.className = "message";
+        element.textContent = "";
+    }, 5000);
+}
+
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            ...(options.body
+                ? { "Content-Type": "application/json" }
+                : {}),
+            ...options.headers
+        }
+    });
+
+    const responseText = await response.text();
+    let data = null;
+
+    if (responseText) {
+        try {
+            data = JSON.parse(responseText);
+        } catch {
+            data = responseText;
+        }
+    }
+
+    if (!response.ok) {
+        const detail = typeof data === "string"
+            ? data
+            : data?.message || data?.error || "";
+
+        throw new Error(
+            detail || `Request failed with HTTP ${response.status}`
+        );
+    }
+
+    return data;
+}
+
+function extractArray(data) {
+    if (Array.isArray(data)) return data;
+    if (!data || typeof data !== "object") return [];
+
+    for (const key of [
+        "content", "data", "items", "payments",
+        "customers", "suppliers", "accounts", "results"
+    ]) {
+        if (Array.isArray(data[key])) return data[key];
+    }
+
+    return [];
+}
+
+function getId(item) {
+    return item.id ??
+        item.paymentId ??
+        item.payment_id ??
+        item.customerId ??
+        item.customer_id ??
+        item.supplierId ??
+        item.supplier_id ??
+        item.accountId ??
+        item.account_id;
+}
+
+function getName(item) {
+    return item.name ??
+        item.customerName ??
+        item.customer_name ??
+        item.supplierName ??
+        item.supplier_name ??
+        item.accountName ??
+        item.account_name ??
+        item.fullName ??
+        item.full_name ??
+        "";
+}
+
+function paymentIdOf(payment) {
+    return payment.paymentId ?? payment.payment_id ?? payment.id;
+}
+
+function paymentTypeOf(payment) {
+    return String(payment.paymentType ?? payment.payment_type ?? "")
+        .toUpperCase();
+}
+
+function paymentDateOf(payment) {
+    return String(payment.paymentDate ?? payment.payment_date ?? "")
+        .slice(0, 10);
+}
+
+function partyTypeOf(payment) {
+    return String(payment.partyType ?? payment.party_type ?? "")
+        .toUpperCase();
+}
+
+function partyIdOf(payment) {
+    return payment.partyId ?? payment.party_id;
+}
+
+function accountIdOf(payment) {
+    return payment.accountId ?? payment.account_id;
+}
+
+function amountOf(payment) {
+    return Number(payment.amount ?? 0) || 0;
+}
+
+function paymentModeOf(payment) {
+    return String(payment.paymentMode ?? payment.payment_mode ?? "")
+        .toUpperCase();
+}
+
+function referenceNoOf(payment) {
+    return payment.referenceNo ?? payment.reference_no ?? "";
+}
+
+function notesOf(payment) {
+    return payment.notes ?? "";
+}
+
+function findPartyName(partyType, partyId) {
+    const source = partyType === "CUSTOMER" ? customers : suppliers;
+
+    const party = source.find(
+        item => String(getId(item)) === String(partyId)
+    );
+
+    return party ? getName(party) : "";
+}
+
+function accountNameOf(payment) {
+    const accountId = accountIdOf(payment);
+
+    const account = accounts.find(
+        item => String(getId(item)) === String(accountId)
+    );
+
+    return account ? getName(account) : `Account ${accountId ?? ""}`;
+}
+
+function normalizePayment(payment) {
+    return {
+        ...payment,
+        _id: paymentIdOf(payment),
+        _date: paymentDateOf(payment),
+        _type: paymentTypeOf(payment),
+        _partyType: partyTypeOf(payment),
+        _partyId: partyIdOf(payment),
+        _party: findPartyName(
+            partyTypeOf(payment),
+            partyIdOf(payment)
+        ),
+        _accountId: accountIdOf(payment),
+        _amount: amountOf(payment),
+        _mode: paymentModeOf(payment),
+        _reference: referenceNoOf(payment),
+        _notes: notesOf(payment)
+    };
+}
+
+async function loadCustomers() {
+    customers = extractArray(await apiRequest(API.customers));
+}
+
+async function loadSuppliers() {
+    suppliers = extractArray(await apiRequest(API.suppliers));
+}
+
+async function loadAccounts() {
+    accounts = extractArray(await apiRequest(API.accounts));
+}
+
+async function loadPayments() {
+    payments = extractArray(await apiRequest(API.payments))
+        .map(normalizePayment);
+}
+
+function populatePartyDropdown(selectedId = "") {
+    const partyType = $("partyType").value;
+    const select = $("partyId");
+
+    const source = partyType === "CUSTOMER" ? customers : suppliers;
+
+    select.innerHTML = '<option value="">Select party</option>';
+
+    source.forEach(item => {
+        const id = getId(item);
+        if (id == null) return;
+
+        const option = document.createElement("option");
+        option.value = String(id);
+        option.textContent = getName(item) || `Party ${id}`;
+
+        select.appendChild(option);
+    });
+
+    if (selectedId !== "" && selectedId != null) {
+        select.value = String(selectedId);
+    }
+}
+
+function populateAccountDropdown(selectedId = "") {
+    const select = $("accountId");
+
+    select.innerHTML = '<option value="">Select account</option>';
+
+    accounts.forEach(account => {
+        const id = getId(account);
+        if (id == null) return;
+
+        const option = document.createElement("option");
+        option.value = String(id);
+        option.textContent = getName(account) || `Account ${id}`;
+
+        select.appendChild(option);
+    });
+
+    if (selectedId !== "" && selectedId != null) {
+        select.value = String(selectedId);
+    }
+}
+
+function updateSummary(list) {
+    let receipts = 0;
+    let outgoing = 0;
+
+    list.forEach(payment => {
+        if (payment._type === "RECEIPT") {
+            receipts += payment._amount;
+        } else if (payment._type === "PAYMENT") {
+            outgoing += payment._amount;
+        }
+    });
+
+    $("totalReceipts").textContent = money(receipts);
+    $("totalPayments").textContent = money(outgoing);
+    $("netCashFlow").textContent = money(receipts - outgoing);
+    $("totalTransactions").textContent = String(list.length);
+}
+
+function getFilteredPayments() {
+    const search = $("searchInput").value.trim().toLowerCase();
+    const type = $("typeFilter").value;
+    const fromDate = $("fromDate").value;
+    const toDate = $("toDate").value;
+
+    return payments.filter(payment => {
+        const searchable = [
+            payment._party,
+            payment._partyType,
+            payment._mode,
+            payment._reference,
+            payment._notes,
+            payment._type,
+            accountNameOf(payment)
+        ].join(" ").toLowerCase();
+
+        if (search && !searchable.includes(search)) return false;
+        if (type && payment._type !== type) return false;
+        if (fromDate && payment._date < fromDate) return false;
+        if (toDate && payment._date > toDate) return false;
+
+        return true;
+    }).sort((a, b) => {
+        const dateComparison = b._date.localeCompare(a._date);
+        if (dateComparison !== 0) return dateComparison;
+
+        return Number(b._id || 0) - Number(a._id || 0);
+    });
+}
+
+function renderPayments() {
+    const tbody = $("paymentsTableBody");
+    const filtered = getFilteredPayments();
+
+    updateSummary(filtered);
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9" class="empty-state">
+                    No transactions found.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(payment => {
+        const typeClass = payment._type === "RECEIPT"
+            ? "type-receipt"
+            : "type-payment";
+
+        return `
+            <tr>
+                <td>${escapeHtml(formatDate(payment._date))}</td>
+                <td>
+                    <span class="payment-type ${typeClass}">
+                        ${escapeHtml(payment._type)}
+                    </span>
+                </td>
+                <td>
+                    ${escapeHtml(payment._party || payment._partyId || "—")}
+                    <small>(${escapeHtml(payment._partyType)})</small>
+                </td>
+                <td>${escapeHtml(accountNameOf(payment))}</td>
+                <td>${escapeHtml(payment._mode || "—")}</td>
+                <td>${escapeHtml(payment._reference || "—")}</td>
+                <td><strong>${escapeHtml(money(payment._amount))}</strong></td>
+                <td>${escapeHtml(payment._notes || "—")}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button
+                            type="button"
+                            class="payment-edit-button"
+                            data-action="edit"
+                            data-id="${escapeHtml(payment._id)}"
+                        >Edit</button>
+                        <button
+                            type="button"
+                            class="payment-delete-button"
+                            data-action="delete"
+                            data-id="${escapeHtml(payment._id)}"
+                        >Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+function resetForm() {
+    $("paymentForm").reset();
+    $("paymentId").value = "";
+    $("paymentDate").value = getToday();
+    $("paymentType").value = "RECEIPT";
+    $("partyType").value = "CUSTOMER";
+    $("paymentMode").value = "CASH";
+
+    $("formTitle").textContent = "Add Payment / Receipt";
+    $("saveButton").textContent = "Save Transaction";
+
+    populatePartyDropdown();
+    populateAccountDropdown();
+}
+
+function getFormPayload() {
+    return {
+        paymentDate: $("paymentDate").value,
+        paymentType: $("paymentType").value,
+        partyType: $("partyType").value,
+        partyId: Number($("partyId").value),
+        accountId: Number($("accountId").value),
+        amount: Number($("amount").value),
+        paymentMode: $("paymentMode").value,
+        referenceNo: $("referenceNo").value.trim() || null,
+        notes: $("notes").value.trim() || null
+    };
+}
+
+function validatePayload(payload) {
+    if (!payload.paymentDate) {
+        throw new Error("Please select the transaction date.");
+    }
+
+    if (!["RECEIPT", "PAYMENT"].includes(payload.paymentType)) {
+        throw new Error("Invalid payment type.");
+    }
+
+    if (!["CUSTOMER", "SUPPLIER"].includes(payload.partyType)) {
+        throw new Error("Select a customer or supplier.");
+    }
+
+    if (payload.paymentType === "RECEIPT" &&
+        payload.partyType !== "CUSTOMER") {
+        throw new Error("A receipt must be associated with a customer.");
+    }
+
+    if (payload.paymentType === "PAYMENT" &&
+        payload.partyType !== "SUPPLIER") {
+        throw new Error("An outgoing payment must be associated with a supplier.");
+    }
+
+    if (!Number.isInteger(payload.partyId) || payload.partyId <= 0) {
+        throw new Error("Please select a valid customer or supplier.");
+    }
+
+    if (!Number.isInteger(payload.accountId) || payload.accountId <= 0) {
+        throw new Error("Please select a valid payment account.");
+    }
+
+    if (!["CASH", "BANK", "UPI", "CARD", "CHEQUE"]
+        .includes(payload.paymentMode)) {
+        throw new Error("Select a valid payment method.");
+    }
+
+    if (!Number.isFinite(payload.amount) || payload.amount <= 0) {
+        throw new Error("Amount must be greater than zero.");
+    }
+
+    if (payload.notes && payload.notes.length > 500) {
+        throw new Error("Notes cannot exceed 500 characters.");
+    }
+}
+
+async function savePayment(event) {
+    event.preventDefault();
+
+    const button = $("saveButton");
+    button.disabled = true;
+
+    try {
+        const payload = getFormPayload();
+        validatePayload(payload);
+
+        const id = $("paymentId").value;
+
+        if (id) {
+            await apiRequest(`${API.payments}/${encodeURIComponent(id)}`, {
+                method: "PUT",
+                body: JSON.stringify(payload)
+            });
+
+            showMessage("Transaction updated successfully.");
+        } else {
+            await apiRequest(API.payments, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            showMessage("Transaction saved successfully.");
+        }
+
+        resetForm();
+        await loadPayments();
+        renderPayments();
+
+    } catch (error) {
+        console.error("Unable to save payment:", error);
+        showMessage(error.message || "Unable to save transaction.", "error");
+    } finally {
+        button.disabled = false;
+    }
+}
+
+function editPayment(id) {
+    const payment = payments.find(
+        item => String(item._id) === String(id)
+    );
+
+    if (!payment) {
+        showMessage("Transaction not found.", "error");
+        return;
+    }
+
+    $("paymentId").value = payment._id;
+    $("paymentDate").value = payment._date;
+    $("paymentType").value = payment._type;
+    $("partyType").value = payment._partyType;
+
+    populatePartyDropdown(payment._partyId);
+    populateAccountDropdown(payment._accountId);
+
+    $("paymentMode").value = payment._mode || "CASH";
+    $("referenceNo").value = payment._reference || "";
+    $("amount").value = payment._amount;
+    $("notes").value = payment._notes || "";
+
+    $("formTitle").textContent = "Edit Payment / Receipt";
+    $("saveButton").textContent = "Update Transaction";
+
+    $("paymentFormSection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+async function deletePayment(id) {
+    const payment = payments.find(
+        item => String(item._id) === String(id)
+    );
+
+    if (!payment) {
+        showMessage("Transaction not found.", "error");
+        return;
+    }
+
+    const confirmed = window.confirm(
+        `Delete this ${payment._type.toLowerCase()} for ` +
+        `${money(payment._amount)}? This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+        await apiRequest(
+            `${API.payments}/${encodeURIComponent(id)}`,
+            { method: "DELETE" }
+        );
+
+        if (String($("paymentId").value) === String(id)) {
+            resetForm();
+        }
+
+        await loadPayments();
+        renderPayments();
+
+        showMessage("Transaction deleted successfully.");
+
+    } catch (error) {
+        console.error("Unable to delete payment:", error);
+        showMessage(error.message || "Unable to delete transaction.", "error");
+    }
+}
+
+async function refreshData() {
+    const button = $("refreshButton");
+    button.disabled = true;
+
+    try {
+        await Promise.all([
+            loadCustomers(),
+            loadSuppliers(),
+            loadAccounts()
+        ]);
+
+        populatePartyDropdown();
+        populateAccountDropdown();
+
+        await loadPayments();
+        renderPayments();
+
+    } catch (error) {
+        console.error("Unable to load payment data:", error);
+
+        showMessage(
+            "Unable to load payment data. Check that the backend is running, "
+            + "you are logged in, and the API endpoints are available. "
+            + error.message,
+            "error"
+        );
+
+        $("paymentsTableBody").innerHTML = `
+            <tr>
+                <td colspan="9" class="empty-state">
+                    Unable to load transactions. Please refresh and try again.
+                </td>
+            </tr>
+        `;
+    } finally {
+        button.disabled = false;
+    }
+}
+
+$("paymentForm").addEventListener("submit", savePayment);
+$("cancelButton").addEventListener("click", resetForm);
+$("refreshButton").addEventListener("click", refreshData);
+
+$("partyType").addEventListener("change", () => {
+    populatePartyDropdown();
+});
+
+[
+    "searchInput",
+    "typeFilter",
+    "fromDate",
+    "toDate"
+].forEach(id => {
+    $(id).addEventListener("input", renderPayments);
+    $(id).addEventListener("change", renderPayments);
+});
+
+$("paymentsTableBody").addEventListener("click", event => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+
+    const { action, id } = button.dataset;
+
+    if (action === "edit") {
+        editPayment(id);
+    } else if (action === "delete") {
+        deletePayment(id);
+    }
+});
+
+resetForm();
+refreshData();
+</script>
+
+</body>
+</html>

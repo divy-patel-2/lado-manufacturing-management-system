@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Users - LADO Manufacturing</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/common.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <div class="container header-inner">
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                L
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    LADO Manufacturing
+                </div>
+
+                <div class="brand-subtitle">
+                    Management System
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <nav class="main-nav">
+
+            <a href="/dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="/categories.html">
+                Categories
+            </a>
+
+            <a href="/units.html">
+                Units
+            </a>
+
+            <a href="/products.html">
+                Products
+            </a>
+
+            <a href="/suppliers.html">
+                Suppliers
+            </a>
+
+            <a href="/customers.html">
+                Customers
+            </a>
+
+            <a href="/purchases.html">
+                Purchases
+            </a>
+
+            <a href="/sales.html">
+                Sales
+            </a>
+
+            <a href="/inventory.html">
+                Inventory
+            </a>
+
+            <a href="/accounts.html">
+                Accounts
+            </a>
+
+            <a href="/payments.html">
+                Payments
+            </a>
+
+            <a href="/reports.html">
+                Reports
+            </a>
+
+            <a
+                href="/users.html"
+                class="active"
+            >
+                Users
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="container">
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <section class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Users
+            </h1>
+
+            <p class="page-subtitle">
+                Manage system users, roles, access and account status.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <button
+                class="btn-primary"
+                onclick="showUserForm()"
+            >
+                + Add User
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SUMMARY CARDS
+    ================================================== -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card blue">
+
+            <div class="stat-label">
+                Total Users
+            </div>
+
+            <div class="stat-value">
+                8
+            </div>
+
+            <div class="stat-description">
+                Registered system users
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card green">
+
+            <div class="stat-label">
+                Active Users
+            </div>
+
+            <div class="stat-value">
+                7
+            </div>
+
+            <div class="stat-description">
+                Users currently active
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card purple">
+
+            <div class="stat-label">
+                Administrators
+            </div>
+
+            <div class="stat-value">
+                2
+            </div>
+
+            <div class="stat-description">
+                Users with admin access
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card orange">
+
+            <div class="stat-label">
+                Inactive Users
+            </div>
+
+            <div class="stat-value">
+                1
+            </div>
+
+            <div class="stat-description">
+                Disabled user accounts
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ADD USER FORM
+    ================================================== -->
+
+    <section
+        id="userForm"
+        class="card"
+        style="display: none;"
+    >
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h2 class="card-title">
+                    Add New User
+                </h2>
+
+                <p class="card-subtitle">
+                    Create a user account and assign system permissions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="grid grid-2">
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter username"
+                >
+
+            </div>
+
+
+
+            <!-- FULL NAME -->
+
+            <div class="form-group">
+
+                <label for="fullName">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="fullName"
+                    placeholder="Enter full name"
+                >
+
+            </div>
+
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter email address"
+                >
+
+            </div>
+
+
+
+            <!-- PHONE -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Enter phone number"
+                >
+
+            </div>
+
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                >
+
+            </div>
+
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="confirmPassword">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm password"
+                >
+
+            </div>
+
+
+
+            <!-- ROLE -->
+
+            <div class="form-group">
+
+                <label for="userRole">
+                    Role
+                </label>
+
+                <select id="userRole">
+
+                    <option value="">
+                        Select Role
+                    </option>
+
+                    <option value="Admin">
+                        Administrator
+                    </option>
+
+                    <option value="Manager">
+                        Manager
+                    </option>
+
+                    <option value="Purchase">
+                        Purchase Manager
+                    </option>
+
+                    <option value="Sales">
+                        Sales Manager
+                    </option>
+
+                    <option value="Accounts">
+                        Accounts User
+                    </option>
+
+                    <option value="Inventory">
+                        Inventory User
+                    </option>
+
+                    <option value="Viewer">
+                        Viewer
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- STATUS -->
+
+            <div class="form-group">
+
+                <label for="userStatus">
+                    Status
+                </label>
+
+                <select id="userStatus">
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Inactive">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PERMISSIONS
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3 class="card-title">
+                        Module Permissions
+                    </h3>
+
+                    <p class="card-subtitle">
+                        Select the modules this user can access.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="grid grid-2">
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionDashboard"
+                        checked
+                    >
+                    Dashboard
+                </label>
+
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionProducts"
+                    >
+                    Products
+                </label>
+
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionPurchases"
+                    >
+                    Purchases
+                </label>
+
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionSales"
+                    >
+                    Sales
+                </label>
+
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionInventory"
+                    >
+                    Inventory
+                </label>
+
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionAccounts"
+                    >
+                    Accounts
+                </label>
+
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionPayments"
+                    >
+                    Payments
+                </label>
+
+
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="permissionReports"
+                    >
+                    Reports
+                </label>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM ACTIONS
+        ================================================== -->
+
+        <div class="form-actions">
+
+            <button
+                class="btn-primary"
+                onclick="saveUser()"
+            >
+                Save User
+            </button>
+
+
+            <button
+                class="btn-secondary"
+                onclick="hideUserForm()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         USER SEARCH / FILTER
+    ================================================== -->
+
+    <section class="card">
+
+
+        <div class="toolbar">
+
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="userSearch"
+                    placeholder="Search users..."
+                    onkeyup="searchUsers()"
+                >
+
+            </div>
+
+
+
+            <div>
+
+                <select
+                    id="roleFilter"
+                    onchange="filterUsers()"
+                >
+
+                    <option value="all">
+                        All Roles
+                    </option>
+
+                    <option value="Administrator">
+                        Administrator
+                    </option>
+
+                    <option value="Manager">
+                        Manager
+                    </option>
+
+                    <option value="Purchase Manager">
+                        Purchase Manager
+                    </option>
+
+                    <option value="Sales Manager">
+                        Sales Manager
+                    </option>
+
+                    <option value="Accounts User">
+                        Accounts User
+                    </option>
+
+                    <option value="Inventory User">
+                        Inventory User
+                    </option>
+
+                    <option value="Viewer">
+                        Viewer
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div>
+
+                <select
+                    id="statusFilter"
+                    onchange="filterUsers()"
+                >
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Inactive">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             USER TABLE
+        ================================================== -->
+
+        <div class="table-container">
+
+            <table id="usersTable">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Username
+                        </th>
+
+                        <th>
+                            Full Name
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Role
+                        </th>
+
+                        <th>
+                            Last Login
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            1
+                        </td>
+
+                        <td>
+                            admin
+                        </td>
+
+                        <td>
+                            System Administrator
+                        </td>
+
+                        <td>
+                            admin@lado.com
+                        </td>
+
+                        <td>
+                            Administrator
+                        </td>
+
+                        <td>
+                            08-Oct-2026 09:15
+                        </td>
+
+                        <td>
+
+                            <span class="badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(1)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            2
+                        </td>
+
+                        <td>
+                            manager
+                        </td>
+
+                        <td>
+                            Plant Manager
+                        </td>
+
+                        <td>
+                            manager@lado.com
+                        </td>
+
+                        <td>
+                            Manager
+                        </td>
+
+                        <td>
+                            08-Oct-2026 08:45
+                        </td>
+
+                        <td>
+
+                            <span class="badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(2)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            3
+                        </td>
+
+                        <td>
+                            purchase
+                        </td>
+
+                        <td>
+                            Purchase Executive
+                        </td>
+
+                        <td>
+                            purchase@lado.com
+                        </td>
+
+                        <td>
+                            Purchase Manager
+                        </td>
+
+                        <td>
+                            07-Oct-2026 17:32
+                        </td>
+
+                        <td>
+
+                            <span class="badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(3)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            4
+                        </td>
+
+                        <td>
+                            sales
+                        </td>
+
+                        <td>
+                            Sales Executive
+                        </td>
+
+                        <td>
+                            sales@lado.com
+                        </td>
+
+                        <td>
+                            Sales Manager
+                        </td>
+
+                        <td>
+                            07-Oct-2026 16:18
+                        </td>
+
+                        <td>
+
+                            <span class="badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(4)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            5
+                        </td>
+
+                        <td>
+                            accounts
+                        </td>
+
+                        <td>
+                            Accounts Executive
+                        </td>
+
+                        <td>
+                            accounts@lado.com
+                        </td>
+
+                        <td>
+                            Accounts User
+                        </td>
+
+                        <td>
+                            08-Oct-2026 10:05
+                        </td>
+
+                        <td>
+
+                            <span class="badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(5)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            6
+                        </td>
+
+                        <td>
+                            inventory
+                        </td>
+
+                        <td>
+                            Inventory Executive
+                        </td>
+
+                        <td>
+                            inventory@lado.com
+                        </td>
+
+                        <td>
+                            Inventory User
+                        </td>
+
+                        <td>
+                            08-Oct-2026 09:42
+                        </td>
+
+                        <td>
+
+                            <span class="badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(6)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            7
+                        </td>
+
+                        <td>
+                            viewer
+                        </td>
+
+                        <td>
+                            Management Viewer
+                        </td>
+
+                        <td>
+                            viewer@lado.com
+                        </td>
+
+                        <td>
+                            Viewer
+                        </td>
+
+                        <td>
+                            06-Oct-2026 14:20
+                        </td>
+
+                        <td>
+
+                            <span class="badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(7)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            8
+                        </td>
+
+                        <td>
+                            olduser
+                        </td>
+
+                        <td>
+                            Former Employee
+                        </td>
+
+                        <td>
+                            olduser@lado.com
+                        </td>
+
+                        <td>
+                            Viewer
+                        </td>
+
+                        <td>
+                            15-Sep-2026 11:05
+                        </td>
+
+                        <td>
+
+                            <span class="badge-danger">
+                                Inactive
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editUser(8)"
+                            >
+                                Edit
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ROLE INFORMATION
+    ================================================== -->
+
+    <section class="card">
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h2 class="card-title">
+                    User Roles
+                </h2>
+
+                <p class="card-subtitle">
+                    Basic access levels used by the system.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-container">
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Role
+                        </th>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th>
+                            Typical Access
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            Administrator
+                        </td>
+
+                        <td>
+                            Full system access
+                        </td>
+
+                        <td>
+                            All modules and user management
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Manager
+                        </td>
+
+                        <td>
+                            Management-level access
+                        </td>
+
+                        <td>
+                            Dashboard, reports and business modules
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Purchase Manager
+                        </td>
+
+                        <td>
+                            Procurement management
+                        </td>
+
+                        <td>
+                            Suppliers, purchases and inventory
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Sales Manager
+                        </td>
+
+                        <td>
+                            Sales management
+                        </td>
+
+                        <td>
+                            Customers, sales and payments
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Accounts User
+                        </td>
+
+                        <td>
+                            Financial transaction management
+                        </td>
+
+                        <td>
+                            Accounts, payments and reports
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Inventory User
+                        </td>
+
+                        <td>
+                            Stock management
+                        </td>
+
+                        <td>
+                            Products and inventory
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Viewer
+                        </td>
+
+                        <td>
+                            Read-only access
+                        </td>
+
+                        <td>
+                            Dashboard and reports
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        LADO Manufacturing Management System
+
+        <br>
+
+        <small>
+            User & Access Management Module
+        </small>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+    /* =================================================
+       SHOW USER FORM
+    ================================================== */
+
+    function showUserForm() {
+
+        document.getElementById(
+            "userForm"
+        ).style.display = "block";
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+
+
+    /* =================================================
+       HIDE USER FORM
+    ================================================== */
+
+    function hideUserForm() {
+
+        document.getElementById(
+            "userForm"
+        ).style.display = "none";
+
+
+        clearUserForm();
+
+    }
+
+
+
+    /* =================================================
+       SAVE USER
+    ================================================== */
+
+    function saveUser() {
+
+
+        const username =
+            document.getElementById(
+                "username"
+            ).value.trim();
+
+
+        const fullName =
+            document.getElementById(
+                "fullName"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "email"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+
+        const confirmPassword =
+            document.getElementById(
+                "confirmPassword"
+            ).value;
+
+
+        const role =
+            document.getElementById(
+                "userRole"
+            ).value;
+
+
+
+        if (!username) {
+
+            alert(
+                "Please enter a username."
+            );
+
+            return;
+
+        }
+
+
+
+        if (!fullName) {
+
+            alert(
+                "Please enter the full name."
+            );
+
+            return;
+
+        }
+
+
+
+        if (!email) {
+
+            alert(
+                "Please enter an email address."
+            );
+
+            return;
+
+        }
+
+
+
+        if (!password) {
+
+            alert(
+                "Please enter a password."
+            );
+
+            return;
+
+        }
+
+
+
+        if (
+            password !==
+            confirmPassword
+        ) {
+
+            alert(
+                "Passwords do not match."
+            );
+
+            return;
+
+        }
+
+
+
+        if (!role) {
+
+            alert(
+                "Please select a user role."
+            );
+
+            return;
+
+        }
+
+
+
+        alert(
+
+            "User created successfully.\n\n" +
+
+            "Username: " +
+            username +
+
+            "\nName: " +
+            fullName +
+
+            "\nRole: " +
+            role
+
+        );
+
+
+        hideUserForm();
+
+    }
+
+
+
+    /* =================================================
+       CLEAR USER FORM
+    ================================================== */
+
+    function clearUserForm() {
+
+
+        document.getElementById(
+            "username"
+        ).value = "";
+
+
+        document.getElementById(
+            "fullName"
+        ).value = "";
+
+
+        document.getElementById(
+            "email"
+        ).value = "";
+
+
+        document.getElementById(
+            "phone"
+        ).value = "";
+
+
+        document.getElementById(
+            "password"
+        ).value = "";
+
+
+        document.getElementById(
+            "confirmPassword"
+        ).value = "";
+
+
+        document.getElementById(
+            "userRole"
+        ).value = "'";
+
+
+        document.getElementById(
+            "userStatus"
+        ).value = "Active";
+
+
+        document.getElementById(
+            "permissionDashboard"
+        ).checked = true;
+
+
+        document.getElementById(
+            "permissionProducts"
+        ).checked = false;
+
+
+        document.getElementById(
+            "permissionPurchases"
+        ).checked = false;
+
+
+        document.getElementById(
+            "permissionSales"
+        ).checked = false;
+
+
+        document.getElementById(
+            "permissionInventory"
+        ).checked = false;
+
+
+        document.getElementById(
+            "permissionAccounts"
+        ).checked = false;
+
+
+        document.getElementById(
+            "permissionPayments"
+        ).checked = false;
+
+
+        document.getElementById(
+            "permissionReports"
+        ).checked = false;
+
+    }
+
+
+
+    /* =================================================
+       EDIT USER
+    ================================================== */
+
+    function editUser(id) {
+
+        alert(
+
+            "Edit User #" +
+            id +
+
+            "\n\n" +
+
+            "The final version will load this user's information from Oracle."
+
+        );
+
+    }
+
+
+
+    /* =================================================
+       SEARCH USERS
+    ================================================== */
+
+    function searchUsers() {
+
+
+        const search =
+            document.getElementById(
+                "userSearch"
+            ).value.toLowerCase();
+
+
+
+        const rows =
+            document.querySelectorAll(
+                "#usersTable tbody tr"
+            );
+
+
+
+        rows.forEach(
+            function(row) {
+
+                const text =
+                    row.textContent
+                        .toLowerCase();
+
+
+                row.style.display =
+                    text.includes(search)
+                    ? ""
+                    : "none";
+
+            }
+        );
+
+    }
+
+
+
+    /* =================================================
+       FILTER USERS
+    ================================================== */
+
+    function filterUsers() {
+
+
+        const role =
+            document.getElementById(
+                "roleFilter"
+            ).value;
+
+
+        const status =
+            document.getElementById(
+                "statusFilter"
+            ).value;
+
+
+
+        const rows =
+            document.querySelectorAll(
+                "#usersTable tbody tr"
+            );
+
+
+
+        rows.forEach(
+            function(row) {
+
+
+                const rowRole =
+                    row.cells[4]
+                        .textContent
+                        .trim();
+
+
+                const rowStatus =
+                    row.cells[6]
+                        .textContent
+                        .trim();
+
+
+
+                const roleMatch =
+                    role === "all" ||
+                    rowRole === role;
+
+
+
+                const statusMatch =
+                    status === "all" ||
+                    rowStatus === status;
+
+
+
+                row.style.display =
+                    roleMatch &&
+                    statusMatch
+                    ? ""
+                    : "none";
+
+            }
+        );
+
+    }
+
+
+</script>
+
+
+</body>
+
+</html>

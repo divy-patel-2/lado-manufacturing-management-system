@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts - LADO Manufacturing</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <div class="brand">
+            <div class="brand-icon">L</div>
+            <div>
+                <div class="brand-name">LADO Manufacturing</div>
+                <div class="brand-subtitle">Management System</div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/categories.html">Categories</a>
+            <a href="/units.html">Units</a>
+            <a href="/products.html">Products</a>
+            <a href="/suppliers.html">Suppliers</a>
+            <a href="/customers.html">Customers</a>
+            <a href="/purchases.html">Purchases</a>
+            <a href="/sales.html">Sales</a>
+            <a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html" class="active">Accounts</a>
+            <a href="/payments.html">Payments</a>
+            <a href="/reports.html">Reports</a>
+            <a href="/users.html">Users</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <section class="page-header">
+        <div>
+            <h1 class="page-title">Accounts</h1>
+            <p class="page-subtitle">
+                Manage cash, bank balances, income, expenses and transfers.
+            </p>
+        </div>
+        <div class="page-actions">
+            <button type="button" class="btn-primary" onclick="showAccountEntry()">
+                + New Entry
+            </button>
+        </div>
+    </section>
+
+    <div id="pageMessage" role="status" aria-live="polite"></div>
+
+    <!-- Financial summary -->
+    <section class="stats-grid">
+        <div class="stat-card blue">
+            <div class="stat-label">Cash Balance</div>
+            <div class="stat-value" id="cashBalance">₹0.00</div>
+            <div class="stat-description">Active cash accounts</div>
+        </div>
+
+        <div class="stat-card green">
+            <div class="stat-label">Bank Balance</div>
+            <div class="stat-value" id="bankBalance">₹0.00</div>
+            <div class="stat-description">Active bank accounts</div>
+        </div>
+
+        <div class="stat-card orange">
+            <div class="stat-label">Total Income</div>
+            <div class="stat-value" id="totalIncome">₹0.00</div>
+            <div class="stat-description">Recorded income entries</div>
+        </div>
+
+        <div class="stat-card purple">
+            <div class="stat-label">Total Expenses</div>
+            <div class="stat-value" id="totalExpenses">₹0.00</div>
+            <div class="stat-description">Recorded expense entries</div>
+        </div>
+    </section>
+
+    <!-- Entry form -->
+    <section id="accountEntryForm" class="card" style="display:none;">
+        <div class="card-header">
+            <div>
+                <h2 class="card-title">New Account Entry</h2>
+                <p class="card-subtitle">
+                    Record income, expenses or transfers between accounts.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="entryDate">Entry Date</label>
+                <input type="date" id="entryDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="entryType">Entry Type</label>
+                <select id="entryType" required onchange="handleEntryTypeChange()">
+                    <option value="">Select Entry Type</option>
+                    <option value="INCOME">Income</option>
+                    <option value="EXPENSE">Expense</option>
+                    <option value="TRANSFER">Transfer Between Accounts</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="sourceAccountGroup">
+                <label for="accountType">Account / From Account</label>
+                <select id="accountType" required>
+                    <option value="">Loading accounts...</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="destinationAccountGroup" style="display:none;">
+                <label for="destinationAccount">To Account</label>
+                <select id="destinationAccount">
+                    <option value="">Select destination account</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="categoryGroup">
+                <label for="accountCategory">Category</label>
+                <select id="accountCategory">
+                    <option value="">Select Category</option>
+                    <option value="Sales Receipt">Sales Receipt</option>
+                    <option value="Purchase Payment">Purchase Payment</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Electricity">Electricity</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Office Expense">Office Expense</option>
+                    <option value="Other Income">Other Income</option>
+                    <option value="Other Expense">Other Expense</option>
+                    <option value="Account Transfer">Account Transfer</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="entryAmount">Amount (₹)</label>
+                <input
+                    type="number"
+                    id="entryAmount"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="Enter amount"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="entryReference">Reference Number</label>
+                <input
+                    type="text"
+                    id="entryReference"
+                    maxlength="100"
+                    placeholder="Example: EXP-2026-001"
+                >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="entryDescription">Description</label>
+            <textarea
+                id="entryDescription"
+                rows="3"
+                maxlength="500"
+                placeholder="Enter transaction description"
+            ></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button
+                type="button"
+                id="saveEntryButton"
+                class="btn-primary"
+                onclick="saveAccountEntry()"
+            >
+                Save Entry
+            </button>
+
+            <button
+                type="button"
+                class="btn-secondary"
+                onclick="hideAccountEntry()"
+            >
+                Cancel
+            </button>
+        </div>
+    </section>
+
+    <!-- Account balances -->
+    <section class="card">
+        <div class="card-header">
+            <div>
+                <h2 class="card-title">Account Balances</h2>
+                <p class="card-subtitle">
+                    Current balances from the Oracle database.
+                </p>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="balancesTable">
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>Account Type</th>
+                        <th>Opening Balance</th>
+                        <th>Current Balance</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="5">Loading accounts...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Transaction history -->
+    <section class="card">
+        <div class="card-header">
+            <div>
+                <h2 class="card-title">Account Transactions</h2>
+                <p class="card-subtitle">
+                    Recorded income, expenses and transfers.
+                </p>
+            </div>
+            <button type="button" class="btn-secondary" onclick="refreshPageData()">
+                Refresh
+            </button>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-box">
+                <input
+                    type="search"
+                    id="accountSearch"
+                    placeholder="Search account or description..."
+                    oninput="renderTransactions()"
+                >
+            </div>
+
+            <div>
+                <select id="accountFilter" onchange="renderTransactions()">
+                    <option value="ALL">All Types</option>
+                    <option value="INCOME">Income</option>
+                    <option value="EXPENSE">Expense</option>
+                    <option value="TRANSFER">Transfers</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="accountTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Transaction ID</th>
+                        <th>Account</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="6">Loading transactions...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        LADO Manufacturing Management System
+        <br>
+        <small>Accounts &amp; Financial Management Module</small>
+    </div>
+</footer>
+
+<script>
+"use strict";
+
+const API_BASE = "/api/accounts";
+
+let accountList = [];
+let accountTransactions = [];
+
+function showMessage(message, isError = false) {
+    const element = document.getElementById("pageMessage");
+    element.textContent = message;
+    element.style.color = isError ? "#b91c1c" : "#166534";
+    element.style.margin = "12px 0";
+}
+
+function clearMessage() {
+    const element = document.getElementById("pageMessage");
+    element.textContent = "";
+    element.style.margin = "0";
+}
+
+function formatCurrency(value) {
+    return Number(value || 0).toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function formatDate(value) {
+    if (!value) return "—";
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+
+    return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function createCell(row, value) {
+    const cell = row.insertCell();
+    cell.textContent =
+        value === null || value === undefined || value === ""
+            ? "—"
+            : String(value);
+    return cell;
+}
+
+async function fetchJson(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options
+    });
+
+    if (response.redirected && response.url.includes("login")) {
+        throw new Error("Your login session may have expired. Please log in again.");
+    }
+
+    const contentType = response.headers.get("content-type") || "";
+    let data;
+
+    if (contentType.includes("application/json")) {
+        data = await response.json();
+    } else {
+        const body = await response.text();
+        data = body ? { error: body } : {};
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data.error || data.message || `Request failed: HTTP ${response.status}`
+        );
+    }
+
+    return data;
+}
+
+function showAccountEntry() {
+    document.getElementById("accountEntryForm").style.display = "block";
+
+    const dateInput = document.getElementById("entryDate");
+
+    if (!dateInput.value) {
+        const now = new Date();
+
+        dateInput.value = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, "0"),
+            String(now.getDate()).padStart(2, "0")
+        ].join("-");
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function hideAccountEntry() {
+    document.getElementById("accountEntryForm").style.display = "none";
+    clearAccountForm();
+}
+
+function clearAccountForm() {
+    document.getElementById("entryDate").value = "";
+    document.getElementById("entryType").value = "";
+    document.getElementById("accountType").value = "";
+    document.getElementById("destinationAccount").value = "";
+    document.getElementById("accountCategory").value = "";
+    document.getElementById("entryAmount").value = "";
+    document.getElementById("entryReference").value = "";
+    document.getElementById("entryDescription").value = "";
+
+    handleEntryTypeChange();
+}
+
+function handleEntryTypeChange() {
+    const type = document.getElementById("entryType").value;
+    const isTransfer = type === "TRANSFER";
+
+    document.getElementById("destinationAccountGroup").style.display =
+        isTransfer ? "block" : "none";
+
+    document.getElementById("categoryGroup").style.display =
+        isTransfer ? "none" : "block";
+
+    document.getElementById("accountCategory").required = !isTransfer;
+    document.getElementById("destinationAccount").required = isTransfer;
+}
+
+async function loadAccounts() {
+    const accounts = await fetchJson(API_BASE);
+    accountList = Array.isArray(accounts) ? accounts : [];
+
+    renderAccountBalances();
+    renderAccountDropdown();
+    updateSummary();
+}
+
+function renderAccountDropdown() {
+    const source = document.getElementById("accountType");
+    const destination = document.getElementById("destinationAccount");
+
+    source.replaceChildren(new Option("Select account", ""));
+    destination.replaceChildren(new Option("Select destination account", ""));
+
+    const activeAccounts = accountList.filter(account =>
+        String(account.isActive).toUpperCase() === "Y" &&
+        ["CASH", "BANK"].includes(String(account.accountType).toUpperCase())
+    );
+
+    activeAccounts.forEach(account => {
+        const label = `${account.accountName} (${account.accountType})`;
+
+        source.add(new Option(label, String(account.accountId)));
+        destination.add(new Option(label, String(account.accountId)));
+    });
+
+    if (activeAccounts.length === 0) {
+        source.replaceChildren(new Option("No active Cash/Bank accounts", ""));
+        destination.replaceChildren(new Option("No active Cash/Bank accounts", ""));
+    }
+}
+
+function renderAccountBalances() {
+    const tbody = document.querySelector("#balancesTable tbody");
+    tbody.replaceChildren();
+
+    if (accountList.length === 0) {
+        const row = tbody.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 5;
+        cell.textContent = "No accounts found.";
+        return;
+    }
+
+    accountList.forEach(account => {
+        const row = tbody.insertRow();
+
+        createCell(row, account.accountName);
+        createCell(row, account.accountType);
+        createCell(row, formatCurrency(account.openingBalance));
+        createCell(row, formatCurrency(account.currentBalance));
+
+        const statusCell = row.insertCell();
+        const active = String(account.isActive).toUpperCase() === "Y";
+        const badge = document.createElement("span");
+
+        badge.className = active ? "badge-success" : "badge-danger";
+        badge.textContent = active ? "Active" : "Inactive";
+        statusCell.appendChild(badge);
+    });
+}
+
+async function loadTransactions() {
+    const transactions = await fetchJson(`${API_BASE}/transactions`);
+    accountTransactions = Array.isArray(transactions) ? transactions : [];
+
+    renderTransactions();
+    updateSummary();
+}
+
+function getTransactionType(transaction) {
+    const description = String(transaction.DESCRIPTION || "").toLowerCase();
+
+    if (
+        String(transaction.REFERENCE_TYPE || "").toUpperCase() === "TRANSFER" ||
+        description.includes("transfer to ") ||
+        description.includes("transfer from ")
+    ) {
+        return "TRANSFER";
+    }
+
+    return String(transaction.TRANSACTION_TYPE || "").toUpperCase();
+}
+
+function renderTransactions() {
+    const tbody = document.querySelector("#accountTable tbody");
+    tbody.replaceChildren();
+
+    const search = document.getElementById("accountSearch")
+        .value.trim().toLowerCase();
+
+    const filter = document.getElementById("accountFilter").value.toUpperCase();
+
+    const filtered = accountTransactions.filter(transaction => {
+        const type = getTransactionType(transaction);
+
+        const searchableText = [
+            transaction.TRANSACTION_ID,
+            transaction.ACCOUNT_NAME,
+            transaction.TRANSACTION_TYPE,
+            transaction.DESCRIPTION,
+            transaction.REFERENCE_TYPE,
+            transaction.REFERENCE_ID
+        ].join(" ").toLowerCase();
+
+        return (filter === "ALL" || type === filter) &&
+            searchableText.includes(search);
+    });
+
+    if (filtered.length === 0) {
+        const row = tbody.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 6;
+        cell.textContent = accountTransactions.length === 0
+            ? "No transactions recorded yet."
+            : "No transactions match your search.";
+        return;
+    }
+
+    filtered.forEach(transaction => {
+        const row = tbody.insertRow();
+
+        createCell(row, formatDate(transaction.TRANSACTION_DATE));
+        createCell(row, transaction.TRANSACTION_ID);
+        createCell(row, transaction.ACCOUNT_NAME);
+
+        const typeCell = row.insertCell();
+        const type = getTransactionType(transaction);
+        const badge = document.createElement("span");
+
+        badge.className = type === "INCOME"
+            ? "badge-success"
+            : type === "EXPENSE"
+                ? "badge-danger"
+                : "badge-warning";
+
+        badge.textContent = type === "INCOME"
+            ? "Income"
+            : type === "EXPENSE"
+                ? "Expense"
+                : "Transfer";
+
+        typeCell.appendChild(badge);
+
+        createCell(row, formatCurrency(transaction.AMOUNT));
+        createCell(row, transaction.DESCRIPTION || "—");
+    });
+}
+
+function updateSummary() {
+    const cashBalance = accountList
+        .filter(account =>
+            String(account.accountType).toUpperCase() === "CASH" &&
+            String(account.isActive).toUpperCase() === "Y"
+        )
+        .reduce((total, account) => total + Number(account.currentBalance || 0), 0);
+
+    const bankBalance = accountList
+        .filter(account =>
+            String(account.accountType).toUpperCase() === "BANK" &&
+            String(account.isActive).toUpperCase() === "Y"
+        )
+        .reduce((total, account) => total + Number(account.currentBalance || 0), 0);
+
+    const totalIncome = accountTransactions
+        .filter(transaction =>
+            String(transaction.TRANSACTION_TYPE).toUpperCase() === "INCOME"
+        )
+        .reduce((total, transaction) => total + Number(transaction.AMOUNT || 0), 0);
+
+    const totalExpenses = accountTransactions
+        .filter(transaction =>
+            String(transaction.TRANSACTION_TYPE).toUpperCase() === "EXPENSE"
+        )
+        .reduce((total, transaction) => total + Number(transaction.AMOUNT || 0), 0);
+
+    document.getElementById("cashBalance").textContent = formatCurrency(cashBalance);
+    document.getElementById("bankBalance").textContent = formatCurrency(bankBalance);
+    document.getElementById("totalIncome").textContent = formatCurrency(totalIncome);
+    document.getElementById("totalExpenses").textContent = formatCurrency(totalExpenses);
+}
+
+async function saveAccountEntry() {
+    clearMessage();
+
+    const date = document.getElementById("entryDate").value;
+    const type = document.getElementById("entryType").value;
+    const fromAccountId = document.getElementById("accountType").value;
+    const toAccountId = document.getElementById("destinationAccount").value;
+    const category = document.getElementById("accountCategory").value.trim();
+    const amount = Number(document.getElementById("entryAmount").value);
+    const reference = document.getElementById("entryReference").value.trim();
+    const description = document.getElementById("entryDescription").value.trim();
+
+    if (!date || !type || !fromAccountId) {
+        showMessage("Please select the date, entry type and account.", true);
+        return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        showMessage("Enter an amount greater than zero.", true);
+        return;
+    }
+
+    const isTransfer = type === "TRANSFER";
+
+    if (isTransfer) {
+        if (!toAccountId) {
+            showMessage("Please select a destination account.", true);
+            return;
+        }
+
+        if (fromAccountId === toAccountId) {
+            showMessage("Source and destination accounts must be different.", true);
+            return;
+        }
+    } else if (type !== "INCOME" && type !== "EXPENSE") {
+        showMessage("Select Income, Expense or Transfer.", true);
+        return;
+    } else if (!category) {
+        showMessage("Please select a category.", true);
+        return;
+    }
+
+    const fullDescription = [
+        category,
+        reference ? `Reference: ${reference}` : "",
+        description
+    ].filter(Boolean).join(" | ");
+
+    if (!isTransfer && fullDescription.length > 500) {
+        showMessage("Combined category, reference and description is too long.", true);
+        return;
+    }
+
+    if (isTransfer && description.length > 400) {
+        showMessage("Transfer description cannot exceed 400 characters.", true);
+        return;
+    }
+
+    const saveButton = document.getElementById("saveEntryButton");
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    try {
+        const endpoint = isTransfer
+            ? `${API_BASE}/transfers`
+            : `${API_BASE}/transactions`;
+
+        const payload = isTransfer
+            ? {
+                fromAccountId: Number(fromAccountId),
+                toAccountId: Number(toAccountId),
+                amount,
+                description: [
+                    reference ? `Reference: ${reference}` : "",
+                    description
+                ].filter(Boolean).join(" | ") || "Account transfer",
+                transactionDate: date
+            }
+            : {
+                accountId: Number(fromAccountId),
+                transactionType: type,
+                amount,
+                description: fullDescription,
+                transactionDate: date
+            };
+
+        await fetchJson(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        showMessage(isTransfer
+            ? "Transfer completed successfully."
+            : "Transaction saved successfully.");
+
+        clearAccountForm();
+        document.getElementById("accountEntryForm").style.display = "none";
+
+        await Promise.all([loadAccounts(), loadTransactions()]);
+    } catch (error) {
+        console.error("Save error:", error);
+        showMessage("Could not save entry: " + error.message, true);
+    } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Entry";
+    }
+}
+
+async function refreshPageData() {
+    clearMessage();
+
+    try {
+        await Promise.all([loadAccounts(), loadTransactions()]);
+        showMessage("Account data refreshed.");
+    } catch (error) {
+        console.error("Refresh error:", error);
+        showMessage("Could not refresh data: " + error.message, true);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    handleEntryTypeChange();
+
+    try {
+        await Promise.all([loadAccounts(), loadTransactions()]);
+    } catch (error) {
+        console.error("Page loading error:", error);
+        showMessage(
+            "Could not load account data. Check your login and backend. " + error.message,
+            true
+        );
+    }
+});
+</script>
+
+</body>
+</html>

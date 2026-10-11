@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - LADO Manufacturing</title>
+
+    <link rel="stylesheet" href="/css/common.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .reports-container {
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        .report-panel {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            background: #ffffff;
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 17px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .btn-success {
+            background: #059669;
+            color: white;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            padding: 20px;
+            border-radius: 11px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+            min-width: 0;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .summary-value {
+            font-size: 25px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+            margin-bottom: 8px;
+        }
+
+        .summary-description {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .table-header h2 {
+            margin: 0 0 6px;
+            font-size: 20px;
+        }
+
+        .table-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead {
+            background: #f3f4f6;
+        }
+
+        th,
+        td {
+            padding: 13px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        th {
+            font-weight: 700;
+            color: #374151;
+        }
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-info {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .message {
+            padding: 13px 16px;
+            border-radius: 7px;
+            margin-bottom: 18px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .message.error {
+            display: block;
+            color: #991b1b;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+        }
+
+        .message.info {
+            display: block;
+            color: #1d4ed8;
+            background: #dbeafe;
+            border: 1px solid #bfdbfe;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 15px;
+            color: #6b7280;
+        }
+
+        .report-note {
+            background: #f9fafb;
+            border-left: 4px solid #2563eb;
+            padding: 13px 15px;
+            margin-top: 18px;
+            color: #4b5563;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .loading {
+            opacity: 0.65;
+            pointer-events: none;
+        }
+
+        @media (max-width: 1000px) {
+            .filter-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .reports-container {
+                padding: 14px;
+            }
+
+            .report-panel {
+                padding: 15px;
+            }
+
+            .filter-grid,
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            .summary-value {
+                font-size: 22px;
+            }
+
+            .button-group .btn {
+                flex: 1;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .reports-container {
+                max-width: none;
+                padding: 0;
+            }
+
+            .filter-panel,
+            .button-group,
+            .page-header .no-print {
+                display: none !important;
+            }
+
+            .report-panel,
+            .summary-card {
+                box-shadow: none;
+            }
+
+            .table-wrapper {
+                overflow: visible;
+            }
+
+            table {
+                min-width: 0;
+                font-size: 10px;
+            }
+
+            th,
+            td {
+                padding: 6px;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="reports-container">
+
+    <header class="page-header">
+        <div>
+            <h1>Reports</h1>
+            <p>View and analyze your LADO Manufacturing business data.</p>
+        </div>
+
+        <div class="button-group no-print">
+            <button type="button" class="btn btn-success" id="printButton">
+                Print Report
+            </button>
+        </div>
+    </header>
+
+    <div id="messageBox" class="message" role="alert"></div>
+
+    <section class="report-panel filter-panel">
+        <div class="filter-grid">
+
+            <div class="form-group">
+                <label for="reportType">Report Type</label>
+                <select id="reportType">
+                    <option value="sales">Sales Report</option>
+                    <option value="purchases">Purchase Report</option>
+                    <option value="inventory">Inventory Report</option>
+                    <option value="payments">Payment Report</option>
+                    <option value="accounts" disabled>Accounts Report - Not Connected</option>
+                    <option value="profit" disabled>Profit Report - Not Connected</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fromDate">From Date</label>
+                <input type="date" id="fromDate">
+            </div>
+
+            <div class="form-group">
+                <label for="toDate">To Date</label>
+                <input type="date" id="toDate">
+            </div>
+
+            <div class="form-group">
+                <label>Actions</label>
+                <div class="button-group">
+                    <button type="button" class="btn btn-primary" id="generateButton">
+                        Generate
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="resetButton">
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="button-group" style="margin-top: 16px;">
+            <button type="button" class="btn btn-secondary" data-range="today">
+                Today
+            </button>
+            <button type="button" class="btn btn-secondary" data-range="week">
+                Last 7 Days
+            </button>
+            <button type="button" class="btn btn-secondary" data-range="month">
+                This Month
+            </button>
+            <button type="button" class="btn btn-secondary" data-range="all">
+                All Dates
+            </button>
+        </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Report summary">
+        <article class="summary-card">
+            <div class="summary-label" id="summaryLabel1">Total Records</div>
+            <div class="summary-value" id="summaryValue1">—</div>
+            <div class="summary-description" id="summaryDescription1">Generate a report</div>
+        </article>
+
+        <article class="summary-card">
+            <div class="summary-label" id="summaryLabel2">Total Amount</div>
+            <div class="summary-value" id="summaryValue2">—</div>
+            <div class="summary-description" id="summaryDescription2">Generate a report</div>
+        </article>
+
+        <article class="summary-card">
+            <div class="summary-label" id="summaryLabel3">Status</div>
+            <div class="summary-value" id="summaryValue3">—</div>
+            <div class="summary-description" id="summaryDescription3">Generate a report</div>
+        </article>
+
+        <article class="summary-card">
+            <div class="summary-label" id="summaryLabel4">Additional Details</div>
+            <div class="summary-value" id="summaryValue4">—</div>
+            <div class="summary-description" id="summaryDescription4">Generate a report</div>
+        </article>
+    </section>
+
+    <section class="report-panel">
+
+        <div class="table-header">
+            <div>
+                <h2 id="tableTitle">Sales Report</h2>
+                <p id="tableSubtitle">Sales records retrieved from Oracle.</p>
+            </div>
+
+            <p id="recordCount">0 records</p>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead id="reportTableHead">
+                    <tr>
+                        <th>Loading</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reportTableBody">
+                    <tr>
+                        <td class="empty-state">Select a report and click Generate.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-note" id="reportNote">
+            Select a report type and click Generate to retrieve information.
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+"use strict";
+
+/*
+ * API endpoints:
+ * GET /api/reports/sales
+ * GET /api/reports/purchases
+ * GET /api/reports/inventory
+ * GET /api/reports/payments
+ */
+
+const API_BASE = "/api/reports";
+
+const reportType = document.getElementById("reportType");
+const fromDateInput = document.getElementById("fromDate");
+const toDateInput = document.getElementById("toDate");
+const generateButton = document.getElementById("generateButton");
+const resetButton = document.getElementById("resetButton");
+const printButton = document.getElementById("printButton");
+const messageBox = document.getElementById("messageBox");
+const reportTableHead = document.getElementById("reportTableHead");
+const reportTableBody = document.getElementById("reportTableBody");
+
+let currentReport = null;
+
+function setText(id, value) {
+    document.getElementById(id).textContent = value ?? "";
+}
+
+function showMessage(message, type = "info") {
+    messageBox.textContent = message;
+    messageBox.className = "message " + type;
+}
+
+function clearMessage() {
+    messageBox.textContent = "";
+    messageBox.className = "message";
+}
+
+function formatMoney(value) {
+    const amount = Number(value ?? 0);
+
+    if (!Number.isFinite(amount)) {
+        return "₹0.00";
+    }
+
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount);
+}
+
+function formatNumber(value) {
+    return new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2
+    }).format(Number(value ?? 0));
+}
+
+function formatDate(value) {
+    if (!value) {
+        return "—";
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function displayValue(value) {
+    if (value === null || value === undefined || value === "") {
+        return "—";
+    }
+
+    return String(value);
+}
+
+function setSummaryCard(number, label, value, description) {
+    setText("summaryLabel" + number, label);
+    setText("summaryValue" + number, value);
+    setText("summaryDescription" + number, description);
+}
+
+function resetSummary() {
+    setSummaryCard(1, "Total Records", "—", "Generate a report");
+    setSummaryCard(2, "Total Amount", "—", "Generate a report");
+    setSummaryCard(3, "Status", "—", "Generate a report");
+    setSummaryCard(4, "Additional Details", "—", "Generate a report");
+}
+
+function renderTableHeaders(headers) {
+    reportTableHead.replaceChildren();
+
+    const row = document.createElement("tr");
+
+    for (const header of headers) {
+        const th = document.createElement("th");
+        th.textContent = header;
+        row.appendChild(th);
+    }
+
+    reportTableHead.appendChild(row);
+}
+
+function addCell(row, value) {
+    const cell = document.createElement("td");
+    cell.textContent = displayValue(value);
+    row.appendChild(cell);
+}
+
+function addStatusCell(row, value) {
+    const cell = document.createElement("td");
+    const badge = document.createElement("span");
+
+    const status = displayValue(value);
+    badge.textContent = status.replaceAll("_", " ");
+    badge.className = "status-badge";
+
+    const normalized = status.toUpperCase();
+
+    if (
+        ["COMPLETED", "PAID", "RECEIPT", "IN_STOCK", "SUCCESS"].includes(normalized)
+    ) {
+        badge.classList.add("status-success");
+    } else if (
+        ["PENDING", "PARTIAL", "LOW_STOCK"].includes(normalized)
+    ) {
+        badge.classList.add("status-warning");
+    } else if (
+        ["CANCELLED", "FAILED", "OUT_OF_STOCK", "OVERDUE"].includes(normalized)
+    ) {
+        badge.classList.add("status-danger");
+    } else {
+        badge.classList.add("status-info");
+    }
+
+    cell.appendChild(badge);
+    row.appendChild(cell);
+}
+
+function showEmptyTable(message, columnCount) {
+    reportTableBody.replaceChildren();
+
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+
+    cell.colSpan = columnCount;
+    cell.className = "empty-state";
+    cell.textContent = message;
+
+    row.appendChild(cell);
+    reportTableBody.appendChild(row);
+
+    setText("recordCount", "0 records");
+}
+
+function resetTable(message = "Select a report and click Generate.") {
+    renderTableHeaders(["Report Data"]);
+    showEmptyTable(message, 1);
+}
+
+function renderSalesSummary(report) {
+    const sales = Array.isArray(report.sales) ? report.sales : [];
+
+    const total = sales.reduce(
+        (sum, sale) => sum + Number(sale.TOTAL_AMOUNT ?? 0),
+        0
+    );
+
+    setSummaryCard(1, "Total Sales", formatMoney(total),
+        "Sum of sales record amounts");
+
+    setSummaryCard(2, "Sales Records", formatNumber(sales.length),
+        "Number of sales records");
+
+    setSummaryCard(3, "Paid Records",
+        formatNumber(sales.filter(s =>
+            String(s.PAYMENT_STATUS ?? "").toUpperCase() === "PAID"
+        ).length),
+        "Records marked as paid");
+
+    setSummaryCard(4, "Other Statuses",
+        formatNumber(sales.filter(s =>
+            String(s.PAYMENT_STATUS ?? "").toUpperCase() !== "PAID"
+        ).length),
+        "Records not marked as paid");
+}
+
+function renderPurchaseSummary(report) {
+    const purchases = Array.isArray(report.purchases)
+        ? report.purchases
+        : [];
+
+    const total = purchases.reduce(
+        (sum, purchase) => sum + Number(purchase.TOTAL_AMOUNT ?? 0),
+        0
+    );
+
+    setSummaryCard(1, "Total Purchases", formatMoney(total),
+        "Sum of purchase record amounts");
+
+    setSummaryCard(2, "Purchase Records", formatNumber(purchases.length),
+        "Number of purchase records");
+
+    setSummaryCard(3, "Paid Records",
+        formatNumber(purchases.filter(p =>
+            String(p.PAYMENT_STATUS ?? "").toUpperCase() === "PAID"
+        ).length),
+        "Records marked as paid");
+
+    setSummaryCard(4, "Other Statuses",
+        formatNumber(purchases.filter(p =>
+            String(p.PAYMENT_STATUS ?? "").toUpperCase() !== "PAID"
+        ).length),
+        "Records not marked as paid");
+}
+
+function renderInventorySummary(report) {
+    const inventory = Array.isArray(report.inventory)
+        ? report.inventory
+        : [];
+
+    const totalUnits = inventory.reduce(
+        (sum, item) => sum + Number(item.CURRENT_STOCK ?? 0),
+        0
+    );
+
+    const lowStock = inventory.filter(item =>
+        String(item.STOCK_STATUS ?? "").toUpperCase() === "LOW_STOCK"
+    ).length;
+
+    const outOfStock = inventory.filter(item =>
+        String(item.STOCK_STATUS ?? "").toUpperCase() === "OUT_OF_STOCK"
+    ).length;
+
+    setSummaryCard(1, "Products", formatNumber(inventory.length),
+        "Active products in the report");
+
+    setSummaryCard(2, "Total Stock Units", formatNumber(totalUnits),
+        "Sum of current stock quantities");
+
+    setSummaryCard(3, "Low Stock", formatNumber(lowStock),
+        "Products at or below reorder level");
+
+    setSummaryCard(4, "Out of Stock", formatNumber(outOfStock),
+        "Products with zero stock");
+}
+
+function renderPaymentSummary(report) {
+    setSummaryCard(
+        1,
+        "Total Receipts",
+        formatMoney(report.totalReceipts),
+        `${report.receiptCount ?? 0} receipt transactions`
+    );
+
+    setSummaryCard(
+        2,
+        "Total Payments",
+        formatMoney(report.totalPayments),
+        `${report.paymentCount ?? 0} payment transactions`
+    );
+
+    setSummaryCard(
+        3,
+        "Net Cash Flow",
+        formatMoney(report.netCashFlow),
+        "Receipts minus payments"
+    );
+
+    setSummaryCard(
+        4,
+        "Total Transactions",
+        formatNumber(report.totalPaymentRecords ?? 0),
+        "Payment and receipt records"
+    );
+}
+
+function renderSalesTable(sales) {
+    renderTableHeaders([
+        "Sale ID",
+        "Sale Number",
+        "Customer",
+        "Sale Date",
+        "Total Amount",
+        "Payment Status"
+    ]);
+
+    reportTableBody.replaceChildren();
+
+    if (!Array.isArray(sales) || sales.length === 0) {
+        showEmptyTable("No sales records found for the selected date range.", 6);
+        return;
+    }
+
+    for (const sale of sales) {
+        const row = document.createElement("tr");
+
+        addCell(row, sale.SALE_ID);
+        addCell(row, sale.SALE_NO);
+        addCell(row, sale.CUSTOMER_NAME);
+        addCell(row, formatDate(sale.SALE_DATE));
+        addCell(row, formatMoney(sale.TOTAL_AMOUNT));
+        addStatusCell(row, sale.PAYMENT_STATUS);
+
+        reportTableBody.appendChild(row);
+    }
+
+    setText("recordCount", `${sales.length} records`);
+}
+
+function renderPurchaseTable(purchases) {
+    renderTableHeaders([
+        "Purchase ID",
+        "Purchase Number",
+        "Supplier",
+        "Purchase Date",
+        "Total Amount",
+        "Payment Status"
+    ]);
+
+    reportTableBody.replaceChildren();
+
+    if (!Array.isArray(purchases) || purchases.length === 0) {
+        showEmptyTable(
+            "No purchase records found for the selected date range.",
+            6
+        );
+        return;
+    }
+
+    for (const purchase of purchases) {
+        const row = document.createElement("tr");
+
+        addCell(row, purchase.PURCHASE_ID);
+        addCell(row, purchase.PURCHASE_NO);
+        addCell(row, purchase.SUPPLIER_NAME);
+        addCell(row, formatDate(purchase.PURCHASE_DATE));
+        addCell(row, formatMoney(purchase.TOTAL_AMOUNT));
+        addStatusCell(row, purchase.PAYMENT_STATUS);
+
+        reportTableBody.appendChild(row);
+    }
+
+    setText("recordCount", `${purchases.length} records`);
+}
+
+function renderInventoryTable(inventory) {
+    renderTableHeaders([
+        "Product Code",
+        "Product Name",
+        "Current Stock",
+        "Minimum Stock",
+        "Cost Price",
+        "Selling Price",
+        "Stock Status"
+    ]);
+
+    reportTableBody.replaceChildren();
+
+    if (!Array.isArray(inventory) || inventory.length === 0) {
+        showEmptyTable("No inventory records were found.", 7);
+        return;
+    }
+
+    for (const item of inventory) {
+        const row = document.createElement("tr");
+
+        addCell(row, item.PRODUCT_CODE);
+        addCell(row, item.PRODUCT_NAME);
+        addCell(row, formatNumber(item.CURRENT_STOCK));
+        addCell(row, formatNumber(item.MIN_STOCK));
+        addCell(row, formatMoney(item.COST_PRICE));
+        addCell(row, formatMoney(item.SELLING_PRICE));
+        addStatusCell(row, item.STOCK_STATUS);
+
+        reportTableBody.appendChild(row);
+    }
+
+    setText("recordCount", `${inventory.length} records`);
+}
+
+function renderPaymentTable(payments) {
+    renderTableHeaders([
+        "Date",
+        "Type",
+        "Party Type",
+        "Party Name",
+        "Account",
+        "Amount",
+        "Mode",
+        "Reference No."
+    ]);
+
+    reportTableBody.replaceChildren();
+
+    if (!Array.isArray(payments) || payments.length === 0) {
+        showEmptyTable(
+            "No payments or receipts were found for the selected date range.",
+            8
+        );
+        return;
+    }
+
+    for (const payment of payments) {
+        const row = document.createElement("tr");
+
+        addCell(row, formatDate(payment.PAYMENT_DATE));
+        addStatusCell(row, payment.PAYMENT_TYPE);
+        addCell(row, payment.PARTY_TYPE);
+        addCell(row, payment.PARTY_NAME);
+        addCell(row, payment.ACCOUNT_NAME);
+        addCell(row, formatMoney(payment.AMOUNT));
+        addCell(row, payment.PAYMENT_MODE);
+        addCell(row, payment.REFERENCE_NO);
+
+        reportTableBody.appendChild(row);
+    }
+
+    setText("recordCount", `${payments.length} records`);
+}
+
+function configureReport(type) {
+    if (type === "sales") {
+        setText("tableTitle", "Sales Report");
+        setText("tableSubtitle", "Sales records retrieved from Oracle.");
+        setText("reportNote",
+            "This report displays sales records for the selected date range. Amounts reflect the totals stored in your sales records.");
+    } else if (type === "purchases") {
+        setText("tableTitle", "Purchase Report");
+        setText("tableSubtitle", "Purchase records retrieved from Oracle.");
+        setText("reportNote",
+            "This report displays purchase records for the selected date range, including the supplier and recorded payment status.");
+    } else if (type === "inventory") {
+        setText("tableTitle", "Inventory Report");
+        setText("tableSubtitle", "Current inventory retrieved from Oracle.");
+        setText("reportNote",
+            "Inventory shows current stock levels. Date filters do not change current stock unless the backend inventory endpoint is designed to support historical inventory.");
+    } else if (type === "payments") {
+        setText("tableTitle", "Payment Report");
+        setText("tableSubtitle", "Receipts and payments retrieved from Oracle.");
+        setText("reportNote",
+            "Net cash flow equals receipts minus payments for the selected period. It is not necessarily the current balance of your bank or cash accounts.");
+    }
+}
+
+function buildReportUrl(type) {
+    const query = new URLSearchParams();
+
+    if (fromDateInput.value) {
+        query.set("fromDate", fromDateInput.value);
+    }
+
+    if (toDateInput.value) {
+        query.set("toDate", toDateInput.value);
+    }
+
+    const queryString = query.toString();
+
+    return `${API_BASE}/${type}${queryString ? "?" + queryString : ""}`;
+}
+
+async function generateReport() {
+    clearMessage();
+
+    const type = reportType.value;
+    const fromDate = fromDateInput.value;
+    const toDate = toDateInput.value;
+
+    if (!["sales", "purchases", "inventory", "payments"].includes(type)) {
+        showMessage("This report is not connected to the backend yet.", "info");
+        return;
+    }
+
+    if (fromDate && toDate && fromDate > toDate) {
+        showMessage("From date cannot be after to date.", "error");
+        return;
+    }
+
+    configureReport(type);
+    generateButton.disabled = true;
+    generateButton.textContent = "Loading...";
+    document.querySelector(".reports-container").classList.add("loading");
+
+    try {
+        const response = await fetch(buildReportUrl(type), {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
+            credentials: "same-origin"
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || `Request failed with status ${response.status}`
+            );
+        }
+
+        currentReport = data;
+
+        if (type === "sales") {
+            renderSalesSummary(data);
+            renderSalesTable(data.sales);
+        } else if (type === "purchases") {
+            renderPurchaseSummary(data);
+            renderPurchaseTable(data.purchases);
+        } else if (type === "inventory") {
+            renderInventorySummary(data);
+            renderInventoryTable(data.inventory);
+        } else if (type === "payments") {
+            renderPaymentSummary(data);
+            renderPaymentTable(data.payments);
+        }
+
+        showMessage("Report generated successfully.", "info");
+
+    } catch (error) {
+        console.error("Report error:", error);
+
+        resetSummary();
+
+        const columnCount = type === "sales" ? 6
+            : type === "purchases" ? 6
+            : type === "inventory" ? 7
+            : type === "payments" ? 8
+            : 1;
+
+        renderTableHeaders(["Report Data"]);
+        showEmptyTable("Unable to load the report.", columnCount);
+
+        showMessage(
+            error.message || "Unable to load the report. Check your connection and login status.",
+            "error"
+        );
+
+    } finally {
+        generateButton.disabled = false;
+        generateButton.textContent = "Generate";
+        document.querySelector(".reports-container").classList.remove("loading");
+    }
+}
+
+function formatLocalDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function applyDateRange(range) {
+    const today = new Date();
+    const end = new Date(today);
+    let start = new Date(today);
+
+    if (range === "today") {
+        // Start and end are today.
+    } else if (range === "week") {
+        start.setDate(today.getDate() - 6);
+    } else if (range === "month") {
+        start = new Date(today.getFullYear(), today.getMonth(), 1);
+    } else if (range === "all") {
+        fromDateInput.value = "";
+        toDateInput.value = "";
+        generateReport();
+        return;
+    }
+
+    fromDateInput.value = formatLocalDate(start);
+    toDateInput.value = formatLocalDate(end);
+
+    generateReport();
+}
+
+function resetFilters() {
+    reportType.value = "sales";
+    fromDateInput.value = "";
+    toDateInput.value = "";
+
+    clearMessage();
+    resetSummary();
+    configureReport("sales");
+    resetTable();
+    currentReport = null;
+
+    generateReport();
+}
+
+generateButton.addEventListener("click", generateReport);
+
+resetButton.addEventListener("click", resetFilters);
+
+printButton.addEventListener("click", () => {
+    window.print();
+});
+
+reportType.addEventListener("change", () => {
+    clearMessage();
+    configureReport(reportType.value);
+});
+
+document.querySelectorAll("[data-range]").forEach(button => {
+    button.addEventListener("click", () => {
+        applyDateRange(button.dataset.range);
+    });
+});
+
+configureReport(reportType.value);
+resetSummary();
+resetTable();
+
+generateReport();
+</script>
+
+</body>
+</html>

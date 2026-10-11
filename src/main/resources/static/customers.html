@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customers - LADO Manufacturing</title>
+
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <div class="container header-inner">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                L
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    LADO Manufacturing
+                </div>
+
+                <div class="brand-subtitle">
+                    Management System
+                </div>
+            </div>
+
+        </div>
+
+
+        <nav class="main-nav">
+
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/products.html">Products</a>
+            <a href="/purchases.html">Purchases</a>
+            <a href="/sales.html">Sales</a>
+            <a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html">Accounts</a>
+            <a href="/reports.html">Reports</a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <div class="page-title">
+                Customers
+            </div>
+
+            <div class="page-subtitle">
+                Manage customer information used for sales,
+                invoices and payments.
+            </div>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <button
+                class="btn-primary"
+                onclick="showCustomerForm()"
+            >
+                + Add Customer
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SUMMARY CARDS
+    ================================================== -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card blue">
+
+            <div class="stat-label">
+                Total Customers
+            </div>
+
+            <div class="stat-value">
+                46
+            </div>
+
+            <div class="stat-description">
+                Customers registered
+            </div>
+
+        </div>
+
+
+        <div class="stat-card green">
+
+            <div class="stat-label">
+                Active Customers
+            </div>
+
+            <div class="stat-value">
+                42
+            </div>
+
+            <div class="stat-description">
+                Currently buying products
+            </div>
+
+        </div>
+
+
+        <div class="stat-card orange">
+
+            <div class="stat-label">
+                This Month
+            </div>
+
+            <div class="stat-value">
+                18
+            </div>
+
+            <div class="stat-description">
+                Customers with sales
+            </div>
+
+        </div>
+
+
+        <div class="stat-card purple">
+
+            <div class="stat-label">
+                Receivables
+            </div>
+
+            <div class="stat-value">
+                ₹2.46L
+            </div>
+
+            <div class="stat-description">
+                Amount pending from customers
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ADD CUSTOMER FORM
+    ================================================== -->
+
+    <section
+        class="card"
+        id="customerForm"
+        style="display: none;"
+    >
+
+        <div class="card-header">
+
+            <div>
+
+                <div class="card-title">
+                    Add New Customer
+                </div>
+
+                <div class="card-subtitle">
+                    Enter customer contact and business details.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form onsubmit="addCustomer(event)">
+
+
+            <!-- CUSTOMER CODE + NAME -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="customerCode">
+                        Customer Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="customerCode"
+                        placeholder="Example: CUS-001"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="customerName">
+                        Customer Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="customerName"
+                        placeholder="Enter customer/company name"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT + PHONE -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="contactPerson">
+                        Contact Person
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contactPerson"
+                        placeholder="Enter contact person"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter phone number"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL + GST -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="customer@example.com"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="gstNumber">
+                        GST Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="gstNumber"
+                        placeholder="Enter GST number"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CITY + STATE -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="city">
+                        City
+                    </label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        placeholder="Enter city"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="state">
+                        State
+                    </label>
+
+                    <input
+                        type="text"
+                        id="state"
+                        placeholder="Enter state"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ADDRESS -->
+
+            <div class="form-group">
+
+                <label for="address">
+                    Address
+                </label>
+
+                <textarea
+                    id="address"
+                    rows="3"
+                    placeholder="Enter complete customer address"
+                ></textarea>
+
+            </div>
+
+
+            <!-- CREDIT LIMIT + PAYMENT TERMS -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="creditLimit">
+                        Credit Limit
+                    </label>
+
+                    <input
+                        type="number"
+                        id="creditLimit"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="paymentTerms">
+                        Payment Terms
+                    </label>
+
+                    <select id="paymentTerms">
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="15 Days">
+                            15 Days
+                        </option>
+
+                        <option value="30 Days">
+                            30 Days
+                        </option>
+
+                        <option value="45 Days">
+                            45 Days
+                        </option>
+
+                        <option value="60 Days">
+                            60 Days
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="form-group">
+
+                <label for="customerStatus">
+                    Status
+                </label>
+
+                <select id="customerStatus">
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Inactive">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn-success"
+                >
+                    Save Customer
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="hideCustomerForm()"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =================================================
+         CUSTOMER LIST
+    ================================================== -->
+
+    <section class="card">
+
+
+        <div class="card-header">
+
+            <div>
+
+                <div class="card-title">
+                    Customer List
+                </div>
+
+                <div class="card-subtitle">
+                    View and manage registered customers.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH / FILTER -->
+
+        <div class="toolbar">
+
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="searchCustomer"
+                    placeholder="Search customers..."
+                    onkeyup="searchCustomers()"
+                >
+
+            </div>
+
+
+            <select
+                id="customerStatusFilter"
+                onchange="filterCustomers()"
+            >
+
+                <option value="All">
+                    All Status
+                </option>
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="Inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Customer Code</th>
+                        <th>Customer Name</th>
+                        <th>Contact Person</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Credit Limit</th>
+                        <th>Receivable</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="customerTableBody">
+
+
+                    <!-- CUSTOMER 1 -->
+
+                    <tr>
+
+                        <td>1</td>
+
+                        <td>CUS-001</td>
+
+                        <td>Shree Industries</td>
+
+                        <td>Rahul Shah</td>
+
+                        <td>9876543210</td>
+
+                        <td>Ahmedabad</td>
+
+                        <td>₹1,00,000</td>
+
+                        <td>₹24,500</td>
+
+                        <td>
+
+                            <span class="badge badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editCustomer(1)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteCustomer(1)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- CUSTOMER 2 -->
+
+                    <tr>
+
+                        <td>2</td>
+
+                        <td>CUS-002</td>
+
+                        <td>Patel Engineering</td>
+
+                        <td>Dhruv Patel</td>
+
+                        <td>9825012345</td>
+
+                        <td>Vadodara</td>
+
+                        <td>₹2,00,000</td>
+
+                        <td>₹68,200</td>
+
+                        <td>
+
+                            <span class="badge badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editCustomer(2)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteCustomer(2)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- CUSTOMER 3 -->
+
+                    <tr>
+
+                        <td>3</td>
+
+                        <td>CUS-003</td>
+
+                        <td>Modern Electrical Works</td>
+
+                        <td>Jay Mehta</td>
+
+                        <td>9909012345</td>
+
+                        <td>Surat</td>
+
+                        <td>₹75,000</td>
+
+                        <td>₹12,800</td>
+
+                        <td>
+
+                            <span class="badge badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editCustomer(3)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteCustomer(3)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- CUSTOMER 4 -->
+
+                    <tr>
+
+                        <td>4</td>
+
+                        <td>CUS-004</td>
+
+                        <td>Industrial Solutions</td>
+
+                        <td>Karan Joshi</td>
+
+                        <td>9812345678</td>
+
+                        <td>Rajkot</td>
+
+                        <td>₹50,000</td>
+
+                        <td>₹0</td>
+
+                        <td>
+
+                            <span class="badge badge-warning">
+                                Inactive
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editCustomer(4)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteCustomer(4)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        LADO Manufacturing Management System
+        © 2026
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   SHOW FORM
+===================================================== */
+
+function showCustomerForm() {
+
+    document.getElementById("customerForm").style.display = "block";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =====================================================
+   HIDE FORM
+===================================================== */
+
+function hideCustomerForm() {
+
+    document.getElementById("customerForm").style.display = "none";
+
+}
+
+
+/* =====================================================
+   ADD CUSTOMER
+===================================================== */
+
+function addCustomer(event) {
+
+    event.preventDefault();
+
+
+    const code =
+        document.getElementById("customerCode").value;
+
+    const name =
+        document.getElementById("customerName").value;
+
+    const contact =
+        document.getElementById("contactPerson").value;
+
+
+    alert(
+        "Customer added successfully!\n\n" +
+
+        "Customer Code: " +
+        code +
+
+        "\nCustomer Name: " +
+        name +
+
+        "\nContact Person: " +
+        contact
+    );
+
+
+    document
+        .querySelector("#customerForm form")
+        .reset();
+
+
+    hideCustomerForm();
+
+}
+
+
+/* =====================================================
+   EDIT CUSTOMER
+===================================================== */
+
+function editCustomer(id) {
+
+    alert(
+        "Edit Customer ID: " +
+        id +
+
+        "\n\n" +
+
+        "Database editing will be connected later."
+    );
+
+}
+
+
+/* =====================================================
+   DELETE CUSTOMER
+===================================================== */
+
+function deleteCustomer(id) {
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete Customer ID " +
+            id +
+            "?"
+        );
+
+
+    if (confirmDelete) {
+
+        alert(
+            "Customer ID " +
+            id +
+
+            " selected for deletion.\n\n" +
+
+            "Database deletion will be connected later."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SEARCH CUSTOMERS
+===================================================== */
+
+function searchCustomers() {
+
+    const search =
+        document
+            .getElementById("searchCustomer")
+            .value
+            .toLowerCase();
+
+
+    const rows =
+        document.querySelectorAll(
+            "#customerTableBody tr"
+        );
+
+
+    rows.forEach(function(row) {
+
+        const text =
+            row.textContent.toLowerCase();
+
+
+        if (text.includes(search)) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   FILTER CUSTOMERS
+===================================================== */
+
+function filterCustomers() {
+
+    const filter =
+        document
+            .getElementById("customerStatusFilter")
+            .value;
+
+
+    const rows =
+        document.querySelectorAll(
+            "#customerTableBody tr"
+        );
+
+
+    rows.forEach(function(row) {
+
+        const status =
+            row.cells[8]
+                .textContent
+                .trim();
+
+
+        if (
+            filter === "All" ||
+            status === filter
+        ) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+</script>
+
+</body>
+
+</html>

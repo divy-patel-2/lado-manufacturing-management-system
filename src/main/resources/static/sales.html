@@ -1,0 +1,4481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sales - LADO Manufacturing</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/common.css"
+    >
+
+    <style>
+
+        /* =================================================
+           LADO NOTIFICATION BOX
+        ================================================== */
+
+        .lado-notification-overlay {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.35);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            z-index: 9999;
+
+            padding: 20px;
+
+            box-sizing: border-box;
+
+        }
+
+
+        .lado-notification-box {
+
+            width: 100%;
+            max-width: 460px;
+
+            background: #ffffff;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.20);
+
+            overflow: hidden;
+
+            animation:
+                ladoNotificationIn
+                0.20s ease-out;
+
+        }
+
+
+        @keyframes ladoNotificationIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(-15px)
+                    scale(0.97);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+        }
+
+
+        .lado-notification-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 18px 20px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+        }
+
+
+        .lado-notification-icon {
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .lado-notification-title {
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            color: #111827;
+
+        }
+
+
+        .lado-notification-body {
+
+            padding: 20px;
+
+            color: #374151;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            white-space: pre-line;
+
+            word-break: break-word;
+
+        }
+
+
+        .lado-notification-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            padding: 0 20px 20px;
+
+        }
+
+
+        .lado-notification-btn {
+
+            border: none;
+
+            border-radius: 7px;
+
+            padding: 9px 18px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+        }
+
+
+        .lado-notification-btn-secondary {
+
+            background: #e5e7eb;
+
+            color: #374151;
+
+        }
+
+
+        .lado-notification-btn-secondary:hover {
+
+            background: #d1d5db;
+
+        }
+
+
+        .lado-notification-btn-primary {
+
+            background: #1e40af;
+
+            color: #ffffff;
+
+        }
+
+
+        .lado-notification-btn-primary:hover {
+
+            background: #1e3a8a;
+
+        }
+
+
+        .lado-notification-btn-danger {
+
+            background: #b91c1c;
+
+            color: #ffffff;
+
+        }
+
+
+        .lado-notification-btn-danger:hover {
+
+            background: #991b1b;
+
+        }
+
+
+        /* SUCCESS */
+
+        .lado-notification-success
+        .lado-notification-icon {
+
+            background: #dcfce7;
+
+            color: #15803d;
+
+        }
+
+
+        /* WARNING */
+
+        .lado-notification-warning
+        .lado-notification-icon {
+
+            background: #fef3c7;
+
+            color: #b45309;
+
+        }
+
+
+        /* ERROR */
+
+        .lado-notification-error
+        .lado-notification-icon {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+
+        }
+
+
+        /* INFO */
+
+        .lado-notification-info
+        .lado-notification-icon {
+
+            background: #dbeafe;
+
+            color: #1d4ed8;
+
+        }
+
+
+        /* =================================================
+           SMALL LOADING TEXT
+        ================================================== */
+
+        .sales-loading {
+
+            text-align: center;
+
+            padding: 25px;
+
+            color: #6b7280;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <div class="container header-inner">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                L
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    LADO Manufacturing
+                </div>
+
+                <div class="brand-subtitle">
+                    Management System
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="main-nav">
+
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/categories.html">Categories</a>
+            <a href="/units.html">Units</a>
+            <a href="/products.html">Products</a>
+            <a href="/suppliers.html">Suppliers</a>
+            <a href="/customers.html">Customers</a>
+            <a href="/purchases.html">Purchases</a>
+
+            <a
+                href="/sales.html"
+                class="active"
+            >
+                Sales
+            </a>
+
+            <a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html">Accounts</a>
+            <a href="/payments.html">Payments</a>
+            <a href="/reports.html">Reports</a>
+            <a href="/users.html">Users</a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="container">
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <section class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Sales
+            </h1>
+
+            <p class="page-subtitle">
+                Manage customer sales, sold products and payment status.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <button
+                class="btn-primary"
+                onclick="showSalesForm()"
+            >
+                + New Sale
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SUMMARY CARDS
+    ================================================== -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card blue">
+
+            <div class="stat-label">
+                Total Sales
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalSalesCount"
+            >
+                0
+            </div>
+
+            <div class="stat-description">
+                All sales transactions
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card green">
+
+            <div class="stat-label">
+                This Month
+            </div>
+
+            <div
+                class="stat-value"
+                id="thisMonthSales"
+            >
+                ₹0.00
+            </div>
+
+            <div class="stat-description">
+                Sales value this month
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card orange">
+
+            <div class="stat-label">
+                Receivables
+            </div>
+
+            <div
+                class="stat-value"
+                id="salesReceivables"
+            >
+                ₹0.00
+            </div>
+
+            <div class="stat-description">
+                Amount pending from customers
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card purple">
+
+            <div class="stat-label">
+                Items Sold
+            </div>
+
+            <div
+                class="stat-value"
+                id="itemsSoldCount"
+            >
+                0
+            </div>
+
+            <div class="stat-description">
+                Total quantity sold
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         NEW SALE FORM
+    ================================================== -->
+
+    <section
+        id="salesForm"
+        class="card"
+        style="display: none;"
+    >
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h2
+                    class="card-title"
+                    id="salesFormTitle"
+                >
+                    New Sale
+                </h2>
+
+                <p class="card-subtitle">
+                    Enter customer details and add products to the sale.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SALE INFORMATION
+        ================================================== -->
+
+        <div class="card">
+
+            <h3 class="card-title">
+                Sale Information
+            </h3>
+
+            <br>
+
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="saleNumber">
+                        Sale Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="saleNumber"
+                        placeholder="Example: SAL-2026-001"
+                    >
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="saleDate">
+                        Sale Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="saleDate"
+                    >
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="customer">
+                        Customer
+                    </label>
+
+                    <select id="customer">
+
+                        <option value="">
+                            Select Customer
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="customerInvoice">
+                        Invoice Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="customerInvoice"
+                        placeholder="Example: SALE-INV-1025"
+                    >
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="salePaymentStatus">
+                        Payment Status
+                    </label>
+
+                    <select id="salePaymentStatus">
+
+                        <option value="PAID">
+                            Paid
+                        </option>
+
+                        <option value="PARTIAL">
+                            Partial
+                        </option>
+
+                        <option
+                            value="PENDING"
+                            selected
+                        >
+                            Pending
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="salePaymentMethod">
+                        Payment Method
+                    </label>
+
+                    <select id="salePaymentMethod">
+
+                        <option value="">
+                            Select Payment Method
+                        </option>
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="Bank Transfer">
+                            Bank Transfer
+                        </option>
+
+                        <option value="UPI">
+                            UPI
+                        </option>
+
+                        <option value="Cheque">
+                            Cheque
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ADD SALE ITEM
+        ================================================== -->
+
+        <div class="card">
+
+            <h3 class="card-title">
+                Add Sale Item
+            </h3>
+
+            <p class="card-subtitle">
+                Select a product and enter the quantity and selling price.
+            </p>
+
+            <br>
+
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="saleProduct">
+                        Product
+                    </label>
+
+                    <select id="saleProduct">
+
+                        <option value="">
+                            Select Product
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="saleUnit">
+                        Unit
+                    </label>
+
+                    <select id="saleUnit">
+
+                        <option value="">
+                            Select Unit
+                        </option>
+
+                        <option value="pcs">
+                            Piece (pcs)
+                        </option>
+
+                        <option value="kg">
+                            Kilogram (kg)
+                        </option>
+
+                        <option value="g">
+                            Gram (g)
+                        </option>
+
+                        <option value="m">
+                            Meter (m)
+                        </option>
+
+                        <option value="set">
+                            Set
+                        </option>
+
+                        <option value="box">
+                            Box
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="saleQuantity">
+                        Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        id="saleQuantity"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="Enter quantity"
+                    >
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="saleUnitPrice">
+                        Selling Price (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="saleUnitPrice"
+                        min="0"
+                        step="0.01"
+                        placeholder="Enter selling price"
+                    >
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="saleGst">
+                        GST (%)
+                    </label>
+
+                    <select id="saleGst">
+
+                        <option value="0">
+                            0%
+                        </option>
+
+                        <option value="5">
+                            5%
+                        </option>
+
+                        <option value="12">
+                            12%
+                        </option>
+
+                        <option
+                            value="18"
+                            selected
+                        >
+                            18%
+                        </option>
+
+                        <option value="28">
+                            28%
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="saleDiscount">
+                        Discount (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="saleDiscount"
+                        min="0"
+                        step="0.01"
+                        value="0"
+                        placeholder="Enter discount"
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="btn-success"
+                    onclick="addSaleItem()"
+                >
+                    + Add Item
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SALE ITEMS TABLE
+        ================================================== -->
+
+        <div class="card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3 class="card-title">
+                        Sale Items
+                    </h3>
+
+                    <p class="card-subtitle">
+                        Products currently added to this sale.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="table-container">
+
+                <table id="saleItemsTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Product</th>
+
+                            <th>Qty</th>
+
+                            <th>Unit</th>
+
+                            <th>Selling Price</th>
+
+                            <th>GST</th>
+
+                            <th>Discount</th>
+
+                            <th>Total</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody id="saleItemsBody">
+
+                        <tr>
+
+                            <td
+                                colspan="9"
+                                style="text-align:center;"
+                            >
+                                No items added yet.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SALE SUMMARY
+        ================================================== -->
+
+        <div class="card">
+
+            <h3 class="card-title">
+                Sale Summary
+            </h3>
+
+            <br>
+
+
+            <div class="grid grid-2">
+
+                <div></div>
+
+
+                <div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong id="saleSubtotal">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Discount
+                        </span>
+
+                        <strong id="saleTotalDiscount">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            GST / Tax
+                        </span>
+
+                        <strong id="saleTotalTax">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+
+                    <hr>
+
+
+
+                    <div class="summary-row total-row">
+
+                        <span>
+                            Grand Total
+                        </span>
+
+                        <strong id="saleGrandTotal">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             NOTES
+        ================================================== -->
+
+        <div class="form-group">
+
+            <label for="saleNotes">
+                Notes
+            </label>
+
+            <textarea
+                id="saleNotes"
+                rows="4"
+                placeholder="Enter additional sale notes..."
+            ></textarea>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM BUTTONS
+        ================================================== -->
+
+        <div class="form-actions">
+
+            <button
+                type="button"
+                class="btn-primary"
+                id="saveSaleButton"
+                onclick="saveSale()"
+            >
+                Save Sale
+            </button>
+
+
+            <button
+                type="button"
+                class="btn-secondary"
+                onclick="hideSalesForm()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SALES HISTORY
+    ================================================== -->
+
+    <section class="card">
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h2 class="card-title">
+                    Sales History
+                </h2>
+
+                <p class="card-subtitle">
+                    View and manage previous sales transactions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SEARCH / FILTER
+        ================================================== -->
+
+        <div class="toolbar">
+
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="salesSearch"
+                    placeholder="Search sale number or customer..."
+                    onkeyup="searchSales()"
+                >
+
+            </div>
+
+
+
+            <div>
+
+                <select
+                    id="salesStatusFilter"
+                    onchange="filterSales()"
+                >
+
+                    <option value="all">
+                        All Payment Status
+                    </option>
+
+                    <option value="PAID">
+                        Paid
+                    </option>
+
+                    <option value="PARTIAL">
+                        Partial
+                    </option>
+
+                    <option value="PENDING">
+                        Pending
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SALES TABLE
+        ================================================== -->
+
+        <div class="table-container">
+
+            <table id="salesTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Sale No.</th>
+
+                        <th>Date</th>
+
+                        <th>Customer</th>
+
+                        <th>Items</th>
+
+                        <th>Subtotal</th>
+
+                        <th>Tax</th>
+
+                        <th>Total</th>
+
+                        <th>Payment</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody id="salesTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="9"
+                            style="text-align:center;"
+                        >
+                            Loading sales...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        LADO Manufacturing Management System
+
+        <br>
+
+        <small>
+            Sales Management Module
+        </small>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+    /* =================================================
+       GLOBAL DATA
+    ================================================== */
+
+    let saleItems = [];
+
+    let salesData = [];
+
+    let customersData = [];
+
+    let productsData = [];
+
+    let editingSaleId = null;
+
+
+
+    /* =================================================
+       CUSTOM WEBSITE NOTIFICATION
+    ================================================== */
+
+    function showNotification(
+        type,
+        title,
+        message
+    ) {
+
+        const existing =
+            document.getElementById(
+                "ladoNotificationOverlay"
+            );
+
+        if (existing) {
+
+            existing.remove();
+
+        }
+
+
+
+        let icon = "ℹ";
+
+        if (type === "success") {
+
+            icon = "✓";
+
+        }
+
+        else if (type === "warning") {
+
+            icon = "⚠";
+
+        }
+
+        else if (type === "error") {
+
+            icon = "✕";
+
+        }
+
+
+
+        const overlay =
+            document.createElement(
+                "div"
+            );
+
+        overlay.id =
+            "ladoNotificationOverlay";
+
+        overlay.className =
+            "lado-notification-overlay";
+
+
+
+        overlay.innerHTML = `
+
+            <div
+                class="lado-notification-box lado-notification-${type}"
+            >
+
+                <div class="lado-notification-header">
+
+                    <div class="lado-notification-icon">
+
+                        ${icon}
+
+                    </div>
+
+                    <div class="lado-notification-title">
+
+                        ${escapeHtml(title)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="lado-notification-body">
+
+                    ${escapeHtml(message)}
+
+                </div>
+
+
+                <div class="lado-notification-actions">
+
+                    <button
+                        type="button"
+                        class="lado-notification-btn lado-notification-btn-primary"
+                        id="ladoNotificationClose"
+                    >
+                        OK
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+
+        document.body.appendChild(
+            overlay
+        );
+
+
+
+        document
+            .getElementById(
+                "ladoNotificationClose"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    overlay.remove();
+
+                }
+            );
+
+
+
+        overlay.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === overlay
+                ) {
+
+                    overlay.remove();
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    /* =================================================
+       CUSTOM WEBSITE CONFIRMATION
+    ================================================== */
+
+    function showDeleteConfirmation(
+        saleNumber
+    ) {
+
+        return new Promise(
+            function (resolve) {
+
+                const existing =
+                    document.getElementById(
+                        "ladoNotificationOverlay"
+                    );
+
+                if (existing) {
+
+                    existing.remove();
+
+                }
+
+
+
+                const overlay =
+                    document.createElement(
+                        "div"
+                    );
+
+                overlay.id =
+                    "ladoNotificationOverlay";
+
+                overlay.className =
+                    "lado-notification-overlay";
+
+
+
+                overlay.innerHTML = `
+
+                    <div
+                        class="lado-notification-box lado-notification-warning"
+                    >
+
+                        <div class="lado-notification-header">
+
+                            <div class="lado-notification-icon">
+                                ⚠
+                            </div>
+
+                            <div class="lado-notification-title">
+                                Confirm Delete
+                            </div>
+
+                        </div>
+
+
+                        <div class="lado-notification-body">
+
+                            Are you sure you want to delete
+                            <strong>${escapeHtml(saleNumber)}</strong>?
+
+                            Inventory will be restored automatically
+                            by the database trigger.
+
+                        </div>
+
+
+                        <div class="lado-notification-actions">
+
+                            <button
+                                type="button"
+                                class="lado-notification-btn lado-notification-btn-secondary"
+                                id="ladoCancelDelete"
+                            >
+                                Cancel
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="lado-notification-btn lado-notification-btn-danger"
+                                id="ladoConfirmDelete"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+
+                document.body.appendChild(
+                    overlay
+                );
+
+
+
+                function finish(
+                    result
+                ) {
+
+                    overlay.remove();
+
+                    resolve(result);
+
+                }
+
+
+
+                document
+                    .getElementById(
+                        "ladoCancelDelete"
+                    )
+                    .addEventListener(
+                        "click",
+                        function () {
+
+                            finish(false);
+
+                        }
+                    );
+
+
+
+                document
+                    .getElementById(
+                        "ladoConfirmDelete"
+                    )
+                    .addEventListener(
+                        "click",
+                        function () {
+
+                            finish(true);
+
+                        }
+                    );
+
+
+
+                overlay.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            event.target === overlay
+                        ) {
+
+                            finish(false);
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+
+    /* =================================================
+       API ERROR MESSAGE
+    ================================================== */
+
+    async function getErrorMessage(
+        response
+    ) {
+
+        try {
+
+            const data =
+                await response.json();
+
+
+
+            if (
+                data &&
+                data.error
+            ) {
+
+                return data.error;
+
+            }
+
+
+
+            if (
+                data &&
+                data.message
+            ) {
+
+                return data.message;
+
+            }
+
+        }
+
+        catch (error) {
+
+            // Response was not JSON.
+
+        }
+
+
+
+        if (
+            response.status === 401 ||
+            response.status === 403
+        ) {
+
+            return "Your session has expired. Please log in again.";
+
+        }
+
+
+
+        if (
+            response.status === 404
+        ) {
+
+            return "The requested sales record was not found.";
+
+        }
+
+
+
+        return (
+            "An unexpected server error occurred. " +
+            "HTTP status: " +
+            response.status
+        );
+
+    }
+
+
+
+    /* =================================================
+       API FETCH HELPER
+       PREVENT STALE HISTORY
+    ================================================== */
+
+    async function apiFetch(
+        url,
+        options = {}
+    ) {
+
+        const finalOptions = {
+
+            ...options,
+
+            cache: "no-store"
+
+        };
+
+
+
+        const response =
+            await fetch(
+                url,
+                finalOptions
+            );
+
+
+
+        if (
+            response.redirected &&
+            response.url.includes(
+                "/login"
+            )
+        ) {
+
+            throw new Error(
+                "Your login session has expired. Please log in again."
+            );
+
+        }
+
+
+
+        return response;
+
+    }
+
+
+
+    /* =================================================
+       PAGE LOAD
+    ================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async function () {
+
+            setDefaultSaleDate();
+
+            await loadCustomers();
+
+            await loadProducts();
+
+            await loadSales();
+
+        }
+    );
+
+
+
+    /* =================================================
+       LOAD CUSTOMERS
+    ================================================== */
+
+    async function loadCustomers() {
+
+        try {
+
+            const response =
+                await apiFetch(
+                    "/api/customers"
+                );
+
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    await getErrorMessage(
+                        response
+                    )
+                );
+
+            }
+
+
+
+            customersData =
+                await response.json();
+
+
+
+            const select =
+                document.getElementById(
+                    "customer"
+                );
+
+
+
+            select.innerHTML = `
+
+                <option value="">
+                    Select Customer
+                </option>
+
+            `;
+
+
+
+            customersData.forEach(
+                function (customer) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+
+                    option.value =
+                        customer.id;
+
+
+
+                    option.textContent =
+                        customer.code
+                            ? customer.code +
+                              " - " +
+                              customer.name
+                            : customer.name;
+
+
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Customer loading error:",
+                error
+            );
+
+
+
+            showNotification(
+                "error",
+                "Customer Loading Failed",
+                error.message
+            );
+
+        }
+
+    }
+
+
+
+    /* =================================================
+       LOAD PRODUCTS
+    ================================================== */
+
+    async function loadProducts() {
+
+        try {
+
+            const response =
+                await apiFetch(
+                    "/api/products"
+                );
+
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    await getErrorMessage(
+                        response
+                    )
+                );
+
+            }
+
+
+
+            productsData =
+                await response.json();
+
+
+
+            const select =
+                document.getElementById(
+                    "saleProduct"
+                );
+
+
+
+            select.innerHTML = `
+
+                <option value="">
+                    Select Product
+                </option>
+
+            `;
+
+
+
+            productsData.forEach(
+                function (product) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+
+                    option.value =
+                        product.id;
+
+
+
+                    option.textContent =
+                        product.code
+                            ? product.code +
+                              " - " +
+                              product.name
+                            : product.name;
+
+
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Product loading error:",
+                error
+            );
+
+
+
+            showNotification(
+                "error",
+                "Product Loading Failed",
+                error.message
+            );
+
+        }
+
+    }
+
+
+
+    /* =================================================
+       PRODUCT SELECTION
+       AUTO-FILL SELLING PRICE
+    ================================================== */
+
+    document
+        .getElementById(
+            "saleProduct"
+        )
+        .addEventListener(
+            "change",
+            function () {
+
+                const productId =
+                    Number(
+                        this.value
+                    );
+
+
+
+                const product =
+                    productsData.find(
+                        function (p) {
+
+                            return Number(
+                                p.id
+                            ) === productId;
+
+                        }
+                    );
+
+
+
+                if (product) {
+
+                    if (
+                        product.sellingPrice !==
+                        undefined &&
+                        product.sellingPrice !==
+                        null
+                    ) {
+
+                        document.getElementById(
+                            "saleUnitPrice"
+                        ).value =
+                            product.sellingPrice;
+
+                    }
+
+                }
+
+            }
+        );
+
+
+
+    /* =================================================
+       SHOW SALES FORM
+    ================================================== */
+
+    function showSalesForm() {
+
+        editingSaleId =
+            null;
+
+
+
+        document.getElementById(
+            "salesFormTitle"
+        ).textContent =
+            "New Sale";
+
+
+
+        document.getElementById(
+            "saveSaleButton"
+        ).textContent =
+            "Save Sale";
+
+
+
+        document.getElementById(
+            "salesForm"
+        ).style.display =
+            "block";
+
+
+
+        clearSaleForm();
+
+        setDefaultSaleDate();
+
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+
+
+    /* =================================================
+       HIDE SALES FORM
+    ================================================== */
+
+    function hideSalesForm() {
+
+        document.getElementById(
+            "salesForm"
+        ).style.display =
+            "none";
+
+
+
+        clearSaleForm();
+
+    }
+
+
+
+    /* =================================================
+       SET DEFAULT DATE
+    ================================================== */
+
+    function setDefaultSaleDate() {
+
+        const dateInput =
+            document.getElementById(
+                "saleDate"
+            );
+
+
+
+        if (!dateInput.value) {
+
+            const today =
+                new Date();
+
+
+
+            const year =
+                today.getFullYear();
+
+
+
+            const month =
+                String(
+                    today.getMonth() + 1
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+
+            const day =
+                String(
+                    today.getDate()
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+
+            dateInput.value =
+                `${year}-${month}-${day}`;
+
+        }
+
+    }
+
+
+
+    /* =================================================
+       ADD SALE ITEM
+    ================================================== */
+
+    function addSaleItem() {
+
+        const productId =
+            Number(
+                document.getElementById(
+                    "saleProduct"
+                ).value
+            );
+
+
+
+        const product =
+            productsData.find(
+                function (p) {
+
+                    return Number(
+                        p.id
+                    ) === productId;
+
+                }
+            );
+
+
+
+        const unit =
+            document.getElementById(
+                "saleUnit"
+            ).value;
+
+
+
+        const quantity =
+            parseFloat(
+                document.getElementById(
+                    "saleQuantity"
+                ).value
+            );
+
+
+
+        const unitPrice =
+            parseFloat(
+                document.getElementById(
+                    "saleUnitPrice"
+                ).value
+            );
+
+
+
+        const gst =
+            parseFloat(
+                document.getElementById(
+                    "saleGst"
+                ).value
+            );
+
+
+
+        const discount =
+            parseFloat(
+                document.getElementById(
+                    "saleDiscount"
+                ).value
+            ) || 0;
+
+
+
+        if (
+            !productId ||
+            !product
+        ) {
+
+            showNotification(
+                "warning",
+                "Product Required",
+                "Please select a valid product."
+            );
+
+            return;
+
+        }
+
+
+
+        if (!unit) {
+
+            showNotification(
+                "warning",
+                "Unit Required",
+                "Please select a unit."
+            );
+
+            return;
+
+        }
+
+
+
+        if (
+            isNaN(quantity) ||
+            quantity <= 0
+        ) {
+
+            showNotification(
+                "warning",
+                "Invalid Quantity",
+                "Please enter a quantity greater than zero."
+            );
+
+            return;
+
+        }
+
+
+
+        if (
+            isNaN(unitPrice) ||
+            unitPrice < 0
+        ) {
+
+            showNotification(
+                "warning",
+                "Invalid Selling Price",
+                "Please enter a valid selling price."
+            );
+
+            return;
+
+        }
+
+
+
+        if (discount < 0) {
+
+            showNotification(
+                "warning",
+                "Invalid Discount",
+                "Discount cannot be negative."
+            );
+
+            return;
+
+        }
+
+
+
+        const grossAmount =
+            quantity *
+            unitPrice;
+
+
+
+        /*
+         * Must match Oracle TRG_SI_TOTALS:
+         *
+         * LINE_TOTAL =
+         * QUANTITY * UNIT_PRICE
+         * + TAX_AMOUNT
+         * - DISCOUNT_AMOUNT
+         */
+
+        const taxAmount =
+            grossAmount *
+            gst /
+            100;
+
+
+
+        const total =
+            grossAmount +
+            taxAmount -
+            discount;
+
+
+
+        if (total < 0) {
+
+            showNotification(
+                "warning",
+                "Invalid Discount",
+                "Discount cannot make the item total negative."
+            );
+
+            return;
+
+        }
+
+
+
+        const item = {
+
+            productId:
+                productId,
+
+            product:
+                product.name,
+
+            unit:
+                unit,
+
+            quantity:
+                quantity,
+
+            unitPrice:
+                unitPrice,
+
+            gst:
+                gst,
+
+            discount:
+                discount,
+
+            subtotal:
+                grossAmount,
+
+            tax:
+                taxAmount,
+
+            total:
+                total
+
+        };
+
+
+
+        saleItems.push(
+            item
+        );
+
+
+
+        renderSaleItems();
+
+        clearSaleItemInputs();
+
+    }
+
+
+
+    /* =================================================
+       DISPLAY SALE ITEMS
+    ================================================== */
+
+    function renderSaleItems() {
+
+        const body =
+            document.getElementById(
+                "saleItemsBody"
+            );
+
+
+
+        body.innerHTML = "";
+
+
+
+        if (
+            saleItems.length === 0
+        ) {
+
+            body.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        style="text-align:center;"
+                    >
+                        No items added yet.
+                    </td>
+
+                </tr>
+
+            `;
+
+
+
+            updateSaleTotals();
+
+            return;
+
+        }
+
+
+
+        saleItems.forEach(
+            function (
+                item,
+                index
+            ) {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.product
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatQuantity(
+                            item.quantity
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.unit
+                        )}
+                    </td>
+
+                    <td>
+                        ₹${Number(
+                            item.unitPrice
+                        ).toFixed(2)}
+                    </td>
+
+                    <td>
+                        ${Number(
+                            item.gst
+                        ).toFixed(2)}%
+                    </td>
+
+                    <td>
+                        ₹${Number(
+                            item.discount
+                        ).toFixed(2)}
+                    </td>
+
+                    <td>
+                        ₹${Number(
+                            item.total
+                        ).toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            type="button"
+                            class="btn-danger btn-sm"
+                            onclick="removeSaleItem(${index})"
+                        >
+                            Remove
+                        </button>
+
+                    </td>
+
+                `;
+
+
+
+                body.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+
+        updateSaleTotals();
+
+    }
+
+
+
+    /* =================================================
+       REMOVE SALE ITEM
+    ================================================== */
+
+    function removeSaleItem(
+        index
+    ) {
+
+        saleItems.splice(
+            index,
+            1
+        );
+
+
+
+        renderSaleItems();
+
+    }
+
+
+
+    /* =================================================
+       UPDATE SALE TOTALS
+    ================================================== */
+
+    function updateSaleTotals() {
+
+        let subtotal = 0;
+
+        let discount = 0;
+
+        let tax = 0;
+
+        let grandTotal = 0;
+
+
+
+        saleItems.forEach(
+            function (item) {
+
+                subtotal +=
+                    Number(
+                        item.subtotal || 0
+                    );
+
+
+
+                discount +=
+                    Number(
+                        item.discount || 0
+                    );
+
+
+
+                tax +=
+                    Number(
+                        item.tax || 0
+                    );
+
+
+
+                grandTotal +=
+                    Number(
+                        item.total || 0
+                    );
+
+            }
+        );
+
+
+
+        document.getElementById(
+            "saleSubtotal"
+        ).textContent =
+            formatCurrency(
+                subtotal
+            );
+
+
+
+        document.getElementById(
+            "saleTotalDiscount"
+        ).textContent =
+            formatCurrency(
+                discount
+            );
+
+
+
+        document.getElementById(
+            "saleTotalTax"
+        ).textContent =
+            formatCurrency(
+                tax
+            );
+
+
+
+        document.getElementById(
+            "saleGrandTotal"
+        ).textContent =
+            formatCurrency(
+                grandTotal
+            );
+
+    }
+
+
+
+    /* =================================================
+       CLEAR SALE ITEM INPUTS
+    ================================================== */
+
+    function clearSaleItemInputs() {
+
+        document.getElementById(
+            "saleProduct"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "saleUnit"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "saleQuantity"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "saleUnitPrice"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "saleGst"
+        ).value = "18";
+
+
+
+        document.getElementById(
+            "saleDiscount"
+        ).value = "0";
+
+    }
+
+
+
+    /* =================================================
+       CLEAR COMPLETE SALE FORM
+    ================================================== */
+
+    function clearSaleForm() {
+
+        saleItems = [];
+
+        editingSaleId =
+            null;
+
+
+
+        document.getElementById(
+            "saleNumber"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "saleDate"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "customer"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "customerInvoice"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "salePaymentStatus"
+        ).value =
+            "PENDING";
+
+
+
+        document.getElementById(
+            "salePaymentMethod"
+        ).value = "";
+
+
+
+        document.getElementById(
+            "saleNotes"
+        ).value = "";
+
+
+
+        clearSaleItemInputs();
+
+        renderSaleItems();
+
+    }
+
+
+
+    /* =================================================
+       SAVE / UPDATE SALE
+    ================================================== */
+
+    async function saveSale() {
+
+        const saleNumber =
+            document.getElementById(
+                "saleNumber"
+            ).value.trim();
+
+
+
+        const saleDate =
+            document.getElementById(
+                "saleDate"
+            ).value;
+
+
+
+        const customerId =
+            Number(
+                document.getElementById(
+                    "customer"
+                ).value
+            );
+
+
+
+        const paymentStatus =
+            document.getElementById(
+                "salePaymentStatus"
+            ).value;
+
+
+
+        const notes =
+            document.getElementById(
+                "saleNotes"
+            ).value.trim();
+
+
+
+        if (!saleNumber) {
+
+            showNotification(
+                "warning",
+                "Sale Number Required",
+                "Please enter sale number."
+            );
+
+            return;
+
+        }
+
+
+
+        if (!saleDate) {
+
+            showNotification(
+                "warning",
+                "Sale Date Required",
+                "Please select sale date."
+            );
+
+            return;
+
+        }
+
+
+
+        if (!customerId) {
+
+            showNotification(
+                "warning",
+                "Customer Required",
+                "Please select a customer."
+            );
+
+            return;
+
+        }
+
+
+
+        if (
+            saleItems.length === 0
+        ) {
+
+            showNotification(
+                "warning",
+                "Sale Items Required",
+                "Please add at least one sale item."
+            );
+
+            return;
+
+        }
+
+
+
+        const requestItems =
+            saleItems.map(
+                function (item) {
+
+                    return {
+
+                        productId:
+                            item.productId,
+
+                        quantity:
+                            item.quantity,
+
+                        unitPrice:
+                            item.unitPrice,
+
+                        taxAmount:
+                            Number(
+                                item.tax.toFixed(2)
+                            ),
+
+                        discountAmount:
+                            Number(
+                                item.discount.toFixed(2)
+                            )
+
+                    };
+
+                }
+            );
+
+
+
+        const requestBody = {
+
+            saleNo:
+                saleNumber,
+
+            customerId:
+                customerId,
+
+            saleDate:
+                saleDate,
+
+            paymentStatus:
+                paymentStatus,
+
+            notes:
+                notes,
+
+            items:
+                requestItems
+
+        };
+
+
+
+        const isEditing =
+            editingSaleId !== null;
+
+
+
+        const url =
+            isEditing
+                ? `/api/sales/${editingSaleId}`
+                : "/api/sales";
+
+
+
+        const method =
+            isEditing
+                ? "PUT"
+                : "POST";
+
+
+
+        const button =
+            document.getElementById(
+                "saveSaleButton"
+            );
+
+
+
+        const originalText =
+            button.textContent;
+
+
+
+        try {
+
+            button.disabled = true;
+
+
+
+            button.textContent =
+                isEditing
+                    ? "Updating..."
+                    : "Saving...";
+
+
+
+            const response =
+                await apiFetch(
+                    url,
+                    {
+
+                        method:
+                            method,
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                requestBody
+                            )
+
+                    }
+                );
+
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    await getErrorMessage(
+                        response
+                    )
+                );
+
+            }
+
+
+
+            /*
+             * Read the response if JSON is available.
+             */
+
+            let savedSale = null;
+
+
+
+            try {
+
+                savedSale =
+                    await response.json();
+
+            }
+
+            catch (error) {
+
+                // Response body may be empty.
+
+            }
+
+
+
+            /*
+             * IMPORTANT:
+             * Clear form first.
+             */
+
+            hideSalesForm();
+
+
+
+            /*
+             * IMPORTANT:
+             * Reload history directly from
+             * the database/API.
+             */
+
+            await loadSales();
+
+
+
+            /*
+             * Show website notification AFTER
+             * the history has been refreshed.
+             */
+
+            showNotification(
+
+                "success",
+
+                isEditing
+                    ? "Sale Updated"
+                    : "Sale Saved",
+
+                isEditing
+                    ? "The sale was updated successfully and Sales History has been refreshed."
+                    : "The sale was saved successfully and has been added to Sales History."
+
+            );
+
+
+
+            console.log(
+                "Saved sale:",
+                savedSale
+            );
+
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Save sale error:",
+                error
+            );
+
+
+
+            showNotification(
+                "error",
+                isEditing
+                    ? "Sale Update Failed"
+                    : "Sale Save Failed",
+                error.message
+            );
+
+        }
+
+        finally {
+
+            button.disabled = false;
+
+
+
+            button.textContent =
+                originalText;
+
+        }
+
+    }
+
+
+
+    /* =================================================
+       LOAD SALES HISTORY
+    ================================================== */
+
+    async function loadSales() {
+
+        const body =
+            document.getElementById(
+                "salesTableBody"
+            );
+
+
+
+        /*
+         * Show loading state every time history
+         * is refreshed.
+         */
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    class="sales-loading"
+                >
+                    Loading latest sales...
+                </td>
+
+            </tr>
+
+        `;
+
+
+
+        try {
+
+            /*
+             * cache:no-store is applied by apiFetch().
+             */
+
+            const response =
+                await apiFetch(
+                    "/api/sales",
+                    {
+                        method: "GET"
+                    }
+                );
+
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    await getErrorMessage(
+                        response
+                    )
+                );
+
+            }
+
+
+
+            const data =
+                await response.json();
+
+
+
+            /*
+             * Replace the old array completely.
+             */
+
+            salesData =
+                Array.isArray(data)
+                    ? data
+                    : [];
+
+
+
+            /*
+             * Render the newest database data.
+             */
+
+            renderSalesTable();
+
+            updateSalesSummary();
+
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Sales loading error:",
+                error
+            );
+
+
+
+            body.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        style="text-align:center;"
+                    >
+                        Unable to load sales.
+                    </td>
+
+                </tr>
+
+            `;
+
+
+
+            showNotification(
+                "error",
+                "Sales History Failed",
+                error.message
+            );
+
+        }
+
+    }
+
+
+
+    /* =================================================
+       GET CUSTOMER NAME
+    ================================================== */
+
+    function getCustomerName(
+        customerId
+    ) {
+
+        const customer =
+            customersData.find(
+                function (c) {
+
+                    return Number(
+                        c.id
+                    ) ===
+                    Number(
+                        customerId
+                    );
+
+                }
+            );
+
+
+
+        if (!customer) {
+
+            return "Unknown Customer";
+
+        }
+
+
+
+        return customer.name;
+
+    }
+
+
+
+    /* =================================================
+       GET PRODUCT NAME
+    ================================================== */
+
+    function getProductName(
+        productId
+    ) {
+
+        const product =
+            productsData.find(
+                function (p) {
+
+                    return Number(
+                        p.id
+                    ) ===
+                    Number(
+                        productId
+                    );
+
+                }
+            );
+
+
+
+        if (!product) {
+
+            return "Unknown Product";
+
+        }
+
+
+
+        return product.name;
+
+    }
+
+
+
+    /* =================================================
+       RENDER SALES HISTORY TABLE
+    ================================================== */
+
+    function renderSalesTable() {
+
+        const body =
+            document.getElementById(
+                "salesTableBody"
+            );
+
+
+
+        body.innerHTML = "";
+
+
+
+        if (
+            salesData.length === 0
+        ) {
+
+            body.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        style="text-align:center;"
+                    >
+                        No sales found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+
+        salesData.forEach(
+            function (sale) {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+
+                const items =
+                    sale.items || [];
+
+
+
+                let subtotal = 0;
+
+                let tax = 0;
+
+                let totalQuantity = 0;
+
+
+
+                items.forEach(
+                    function (item) {
+
+                        const gross =
+                            Number(
+                                item.quantity || 0
+                            ) *
+                            Number(
+                                item.unitPrice || 0
+                            );
+
+
+
+                        subtotal +=
+                            gross;
+
+
+
+                        tax +=
+                            Number(
+                                item.taxAmount || 0
+                            );
+
+
+
+                        totalQuantity +=
+                            Number(
+                                item.quantity || 0
+                            );
+
+                    }
+                );
+
+
+
+                const total =
+                    Number(
+                        sale.totalAmount || 0
+                    );
+
+
+
+                const status =
+                    normalizeStatus(
+                        sale.paymentStatus
+                    );
+
+
+
+                const badgeClass =
+                    getStatusBadgeClass(
+                        status
+                    );
+
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${escapeHtml(
+                            sale.saleNo || ""
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatDate(
+                            sale.saleDate
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            getCustomerName(
+                                sale.customerId
+                            )
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatQuantity(
+                            totalQuantity
+                        )}
+                    </td>
+
+                    <td>
+                        ₹${subtotal.toFixed(2)}
+                    </td>
+
+                    <td>
+                        ₹${tax.toFixed(2)}
+                    </td>
+
+                    <td>
+                        ₹${total.toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <span class="${badgeClass}">
+                            ${formatStatus(
+                                status
+                            )}
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <button
+                            type="button"
+                            class="btn-edit btn-sm"
+                            onclick="viewSale(${sale.id})"
+                        >
+                            View
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-danger btn-sm"
+                            onclick="deleteSale(${sale.id})"
+                        >
+                            Delete
+                        </button>
+
+                    </td>
+
+                `;
+
+
+
+                /*
+                 * Store values directly on the row.
+                 * This makes filtering reliable.
+                 */
+
+                row.dataset.saleId =
+                    sale.id;
+
+
+
+                row.dataset.saleStatus =
+                    status;
+
+
+
+                row.dataset.saleSearch =
+                    (
+                        String(
+                            sale.saleNo || ""
+                        ) +
+                        " " +
+                        getCustomerName(
+                            sale.customerId
+                        )
+                    )
+                        .toLowerCase();
+
+
+
+                body.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+
+        /*
+         * Reapply current search and filter.
+         */
+
+        applySalesFilters();
+
+    }
+
+
+
+    /* =================================================
+       UPDATE SALES SUMMARY
+    ================================================== */
+
+    function updateSalesSummary() {
+
+        let thisMonthTotal = 0;
+
+        let receivables = 0;
+
+        let itemsSold = 0;
+
+
+
+        const today =
+            new Date();
+
+
+
+        const currentMonth =
+            today.getMonth();
+
+
+
+        const currentYear =
+            today.getFullYear();
+
+
+
+        salesData.forEach(
+            function (sale) {
+
+                const total =
+                    Number(
+                        sale.totalAmount || 0
+                    );
+
+
+
+                const saleDate =
+                    sale.saleDate
+                        ? new Date(
+                            sale.saleDate
+                        )
+                        : null;
+
+
+
+                if (
+                    saleDate &&
+                    saleDate.getMonth() ===
+                        currentMonth &&
+                    saleDate.getFullYear() ===
+                        currentYear
+                ) {
+
+                    thisMonthTotal +=
+                        total;
+
+                }
+
+
+
+                const status =
+                    normalizeStatus(
+                        sale.paymentStatus
+                    );
+
+
+
+                if (
+                    status === "PENDING" ||
+                    status === "PARTIAL"
+                ) {
+
+                    receivables +=
+                        total;
+
+                }
+
+
+
+                const items =
+                    sale.items || [];
+
+
+
+                items.forEach(
+                    function (item) {
+
+                        itemsSold +=
+                            Number(
+                                item.quantity || 0
+                            );
+
+                    }
+                );
+
+            }
+        );
+
+
+
+        document.getElementById(
+            "totalSalesCount"
+        ).textContent =
+            salesData.length;
+
+
+
+        document.getElementById(
+            "thisMonthSales"
+        ).textContent =
+            formatCurrency(
+                thisMonthTotal
+            );
+
+
+
+        document.getElementById(
+            "salesReceivables"
+        ).textContent =
+            formatCurrency(
+                receivables
+            );
+
+
+
+        document.getElementById(
+            "itemsSoldCount"
+        ).textContent =
+            formatQuantity(
+                itemsSold
+            );
+
+    }
+
+
+
+    /* =================================================
+       SEARCH SALES
+    ================================================== */
+
+    function searchSales() {
+
+        applySalesFilters();
+
+    }
+
+
+
+    /* =================================================
+       FILTER SALES
+    ================================================== */
+
+    function filterSales() {
+
+        applySalesFilters();
+
+    }
+
+
+
+    /* =================================================
+       APPLY SEARCH + STATUS FILTER
+    ================================================== */
+
+    function applySalesFilters() {
+
+        const searchInput =
+            document.getElementById(
+                "salesSearch"
+            );
+
+
+
+        const statusFilter =
+            document.getElementById(
+                "salesStatusFilter"
+            );
+
+
+
+        if (
+            !searchInput ||
+            !statusFilter
+        ) {
+
+            return;
+
+        }
+
+
+
+        const search =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+
+
+        const filter =
+            statusFilter.value;
+
+
+
+        const rows =
+            document.querySelectorAll(
+                "#salesTableBody tr"
+            );
+
+
+
+        rows.forEach(
+            function (row) {
+
+                /*
+                 * Ignore empty/loading rows.
+                 */
+
+                if (
+                    !row.dataset.saleId
+                ) {
+
+                    return;
+
+                }
+
+
+
+                const rowSearch =
+                    row.dataset.saleSearch ||
+                    "";
+
+
+
+                const rowStatus =
+                    row.dataset.saleStatus ||
+                    "";
+
+
+
+                const searchMatch =
+                    rowSearch.includes(
+                        search
+                    );
+
+
+
+                const statusMatch =
+                    filter === "all" ||
+                    rowStatus === filter;
+
+
+
+                row.style.display =
+                    searchMatch &&
+                    statusMatch
+                        ? ""
+                        : "none";
+
+            }
+        );
+
+    }
+
+
+
+    /* =================================================
+       VIEW / EDIT SALE
+    ================================================== */
+
+    async function viewSale(
+        saleId
+    ) {
+
+        try {
+
+            const response =
+                await apiFetch(
+                    `/api/sales/${saleId}`
+                );
+
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    await getErrorMessage(
+                        response
+                    )
+                );
+
+            }
+
+
+
+            const sale =
+                await response.json();
+
+
+
+            editingSaleId =
+                sale.id;
+
+
+
+            document.getElementById(
+                "salesFormTitle"
+            ).textContent =
+                "Edit Sale";
+
+
+
+            document.getElementById(
+                "saveSaleButton"
+            ).textContent =
+                "Update Sale";
+
+
+
+            document.getElementById(
+                "salesForm"
+            ).style.display =
+                "block";
+
+
+
+            document.getElementById(
+                "saleNumber"
+            ).value =
+                sale.saleNo || "";
+
+
+
+            document.getElementById(
+                "saleDate"
+            ).value =
+                normalizeDateForInput(
+                    sale.saleDate
+                );
+
+
+
+            document.getElementById(
+                "customer"
+            ).value =
+                sale.customerId || "";
+
+
+
+            document.getElementById(
+                "salePaymentStatus"
+            ).value =
+                normalizeStatus(
+                    sale.paymentStatus
+                );
+
+
+
+            document.getElementById(
+                "saleNotes"
+            ).value =
+                sale.notes || "";
+
+
+
+            /*
+             * These two fields are currently not
+             * stored in SALES table.
+             */
+
+            document.getElementById(
+                "customerInvoice"
+            ).value = "";
+
+
+
+            document.getElementById(
+                "salePaymentMethod"
+            ).value = "";
+
+
+
+            saleItems = [];
+
+
+
+            const items =
+                sale.items || [];
+
+
+
+            items.forEach(
+                function (item) {
+
+                    const product =
+                        productsData.find(
+                            function (p) {
+
+                                return Number(
+                                    p.id
+                                ) ===
+                                Number(
+                                    item.productId
+                                );
+
+                            }
+                        );
+
+
+
+                    const gross =
+                        Number(
+                            item.quantity || 0
+                        ) *
+                        Number(
+                            item.unitPrice || 0
+                        );
+
+
+
+                    const tax =
+                        Number(
+                            item.taxAmount || 0
+                        );
+
+
+
+                    const discount =
+                        Number(
+                            item.discountAmount || 0
+                        );
+
+
+
+                    const gst =
+                        gross > 0
+                            ? (
+                                tax /
+                                gross
+                            ) *
+                            100
+                            : 0;
+
+
+
+                    saleItems.push({
+
+                        productId:
+                            item.productId,
+
+                        product:
+                            product
+                                ? product.name
+                                : "Unknown Product",
+
+                        unit:
+                            "",
+
+                        quantity:
+                            Number(
+                                item.quantity || 0
+                            ),
+
+                        unitPrice:
+                            Number(
+                                item.unitPrice || 0
+                            ),
+
+                        gst:
+                            Number(
+                                gst.toFixed(2)
+                            ),
+
+                        discount:
+                            discount,
+
+                        subtotal:
+                            gross,
+
+                        tax:
+                            tax,
+
+                        total:
+                            Number(
+                                item.lineTotal || 0
+                            )
+
+                    });
+
+                }
+            );
+
+
+
+            renderSaleItems();
+
+
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "View sale error:",
+                error
+            );
+
+
+
+            showNotification(
+                "error",
+                "Unable to Load Sale",
+                error.message
+            );
+
+        }
+
+    }
+
+
+
+    /* =================================================
+       DELETE SALE
+    ================================================== */
+
+    async function deleteSale(
+        saleId
+    ) {
+
+        const sale =
+            salesData.find(
+                function (s) {
+
+                    return Number(
+                        s.id
+                    ) ===
+                    Number(
+                        saleId
+                    );
+
+                }
+            );
+
+
+
+        const saleNumber =
+            sale
+                ? sale.saleNo
+                : "this sale";
+
+
+
+        /*
+         * Website confirmation box instead of
+         * Chrome confirm().
+         */
+
+        const confirmed =
+            await showDeleteConfirmation(
+                saleNumber
+            );
+
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+
+        try {
+
+            const response =
+                await apiFetch(
+                    `/api/sales/${saleId}`,
+                    {
+
+                        method:
+                            "DELETE"
+
+                    }
+                );
+
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    await getErrorMessage(
+                        response
+                    )
+                );
+
+            }
+
+
+
+            /*
+             * Refresh history immediately from
+             * the database.
+             */
+
+            await loadSales();
+
+
+
+            showNotification(
+                "success",
+                "Sale Deleted",
+                saleNumber +
+                " was deleted successfully. Sales History has been refreshed."
+            );
+
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Delete sale error:",
+                error
+            );
+
+
+
+            showNotification(
+                "error",
+                "Sale Delete Failed",
+                error.message
+            );
+
+        }
+
+    }
+
+
+
+    /* =================================================
+       STATUS HELPERS
+    ================================================== */
+
+    function normalizeStatus(
+        status
+    ) {
+
+        if (!status) {
+
+            return "PENDING";
+
+        }
+
+
+
+        return String(
+            status
+        )
+            .trim()
+            .toUpperCase();
+
+    }
+
+
+
+    function formatStatus(
+        status
+    ) {
+
+        if (
+            status === "PAID"
+        ) {
+
+            return "Paid";
+
+        }
+
+
+
+        if (
+            status === "PARTIAL"
+        ) {
+
+            return "Partial";
+
+        }
+
+
+
+        return "Pending";
+
+    }
+
+
+
+    function getStatusBadgeClass(
+        status
+    ) {
+
+        if (
+            status === "PAID"
+        ) {
+
+            return "badge-success";
+
+        }
+
+
+
+        if (
+            status === "PARTIAL"
+        ) {
+
+            return "badge-warning";
+
+        }
+
+
+
+        return "badge-danger";
+
+    }
+
+
+
+    /* =================================================
+       FORMAT DATE
+    ================================================== */
+
+    function formatDate(
+        dateValue
+    ) {
+
+        if (!dateValue) {
+
+            return "-";
+
+        }
+
+
+
+        const date =
+            new Date(
+                dateValue
+            );
+
+
+
+        if (
+            isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return dateValue;
+
+        }
+
+
+
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+
+                day:
+                    "2-digit",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric"
+
+            }
+        );
+
+    }
+
+
+
+    /* =================================================
+       NORMALIZE DATE FOR INPUT
+    ================================================== */
+
+    function normalizeDateForInput(
+        dateValue
+    ) {
+
+        if (!dateValue) {
+
+            return "";
+
+        }
+
+
+
+        /*
+         * If backend already gives:
+         *
+         * 2026-10-08
+         *
+         * use it directly.
+         */
+
+        if (
+            typeof dateValue === "string" &&
+            /^\d{4}-\d{2}-\d{2}$/.test(
+                dateValue
+            )
+        ) {
+
+            return dateValue;
+
+        }
+
+
+
+        const date =
+            new Date(
+                dateValue
+            );
+
+
+
+        if (
+            isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "";
+
+        }
+
+
+
+        const year =
+            date.getFullYear();
+
+
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+
+        return (
+            year +
+            "-" +
+            month +
+            "-" +
+            day
+        );
+
+    }
+
+
+
+    /* =================================================
+       FORMAT CURRENCY
+    ================================================== */
+
+    function formatCurrency(
+        value
+    ) {
+
+        return "₹" +
+            Number(
+                value || 0
+            ).toLocaleString(
+                "en-IN",
+                {
+
+                    minimumFractionDigits:
+                        2,
+
+                    maximumFractionDigits:
+                        2
+
+                }
+            );
+
+    }
+
+
+
+    /* =================================================
+       FORMAT QUANTITY
+    ================================================== */
+
+    function formatQuantity(
+        value
+    ) {
+
+        return Number(
+            value || 0
+        ).toLocaleString(
+            "en-IN",
+            {
+
+                maximumFractionDigits:
+                    2
+
+            }
+        );
+
+    }
+
+
+
+    /* =================================================
+       ESCAPE HTML
+    ================================================== */
+
+    function escapeHtml(
+        value
+    ) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+
+        div.textContent =
+            value == null
+                ? ""
+                : String(
+                    value
+                );
+
+
+
+        return div.innerHTML;
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

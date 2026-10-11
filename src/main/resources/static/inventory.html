@@ -1,0 +1,1173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management | LADO Manufacturing</title>
+
+    <style>
+        :root {
+            --primary: #2457d6;
+            --primary-dark: #1944b2;
+            --background: #f4f6fb;
+            --surface: #ffffff;
+            --text: #172033;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --success: #15803d;
+            --success-bg: #dcfce7;
+            --warning: #a16207;
+            --warning-bg: #fef3c7;
+            --danger: #b91c1c;
+            --danger-bg: #fee2e2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        button, input, select, textarea {
+            font: inherit;
+        }
+
+        .topbar {
+            background: #14213d;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: #33466b;
+            color: white;
+        }
+
+        .container {
+            width: min(1400px, 92%);
+            margin: 30px auto;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .page-heading h2 {
+            margin: 0 0 7px;
+            font-size: 28px;
+        }
+
+        .page-heading p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .button-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .button-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+        .button-secondary {
+            background: #e8edf5;
+            color: #1e293b;
+        }
+
+        .button-secondary:hover:not(:disabled) {
+            background: #dbe4f0;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 7px rgba(15, 23, 42, 0.03);
+        }
+
+        .summary-card .label {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .summary-card .value {
+            font-size: 28px;
+            font-weight: 750;
+            overflow-wrap: anywhere;
+        }
+
+        .summary-card .description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+            min-width: 0;
+            box-shadow: 0 2px 7px rgba(15, 23, 42, 0.03);
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .panel-heading h3 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .panel-heading p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: minmax(160px, 1fr) 180px;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .field input,
+        .field select,
+        .field textarea,
+        .filters input,
+        .filters select {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 11px 12px;
+            background: white;
+            color: var(--text);
+            outline: none;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus,
+        .filters input:focus,
+        .filters select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(36, 87, 214, 0.1);
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        .field small {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-normal {
+            color: var(--success);
+            background: var(--success-bg);
+        }
+
+        .status-low {
+            color: var(--warning);
+            background: var(--warning-bg);
+        }
+
+        .status-out {
+            color: var(--danger);
+            background: var(--danger-bg);
+        }
+
+        .message {
+            display: none;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            color: var(--danger);
+            background: var(--danger-bg);
+        }
+
+        .message.success {
+            color: var(--success);
+            background: var(--success-bg);
+        }
+
+        .message.info {
+            color: #1d4ed8;
+            background: #dbeafe;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--muted);
+            padding: 28px 12px;
+            white-space: normal;
+        }
+
+        .form-note {
+            padding: 12px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 17px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1000px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+                margin: 20px auto;
+            }
+
+            .summary-grid {
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 15px;
+            }
+
+            .summary-card .value {
+                font-size: 22px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 15px;
+            }
+
+            .page-heading h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <h1>LADO Manufacturing</h1>
+            <p>Manufacturing Management System</p>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="index.html">Dashboard</a>
+            <a href="products.html">Products</a>
+            <a href="purchases.html">Purchases</a>
+            <a href="sales.html">Sales</a>
+            <a href="inventory.html" class="active">Inventory</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="page-heading">
+            <div>
+                <h2>Inventory Management</h2>
+                <p>Monitor stock levels and manage inventory adjustments.</p>
+            </div>
+
+            <button
+                type="button"
+                class="button button-secondary"
+                id="refreshButton"
+                onclick="loadInventory()">
+                Refresh Inventory
+            </button>
+        </section>
+
+        <div id="pageMessage" class="message" role="status" aria-live="polite"></div>
+
+        <!-- Summary cards -->
+        <section class="summary-grid">
+
+            <article class="summary-card">
+                <div class="label">Total Products</div>
+                <div class="value" id="totalProducts">—</div>
+                <div class="description">Active products in inventory</div>
+            </article>
+
+            <article class="summary-card">
+                <div class="label">Inventory Value</div>
+                <div class="value" id="stockValue">—</div>
+                <div class="description">Stock quantity × cost price</div>
+            </article>
+
+            <article class="summary-card">
+                <div class="label">Low Stock</div>
+                <div class="value" id="lowStockCount">—</div>
+                <div class="description">Products at or below reorder level</div>
+            </article>
+
+            <article class="summary-card">
+                <div class="label">Out of Stock</div>
+                <div class="value" id="outOfStockCount">—</div>
+                <div class="description">Products with zero stock</div>
+            </article>
+
+        </section>
+
+        <div class="content-grid">
+
+            <!-- Inventory table -->
+            <section class="panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <h3>Current Inventory</h3>
+                        <p>Live product and stock information from Oracle.</p>
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <input
+                        type="search"
+                        id="inventorySearch"
+                        placeholder="Search product code or name..."
+                        aria-label="Search inventory"
+                    >
+
+                    <select id="stockFilter" aria-label="Filter by stock status">
+                        <option value="all">All Stock Statuses</option>
+                        <option value="normal">In Stock</option>
+                        <option value="low">Low Stock</option>
+                        <option value="out">Out of Stock</option>
+                    </select>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Code</th>
+                                <th>Product Name</th>
+                                <th>Category ID</th>
+                                <th>Unit ID</th>
+                                <th>Current Stock</th>
+                                <th>Min. Stock</th>
+                                <th>Stock Value</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="inventoryTableBody">
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    Loading inventory...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+            <!-- Stock adjustment form -->
+            <section class="panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <h3>Stock Adjustment</h3>
+                        <p>Add stock or record a stock reduction.</p>
+                    </div>
+                </div>
+
+                <div id="adjustmentMessage" class="message"
+                    role="status" aria-live="polite"></div>
+
+                <form id="stockAdjustmentForm">
+
+                    <div class="field">
+                        <label for="adjustmentProduct">Product *</label>
+
+                        <select id="adjustmentProduct" required>
+                            <option value="">Select a product</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="adjustmentType">Adjustment Type *</label>
+
+                        <select id="adjustmentType" required>
+                            <option value="IN">Stock In — Add Stock</option>
+                            <option value="OUT">Stock Out — Remove Stock</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="adjustmentQuantity">Quantity *</label>
+
+                        <input
+                            type="number"
+                            id="adjustmentQuantity"
+                            min="0.000001"
+                            step="any"
+                            placeholder="Enter quantity"
+                            required
+                        >
+                        <small>Enter a quantity greater than zero.</small>
+                    </div>
+
+                    <div class="field">
+                        <label for="adjustmentReason">Reason *</label>
+
+                        <select id="adjustmentReason" required>
+                            <option value="">Select a reason</option>
+                            <option value="Opening Stock">Opening Stock</option>
+                            <option value="Physical Stock Correction">Physical Stock Correction</option>
+                            <option value="Damaged Goods">Damaged Goods</option>
+                            <option value="Returned Goods">Returned Goods</option>
+                            <option value="Lost Goods">Lost Goods</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="adjustmentNotes">Additional Notes</label>
+
+                        <textarea
+                            id="adjustmentNotes"
+                            maxlength="1000"
+                            placeholder="Optional details about this adjustment..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-note">
+                        Stock adjustments are recorded through the Oracle
+                        APPLY_STOCK procedure. Removing more stock than is
+                        available should be rejected by the database.
+                    </div>
+
+                    <div class="form-actions">
+                        <button
+                            type="submit"
+                            class="button button-primary"
+                            id="saveAdjustmentButton">
+                            Save Adjustment
+                        </button>
+
+                        <button
+                            type="reset"
+                            class="button button-secondary"
+                            id="resetAdjustmentButton">
+                            Clear Form
+                        </button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+        <!-- Transaction history placeholder -->
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h3>Stock Movement History</h3>
+                    <p>Transaction history will be connected in a later step.</p>
+                </div>
+            </div>
+
+            <div class="empty-state">
+                Stock movement history is not connected yet.
+                The stock adjustment endpoint records transactions in Oracle,
+                but this page does not fetch and display them yet.
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        LADO Manufacturing Management System
+    </footer>
+
+    <script>
+        "use strict";
+
+        const INVENTORY_API = "/api/inventory";
+        const ADJUSTMENT_API = "/api/inventory/adjustments";
+
+        let inventoryData = [];
+        let isLoadingInventory = false;
+        let isSavingAdjustment = false;
+
+        const currencyFormatter = new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 2
+        });
+
+        const quantityFormatter = new Intl.NumberFormat("en-IN", {
+            maximumFractionDigits: 4
+        });
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, function (char) {
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                };
+
+                return entities[char];
+            });
+        }
+
+        function toNumber(value) {
+            if (value === null || value === undefined || value === "") {
+                return 0;
+            }
+
+            const number = Number(value);
+            return Number.isFinite(number) ? number : 0;
+        }
+
+        function formatQuantity(value) {
+            return quantityFormatter.format(toNumber(value));
+        }
+
+        function formatCurrency(value) {
+            return currencyFormatter.format(toNumber(value));
+        }
+
+        function getStockStatus(product) {
+            const status = String(product.STOCK_STATUS || "").toUpperCase();
+
+            if (status === "OUT_OF_STOCK") {
+                return "out";
+            }
+
+            if (status === "LOW_STOCK") {
+                return "low";
+            }
+
+            if (status === "IN_STOCK") {
+                return "normal";
+            }
+
+            const current = toNumber(product.CURRENT_STOCK);
+            const minimum = Math.max(
+                toNumber(product.MIN_STOCK),
+                toNumber(product.REORDER_LEVEL)
+            );
+
+            if (current <= 0) {
+                return "out";
+            }
+
+            if (current <= minimum) {
+                return "low";
+            }
+
+            return "normal";
+        }
+
+        function getStatusLabel(status) {
+            if (status === "out") {
+                return "Out of Stock";
+            }
+
+            if (status === "low") {
+                return "Low Stock";
+            }
+
+            return "In Stock";
+        }
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+
+            element.textContent = message;
+            element.className = "message show " + type;
+        }
+
+        function hideMessage(elementId) {
+            const element = document.getElementById(elementId);
+
+            element.textContent = "";
+            element.className = "message";
+        }
+
+        function renderSummary() {
+            document.getElementById("totalProducts").textContent =
+                inventoryData.length;
+
+            let totalValue = 0;
+            let lowStock = 0;
+            let outOfStock = 0;
+
+            inventoryData.forEach(function (product) {
+                const stock = toNumber(product.CURRENT_STOCK);
+                const cost = toNumber(product.COST_PRICE);
+
+                totalValue += stock * cost;
+
+                const status = getStockStatus(product);
+
+                if (status === "low") {
+                    lowStock++;
+                }
+
+                if (status === "out") {
+                    outOfStock++;
+                }
+            });
+
+            document.getElementById("stockValue").textContent =
+                formatCurrency(totalValue);
+
+            document.getElementById("lowStockCount").textContent =
+                lowStock;
+
+            document.getElementById("outOfStockCount").textContent =
+                outOfStock;
+        }
+
+        function populateProductDropdown() {
+            const select = document.getElementById("adjustmentProduct");
+            const previousValue = select.value;
+
+            select.replaceChildren();
+
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Select a product";
+            select.appendChild(defaultOption);
+
+            inventoryData.forEach(function (product) {
+                const option = document.createElement("option");
+
+                option.value = String(product.PRODUCT_ID);
+                option.textContent =
+                    String(product.PRODUCT_CODE ?? "") + " - " +
+                    String(product.PRODUCT_NAME ?? "");
+
+                select.appendChild(option);
+            });
+
+            if (
+                previousValue &&
+                inventoryData.some(function (product) {
+                    return String(product.PRODUCT_ID) === previousValue;
+                })
+            ) {
+                select.value = previousValue;
+            }
+        }
+
+        function renderInventoryTable() {
+            const tbody = document.getElementById("inventoryTableBody");
+            const search = document.getElementById("inventorySearch")
+                .value.trim().toLowerCase();
+            const filter = document.getElementById("stockFilter").value;
+
+            const filtered = inventoryData.filter(function (product) {
+                const code = String(product.PRODUCT_CODE ?? "").toLowerCase();
+                const name = String(product.PRODUCT_NAME ?? "").toLowerCase();
+
+                const matchesSearch =
+                    code.includes(search) || name.includes(search);
+
+                const status = getStockStatus(product);
+
+                const matchesFilter =
+                    filter === "all" || filter === status;
+
+                return matchesSearch && matchesFilter;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            No matching inventory products found.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(function (product) {
+                const status = getStockStatus(product);
+                const stock = toNumber(product.CURRENT_STOCK);
+                const cost = toNumber(product.COST_PRICE);
+                const value = stock * cost;
+
+                let badgeClass = "status-normal";
+
+                if (status === "low") {
+                    badgeClass = "status-low";
+                } else if (status === "out") {
+                    badgeClass = "status-out";
+                }
+
+                return `
+                    <tr>
+                        <td>${escapeHtml(product.PRODUCT_CODE)}</td>
+                        <td>${escapeHtml(product.PRODUCT_NAME)}</td>
+                        <td>${escapeHtml(product.CATEGORY_ID ?? "—")}</td>
+                        <td>${escapeHtml(product.UNIT_ID ?? "—")}</td>
+                        <td>${escapeHtml(formatQuantity(stock))}</td>
+                        <td>${escapeHtml(formatQuantity(product.MIN_STOCK))}</td>
+                        <td>${escapeHtml(formatCurrency(value))}</td>
+                        <td>
+                            <span class="status ${badgeClass}">
+                                ${getStatusLabel(status)}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        async function loadInventory() {
+            if (isLoadingInventory) {
+                return;
+            }
+
+            isLoadingInventory = true;
+
+            const refreshButton = document.getElementById("refreshButton");
+            refreshButton.disabled = true;
+            refreshButton.textContent = "Refreshing...";
+
+            hideMessage("pageMessage");
+
+            try {
+                const response = await fetch(INVENTORY_API, {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Inventory request failed with HTTP " + response.status
+                    );
+                }
+
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error("The inventory API returned unexpected data.");
+                }
+
+                inventoryData = data;
+
+                renderSummary();
+                populateProductDropdown();
+                renderInventoryTable();
+
+            } catch (error) {
+                console.error("Inventory loading error:", error);
+
+                showMessage(
+                    "pageMessage",
+                    "Could not load inventory. Check that Spring Boot is running and that /api/inventory is accessible.",
+                    "error"
+                );
+
+                document.getElementById("inventoryTableBody").innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            Inventory could not be loaded. Use Refresh Inventory
+                            after checking the backend.
+                        </td>
+                    </tr>
+                `;
+
+            } finally {
+                isLoadingInventory = false;
+                refreshButton.disabled = false;
+                refreshButton.textContent = "Refresh Inventory";
+            }
+        }
+
+        async function saveStockAdjustment() {
+            if (isSavingAdjustment) {
+                return;
+            }
+
+            hideMessage("adjustmentMessage");
+            hideMessage("pageMessage");
+
+            const productId =
+                document.getElementById("adjustmentProduct").value;
+
+            const type =
+                document.getElementById("adjustmentType").value;
+
+            const quantityInput =
+                document.getElementById("adjustmentQuantity").value;
+
+            const reason =
+                document.getElementById("adjustmentReason").value.trim();
+
+            const notes =
+                document.getElementById("adjustmentNotes").value.trim();
+
+            const quantity = Number(quantityInput);
+
+            if (!productId) {
+                showMessage(
+                    "adjustmentMessage",
+                    "Please select a product.",
+                    "error"
+                );
+                return;
+            }
+
+            if (type !== "IN" && type !== "OUT") {
+                showMessage(
+                    "adjustmentMessage",
+                    "Please select Stock In or Stock Out.",
+                    "error"
+                );
+                return;
+            }
+
+            if (
+                quantityInput.trim() === "" ||
+                !Number.isFinite(quantity) ||
+                quantity <= 0
+            ) {
+                showMessage(
+                    "adjustmentMessage",
+                    "Enter a valid quantity greater than zero.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!reason) {
+                showMessage(
+                    "adjustmentMessage",
+                    "Please select a reason for the adjustment.",
+                    "error"
+                );
+                return;
+            }
+
+            const product = inventoryData.find(function (item) {
+                return String(item.PRODUCT_ID) === String(productId);
+            });
+
+            if (!product) {
+                showMessage(
+                    "adjustmentMessage",
+                    "The selected product is no longer in the inventory list. Refresh the page and try again.",
+                    "error"
+                );
+                return;
+            }
+
+            if (type === "OUT" && quantity > toNumber(product.CURRENT_STOCK)) {
+                showMessage(
+                    "adjustmentMessage",
+                    "The requested quantity is greater than the currently available stock.",
+                    "error"
+                );
+                return;
+            }
+
+            const confirmed = window.confirm(
+                (type === "IN" ? "Add " : "Remove ") +
+                formatQuantity(quantity) +
+                " unit(s) for " +
+                String(product.PRODUCT_NAME) +
+                "?"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            const saveButton =
+                document.getElementById("saveAdjustmentButton");
+
+            isSavingAdjustment = true;
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
+
+            try {
+                const response = await fetch(ADJUSTMENT_API, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        productId: Number(productId),
+                        type: type,
+                        quantity: quantity,
+                        reason: reason,
+                        notes: notes
+                    })
+                });
+
+                const responseText = await response.text();
+                let result = {};
+
+                if (responseText) {
+                    try {
+                        result = JSON.parse(responseText);
+                    } catch {
+                        result = { message: responseText };
+                    }
+                }
+
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        throw new Error(
+                            "The server denied this request (HTTP 403). Spring Security or CSRF protection may be blocking the adjustment."
+                        );
+                    }
+
+                    throw new Error(
+                        result.message ||
+                        "The adjustment failed with HTTP " + response.status
+                    );
+                }
+
+                if (result.success !== true) {
+                    throw new Error(
+                        result.message || "The server did not confirm the adjustment."
+                    );
+                }
+
+                showMessage(
+                    "adjustmentMessage",
+                    result.message || "Stock adjustment saved successfully.",
+                    "success"
+                );
+
+                document.getElementById("stockAdjustmentForm").reset();
+
+                await loadInventory();
+
+                showMessage(
+                    "pageMessage",
+                    "Stock adjustment completed. Inventory has been refreshed.",
+                    "success"
+                );
+
+            } catch (error) {
+                console.error("Stock adjustment error:", error);
+
+                showMessage(
+                    "adjustmentMessage",
+                    error.message ||
+                    "Could not save the adjustment. Check the server logs.",
+                    "error"
+                );
+
+            } finally {
+                isSavingAdjustment = false;
+                saveButton.disabled = false;
+                saveButton.textContent = "Save Adjustment";
+            }
+        }
+
+        document.getElementById("stockAdjustmentForm")
+            .addEventListener("submit", function (event) {
+                event.preventDefault();
+                saveStockAdjustment();
+            });
+
+        document.getElementById("inventorySearch")
+            .addEventListener("input", renderInventoryTable);
+
+        document.getElementById("stockFilter")
+            .addEventListener("change", renderInventoryTable);
+
+        document.getElementById("stockAdjustmentForm")
+            .addEventListener("reset", function () {
+                hideMessage("adjustmentMessage");
+            });
+
+        // Load inventory when the page opens.
+        document.addEventListener("DOMContentLoaded", loadInventory);
+
+        // Also load immediately if this script runs after the page has loaded.
+        if (document.readyState !== "loading") {
+            loadInventory();
+        }
+    </script>
+
+</body>
+</html>

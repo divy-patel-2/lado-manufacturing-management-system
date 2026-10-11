@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LADO Manufacturing Management System</title>
+  <link rel="stylesheet" href="/common.css">
+</head>
+<body>
+  <header id="header"></header>
+  <main>
+    <h1>LADO Manufacturing Management System</h1>
+    <div class="card">
+      <h2 style="margin-top:0">Welcome</h2>
+      <dl id="me"><dt>Loading...</dt></dl>
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0">Master data</h2>
+      <div class="tiles">
+        <a class="tile" href="/categories.html">Categories<small>Product groups</small></a>
+        <a class="tile" href="/units.html">Units<small>Piece, kg, litre...</small></a>
+      </div>
+    </div>
+  </main>
+  <script src="/common.js"></script>
+  <script>
+    renderHeader('/');
+    api('GET', '/api/me').then(function (m) {
+      document.getElementById('me').innerHTML =
+        '<dt>Company</dt><dd>' + esc(m.companyName) + '</dd>' +
+        '<dt>Logged in as</dt><dd>' + esc(m.fullName) + ' (' + esc(m.username) + ')</dd>' +
+        '<dt>Role</dt><dd>' + esc(m.role) + '</dd>';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LADO - Login</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f3f4f6; display: flex;
+           justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .card { background: #fff; padding: 32px; border-radius: 10px; width: 340px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.1); }
+    h1 { font-size: 20px; margin: 0 0 20px; }
+    label { display: block; font-size: 13px; margin: 14px 0 4px; color: #374151; }
+    input[type=text], input[type=password] { width: 100%; padding: 9px; box-sizing: border-box;
+            border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+    button { width: 100%; margin-top: 20px; padding: 10px; background: #2563eb; color: #fff;
+             border: 0; border-radius: 6px; font-size: 15px; cursor: pointer; }
+    .msg { margin-top: 14px; padding: 8px; border-radius: 6px; font-size: 13px; display: none; }
+    .error { background: #fee2e2; color: #991b1b; }
+    .info { background: #dcfce7; color: #166534; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>LADO Manufacturing System</h1>
+    <form id="loginForm" method="post" action="/login">
+      <label for="company">Company code</label>
+      <input type="text" id="company" autocomplete="organization" required>
+
+      <label for="user">Username</label>
+      <input type="text" id="user" autocomplete="username" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+      <!-- the server receives "COMPANYCODE:username" in this field -->
+      <input type="hidden" id="username" name="username">
+
+      <button type="submit">Log in</button>
+    </form>
+    <div id="error" class="msg error">Wrong company, username or password.</div>
+    <div id="logout" class="msg info">You have been logged out.</div>
+  </div>
+
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    if (params.has('error')) document.getElementById('error').style.display = 'block';
+    if (params.has('logout')) document.getElementById('logout').style.display = 'block';
+
+    document.getElementById('loginForm').addEventListener('submit', function () {
+      var company = document.getElementById('company').value.trim().toUpperCase();
+      var user = document.getElementById('user').value.trim();
+      document.getElementById('username').value = company + ':' + user;
+    });
+  </script>
+</body>
+</html>

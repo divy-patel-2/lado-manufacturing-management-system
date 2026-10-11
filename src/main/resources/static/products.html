@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Products - LADO Manufacturing</title>
+
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <div class="container header-inner">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                L
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    LADO Manufacturing
+                </div>
+
+                <div class="brand-subtitle">
+                    Management System
+                </div>
+            </div>
+
+        </div>
+
+
+        <nav class="main-nav">
+
+            <a href="/dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="/products.html">
+                Products
+            </a>
+
+            <a href="/purchases.html">
+                Purchases
+            </a>
+
+            <a href="/sales.html">
+                Sales
+            </a>
+
+            <a href="/inventory.html">
+                Inventory
+            </a>
+
+            <a href="/accounts.html">
+                Accounts
+            </a>
+
+            <a href="/reports.html">
+                Reports
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <div class="page-title">
+                Products
+            </div>
+
+            <div class="page-subtitle">
+                Manage products, designs, categories, units
+                and product information.
+            </div>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <button
+                class="btn-primary"
+                onclick="showProductForm()"
+            >
+                + Add Product
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SUMMARY
+    ================================================== -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card blue">
+
+            <div class="stat-label">
+                Total Products
+            </div>
+
+            <div class="stat-value">
+                124
+            </div>
+
+            <div class="stat-description">
+                Products registered
+            </div>
+
+        </div>
+
+
+        <div class="stat-card green">
+
+            <div class="stat-label">
+                Active Products
+            </div>
+
+            <div class="stat-value">
+                118
+            </div>
+
+            <div class="stat-description">
+                Currently available
+            </div>
+
+        </div>
+
+
+        <div class="stat-card orange">
+
+            <div class="stat-label">
+                Low Stock
+            </div>
+
+            <div class="stat-value">
+                9
+            </div>
+
+            <div class="stat-description">
+                Products below minimum stock
+            </div>
+
+        </div>
+
+
+        <div class="stat-card purple">
+
+            <div class="stat-label">
+                Out of Stock
+            </div>
+
+            <div class="stat-value">
+                3
+            </div>
+
+            <div class="stat-description">
+                Products requiring purchase
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ADD PRODUCT FORM
+    ================================================== -->
+
+    <section
+        class="card"
+        id="productForm"
+        style="display: none;"
+    >
+
+        <div class="card-header">
+
+            <div>
+
+                <div class="card-title">
+                    Add New Product
+                </div>
+
+                <div class="card-subtitle">
+                    Enter the basic information for a new
+                    manufacturing product.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form onsubmit="addProduct(event)">
+
+
+            <!-- PRODUCT CODE + NAME -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="productCode">
+                        Product Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="productCode"
+                        placeholder="Example: LADO-001"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productName">
+                        Product Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="productName"
+                        placeholder="Enter product name"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- DESIGN NUMBER + CATEGORY -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="designNumber">
+                        Design Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="designNumber"
+                        placeholder="Example: D-1001"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <select id="category" required>
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="Electrical Components">
+                            Electrical Components
+                        </option>
+
+                        <option value="Mechanical Components">
+                            Mechanical Components
+                        </option>
+
+                        <option value="Connectors">
+                            Connectors
+                        </option>
+
+                        <option value="Fasteners">
+                            Fasteners
+                        </option>
+
+                        <option value="Raw Materials">
+                            Raw Materials
+                        </option>
+
+                        <option value="Packaging">
+                            Packaging
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- UNIT + PRICE -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="unit">
+                        Unit
+                    </label>
+
+                    <select id="unit" required>
+
+                        <option value="">
+                            Select Unit
+                        </option>
+
+                        <option value="Piece">
+                            Piece (pcs)
+                        </option>
+
+                        <option value="Kilogram">
+                            Kilogram (kg)
+                        </option>
+
+                        <option value="Gram">
+                            Gram (g)
+                        </option>
+
+                        <option value="Meter">
+                            Meter (m)
+                        </option>
+
+                        <option value="Millimeter">
+                            Millimeter (mm)
+                        </option>
+
+                        <option value="Liter">
+                            Liter (L)
+                        </option>
+
+                        <option value="Set">
+                            Set (set)
+                        </option>
+
+                        <option value="Box">
+                            Box (box)
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="price">
+                        Standard Price
+                    </label>
+
+                    <input
+                        type="number"
+                        id="price"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- MIN STOCK + STATUS -->
+
+            <div class="grid grid-2">
+
+
+                <div class="form-group">
+
+                    <label for="minimumStock">
+                        Minimum Stock Level
+                    </label>
+
+                    <input
+                        type="number"
+                        id="minimumStock"
+                        placeholder="0"
+                        min="0"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productStatus">
+                        Status
+                    </label>
+
+                    <select id="productStatus">
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="productDescription">
+                    Description
+                </label>
+
+                <textarea
+                    id="productDescription"
+                    rows="3"
+                    placeholder="Enter product description"
+                ></textarea>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn-success"
+                >
+                    Save Product
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="hideProductForm()"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =================================================
+         PRODUCT LIST
+    ================================================== -->
+
+    <section class="card">
+
+
+        <div class="card-header">
+
+            <div>
+
+                <div class="card-title">
+                    Product List
+                </div>
+
+                <div class="card-subtitle">
+                    View and manage all manufacturing products.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH + FILTER -->
+
+        <div class="toolbar">
+
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="searchProduct"
+                    placeholder="Search by product, code or design..."
+                    onkeyup="searchProducts()"
+                >
+
+            </div>
+
+
+            <select
+                id="categoryFilter"
+                onchange="filterProducts()"
+            >
+
+                <option value="All">
+                    All Categories
+                </option>
+
+                <option value="Electrical Components">
+                    Electrical Components
+                </option>
+
+                <option value="Mechanical Components">
+                    Mechanical Components
+                </option>
+
+                <option value="Connectors">
+                    Connectors
+                </option>
+
+                <option value="Fasteners">
+                    Fasteners
+                </option>
+
+                <option value="Raw Materials">
+                    Raw Materials
+                </option>
+
+            </select>
+
+
+            <select
+                id="productStatusFilter"
+                onchange="filterProducts()"
+            >
+
+                <option value="All">
+                    All Status
+                </option>
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="Inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Product Code
+                        </th>
+
+                        <th>
+                            Product Name
+                        </th>
+
+                        <th>
+                            Design No.
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Unit
+                        </th>
+
+                        <th>
+                            Stock
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="productTableBody">
+
+
+                    <!-- PRODUCT 1 -->
+
+                    <tr>
+
+                        <td>
+                            1
+                        </td>
+
+                        <td>
+                            LADO-001
+                        </td>
+
+                        <td>
+                            Control Panel
+                        </td>
+
+                        <td>
+                            D-1001
+                        </td>
+
+                        <td>
+                            Electrical Components
+                        </td>
+
+                        <td>
+                            pcs
+                        </td>
+
+                        <td>
+                            150
+                        </td>
+
+                        <td>
+
+                            <span class="badge badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editProduct(1)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteProduct(1)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- PRODUCT 2 -->
+
+                    <tr>
+
+                        <td>
+                            2
+                        </td>
+
+                        <td>
+                            LADO-002
+                        </td>
+
+                        <td>
+                            Motor Housing
+                        </td>
+
+                        <td>
+                            D-1002
+                        </td>
+
+                        <td>
+                            Mechanical Components
+                        </td>
+
+                        <td>
+                            pcs
+                        </td>
+
+                        <td>
+                            74
+                        </td>
+
+                        <td>
+
+                            <span class="badge badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editProduct(2)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteProduct(2)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- PRODUCT 3 -->
+
+                    <tr>
+
+                        <td>
+                            3
+                        </td>
+
+                        <td>
+                            LADO-003
+                        </td>
+
+                        <td>
+                            Copper Wire
+                        </td>
+
+                        <td>
+                            D-1003
+                        </td>
+
+                        <td>
+                            Raw Materials
+                        </td>
+
+                        <td>
+                            m
+                        </td>
+
+                        <td>
+                            18
+                        </td>
+
+                        <td>
+
+                            <span class="badge badge-warning">
+                                Low Stock
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editProduct(3)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteProduct(3)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- PRODUCT 4 -->
+
+                    <tr>
+
+                        <td>
+                            4
+                        </td>
+
+                        <td>
+                            LADO-004
+                        </td>
+
+                        <td>
+                            Terminal Connector
+                        </td>
+
+                        <td>
+                            D-1004
+                        </td>
+
+                        <td>
+                            Connectors
+                        </td>
+
+                        <td>
+                            pcs
+                        </td>
+
+                        <td>
+                            0
+                        </td>
+
+                        <td>
+
+                            <span class="badge badge-danger">
+                                Out of Stock
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editProduct(4)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteProduct(4)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- PRODUCT 5 -->
+
+                    <tr>
+
+                        <td>
+                            5
+                        </td>
+
+                        <td>
+                            LADO-005
+                        </td>
+
+                        <td>
+                            Mounting Bolt
+                        </td>
+
+                        <td>
+                            D-1005
+                        </td>
+
+                        <td>
+                            Fasteners
+                        </td>
+
+                        <td>
+                            pcs
+                        </td>
+
+                        <td>
+                            320
+                        </td>
+
+                        <td>
+
+                            <span class="badge badge-success">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-edit btn-sm"
+                                onclick="editProduct(5)"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="btn-danger btn-sm"
+                                onclick="deleteProduct(5)"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        LADO Manufacturing Management System
+        © 2026
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   SHOW FORM
+===================================================== */
+
+function showProductForm() {
+
+    document.getElementById("productForm").style.display = "block";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =====================================================
+   HIDE FORM
+===================================================== */
+
+function hideProductForm() {
+
+    document.getElementById("productForm").style.display = "none";
+
+}
+
+
+/* =====================================================
+   ADD PRODUCT
+===================================================== */
+
+function addProduct(event) {
+
+    event.preventDefault();
+
+
+    const code =
+        document.getElementById("productCode").value;
+
+    const name =
+        document.getElementById("productName").value;
+
+    const category =
+        document.getElementById("category").value;
+
+    const unit =
+        document.getElementById("unit").value;
+
+
+    alert(
+        "Product added successfully!\n\n" +
+
+        "Product Code: " +
+        code +
+
+        "\nProduct Name: " +
+        name +
+
+        "\nCategory: " +
+        category +
+
+        "\nUnit: " +
+        unit
+    );
+
+
+    document
+        .querySelector("#productForm form")
+        .reset();
+
+
+    hideProductForm();
+
+}
+
+
+/* =====================================================
+   EDIT PRODUCT
+===================================================== */
+
+function editProduct(id) {
+
+    alert(
+        "Edit Product ID: " +
+        id +
+
+        "\n\n" +
+
+        "Database editing will be connected later."
+    );
+
+}
+
+
+/* =====================================================
+   DELETE PRODUCT
+===================================================== */
+
+function deleteProduct(id) {
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete Product ID " +
+            id +
+            "?"
+        );
+
+
+    if (confirmDelete) {
+
+        alert(
+            "Product ID " +
+            id +
+
+            " selected for deletion.\n\n" +
+
+            "Database deletion will be connected later."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SEARCH PRODUCTS
+===================================================== */
+
+function searchProducts() {
+
+    const search =
+        document
+            .getElementById("searchProduct")
+            .value
+            .toLowerCase();
+
+
+    const rows =
+        document.querySelectorAll(
+            "#productTableBody tr"
+        );
+
+
+    rows.forEach(function(row) {
+
+        const text =
+            row.textContent.toLowerCase();
+
+
+        if (text.includes(search)) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   FILTER PRODUCTS
+===================================================== */
+
+function filterProducts() {
+
+    const category =
+        document
+            .getElementById("categoryFilter")
+            .value;
+
+    const status =
+        document
+            .getElementById("productStatusFilter")
+            .value;
+
+
+    const rows =
+        document.querySelectorAll(
+            "#productTableBody tr"
+        );
+
+
+    rows.forEach(function(row) {
+
+        const rowCategory =
+            row.cells[4]
+                .textContent
+                .trim();
+
+        const rowStatus =
+            row.cells[7]
+                .textContent
+                .trim();
+
+
+        const categoryMatch =
+            category === "All" ||
+            rowCategory === category;
+
+
+        const statusMatch =
+            status === "All" ||
+            rowStatus === status;
+
+
+        if (
+            categoryMatch &&
+            statusMatch
+        ) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+</script>
+
+</body>
+
+</html>
