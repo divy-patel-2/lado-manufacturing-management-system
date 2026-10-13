@@ -2,739 +2,201 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>LADO Manufacturing - Dashboard</title>
-
-    <link
-        rel="stylesheet"
-        href="/css/common.css"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f6f7fb">
+    <title>Dashboard | LADO Manufacturing</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
-
-<body>
-
-<header class="site-header">
-
-    <div class="container header-inner">
-
-        <div class="brand">
-
-            <div class="brand-icon">
-                LM
-            </div>
-
-            <div>
-                <div class="brand-name">
-                    LADO Manufacturing
-                </div>
-
-                <div class="brand-subtitle">
-                    Management System
-                </div>
-            </div>
-
-        </div>
-
-
-        <nav class="main-nav">
-
-            <a href="/dashboard.html" class="active">
-                Dashboard
-            </a>
-
-            <a href="/categories.html">
-                Categories
-            </a>
-
-            <a href="/units.html">
-                Units
-            </a>
-
-            <a href="/products.html">
-                Products
-            </a>
-
-            <a href="/suppliers.html">
-                Suppliers
-            </a>
-
-            <a href="/customers.html">
-                Customers
-            </a>
-
-            <a href="/purchases.html">
-                Purchases
-            </a>
-
-            <a href="/sales.html">
-                Sales
-            </a>
-
-            <a href="/inventory.html">
-                Inventory
-            </a>
-
-            <a href="/accounts.html">
-                Accounts
-            </a>
-
-            <a href="/payments.html">
-                Payments
-            </a>
-
-            <a href="/reports.html">
-                Reports
-            </a>
-
-            <a href="/users.html">
-                Users
-            </a>
-
-        </nav>
-
-
-        <a
-            href="/dashboard.html"
-            class="logout-btn"
-            onclick="logoutUser(event)"
-        >
-            Logout
+<body class="dashboard-page">
+<div class="dashboard-shell">
+    <aside class="dashboard-sidebar" aria-label="Main navigation">
+        <a class="dashboard-brand" href="/dashboard.html">
+            <span class="dashboard-brand-mark">L</span>
+            <span>
+                <span class="dashboard-brand-name">LADO Manufacturing</span>
+                <span class="dashboard-brand-sub">Management workspace</span>
+            </span>
         </a>
 
-    </div>
+        <div class="dashboard-nav-label">Workspace</div>
+        <nav class="dashboard-nav">
+            <a class="active" href="/dashboard.html"><span class="nav-icon">⌂</span>Dashboard</a>
+            <a href="/categories.html"><span class="nav-icon">▦</span>Categories</a>
+            <a href="/units.html"><span class="nav-icon">◫</span>Units</a>
+            <a href="/products.html"><span class="nav-icon">▣</span>Products</a>
+            <a href="/inventory.html"><span class="nav-icon">▤</span>Inventory</a>
+        </nav>
 
-</header>
+        <div class="dashboard-nav-label">Business</div>
+        <nav class="dashboard-nav">
+            <a href="/suppliers.html"><span class="nav-icon">♧</span>Suppliers</a>
+            <a href="/customers.html"><span class="nav-icon">♙</span>Customers</a>
+            <a href="/purchases.html"><span class="nav-icon">↙</span>Purchases</a>
+            <a href="/sales.html"><span class="nav-icon">↗</span>Sales</a>
+            <a href="/accounts.html"><span class="nav-icon">▱</span>Accounts</a>
+            <a href="/payments.html"><span class="nav-icon">₹</span>Payments</a>
+        </nav>
 
+        <div class="dashboard-nav-label">Management</div>
+        <nav class="dashboard-nav">
+            <a href="/reports.html"><span class="nav-icon">▥</span>Reports</a>
+            <a href="/users.html"><span class="nav-icon">♧</span>Users</a>
+        </nav>
 
-<main>
+        <div class="dashboard-sidebar-bottom">
+            <strong>LADO Manufacturing</strong>
+            Operations at a glance
+        </div>
+    </aside>
 
-    <div class="container">
+    <main class="dashboard-main">
+        <div class="dashboard-topbar">
+            <div class="dashboard-breadcrumb">Workspace <span aria-hidden="true">/</span> <strong>Dashboard</strong></div>
+            <div class="dashboard-top-actions">
+                <span class="dashboard-date" id="todayDate">Your business overview</span>
+                <span class="dashboard-avatar" aria-label="LADO">L</span>
+                <button type="button" class="dash-logout" onclick="logoutUser(event)">Log out ↗</button>
+            </div>
+        </div>
 
-
-        <!-- PAGE HEADER -->
-
-        <div class="page-header">
-
+        <section class="dashboard-heading">
             <div>
-
-                <h1 class="page-title">
-                    Dashboard
-                </h1>
-
-                <p class="page-subtitle">
-                    Overview of LADO Manufacturing operations
-                </p>
-
+                <div class="dashboard-eyebrow">Manufacturing workspace</div>
+                <h1 class="dashboard-title">Good to see you.</h1>
+                <p class="dashboard-subtitle">Here’s your LADO business workspace. Choose a module to get started.</p>
             </div>
-
-
-            <div class="page-actions">
-
-                <a
-                    href="/purchases.html"
-                    class="btn btn-primary"
-                >
-                    + New Purchase
-                </a>
-
-                <a
-                    href="/sales.html"
-                    class="btn btn-success"
-                >
-                    + New Sale
-                </a>
-
+            <div class="dashboard-actions">
+                <a class="dash-btn" href="/purchases.html">＋ New purchase</a>
+                <a class="dash-btn dash-btn-primary" href="/sales.html">＋ Create sale</a>
             </div>
+        </section>
 
-        </div>
-
-
-
-        <!-- KPI CARDS -->
-
-        <div class="stats-grid">
-
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Total Products
-                </div>
-
-                <div class="stat-value">
-                    124
-                </div>
-
-                <div class="stat-description">
-                    118 active products
-                </div>
-
+        <section aria-label="Business overview">
+            <div class="dash-kpi-grid">
+                <article class="dash-card dash-kpi">
+                    <div class="dash-kpi-top"><span class="dash-kpi-label">Sales</span><span class="dash-kpi-icon kpi-purple">↗</span></div>
+                    <div class="dash-kpi-value">—</div>
+                    <div class="dash-kpi-note">Connect live sales data to display totals</div>
+                </article>
+                <article class="dash-card dash-kpi">
+                    <div class="dash-kpi-top"><span class="dash-kpi-label">Purchases</span><span class="dash-kpi-icon kpi-green">↙</span></div>
+                    <div class="dash-kpi-value">—</div>
+                    <div class="dash-kpi-note">Purchase totals will appear here</div>
+                </article>
+                <article class="dash-card dash-kpi">
+                    <div class="dash-kpi-top"><span class="dash-kpi-label">Inventory</span><span class="dash-kpi-icon kpi-orange">▤</span></div>
+                    <div class="dash-kpi-value">—</div>
+                    <div class="dash-kpi-note">Stock counts will appear here</div>
+                </article>
+                <article class="dash-card dash-kpi">
+                    <div class="dash-kpi-top"><span class="dash-kpi-label">Receivables</span><span class="dash-kpi-icon kpi-blue">₹</span></div>
+                    <div class="dash-kpi-value">—</div>
+                    <div class="dash-kpi-note">Outstanding balances will appear here</div>
+                </article>
             </div>
+        </section>
 
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Total Sales
+        <section class="dash-content-grid">
+            <article class="dash-card">
+                <div class="dash-panel-head">
+                    <div><h2 class="dash-section-title">Business activity</h2><p class="dash-section-sub">Sales and purchase performance</p></div>
+                    <a class="dash-link" href="/reports.html">View reports ↗</a>
                 </div>
-
-                <div class="stat-value">
-                    ₹7.36L
-                </div>
-
-                <div class="stat-description">
-                    This month
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Total Purchases
-                </div>
-
-                <div class="stat-value">
-                    ₹4.82L
-                </div>
-
-                <div class="stat-description">
-                    This month
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Stock Items
-                </div>
-
-                <div class="stat-value">
-                    124
-                </div>
-
-                <div class="stat-description">
-                    9 low stock items
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- ACCOUNT SUMMARY -->
-
-        <div class="card">
-
-            <div class="card-header">
-
-                <div>
-
-                    <h2 class="card-title">
-                        Account Summary
-                    </h2>
-
-                    <p class="card-subtitle">
-                        Current cash and bank balances
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="card-body">
-
-                <div class="account-summary">
-
-
-                    <div class="stat-card">
-
-                        <div class="stat-label">
-                            Cash Balance
-                        </div>
-
-                        <div class="stat-value">
-                            ₹0
-                        </div>
-
-                        <div class="stat-description">
-                            Available cash
-                        </div>
-
+                <div class="dash-panel-body">
+                    <div class="dash-chart-placeholder">
+                        <span class="dash-placeholder-icon">▥</span>
+                        <div class="dash-placeholder-title">Your activity chart will appear here</div>
+                        <p class="dash-placeholder-text">Once the dashboard is connected to transaction data, this space can show sales and purchase trends from your records.</p>
+                        <p style="margin:13px 0 0"><a class="dash-link" href="/reports.html">Open reports →</a></p>
                     </div>
-
-
-                    <div class="stat-card">
-
-                        <div class="stat-label">
-                            Bank Balance
-                        </div>
-
-                        <div class="stat-value">
-                            ₹0
-                        </div>
-
-                        <div class="stat-description">
-                            Available bank balance
-                        </div>
-
-                    </div>
-
                 </div>
+            </article>
 
+            <article class="dash-card">
+                <div class="dash-panel-head">
+                    <div><h2 class="dash-section-title">Workspace shortcuts</h2><p class="dash-section-sub">Jump into a business area</p></div>
+                </div>
+                <div class="dash-panel-body">
+                    <div class="dash-status-list">
+                        <a class="dash-status-row" href="/products.html">
+                            <span class="dash-status-icon">▣</span>
+                            <span class="dash-status-copy"><span class="dash-status-name">Product catalogue</span><span class="dash-status-desc">Manage products and designs</span></span>
+                            <span class="dash-status-tag">Open ↗</span>
+                        </a>
+                        <a class="dash-status-row" href="/inventory.html">
+                            <span class="dash-status-icon">▤</span>
+                            <span class="dash-status-copy"><span class="dash-status-name">Stock overview</span><span class="dash-status-desc">Review available inventory</span></span>
+                            <span class="dash-status-tag">Open ↗</span>
+                        </a>
+                        <a class="dash-status-row" href="/accounts.html">
+                            <span class="dash-status-icon">₹</span>
+                            <span class="dash-status-copy"><span class="dash-status-name">Accounts</span><span class="dash-status-desc">Review cash and bank entries</span></span>
+                            <span class="dash-status-tag">Open ↗</span>
+                        </a>
+                        <a class="dash-status-row" href="/reports.html">
+                            <span class="dash-status-icon">▥</span>
+                            <span class="dash-status-copy"><span class="dash-status-name">Reports</span><span class="dash-status-desc">Review business summaries</span></span>
+                            <span class="dash-status-tag">Open ↗</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="dash-card" style="margin-bottom:19px">
+            <div class="dash-panel-head">
+                <div><h2 class="dash-section-title">Recent transactions</h2><p class="dash-section-sub">Latest sales and purchases recorded in the system</p></div>
+                <div class="dashboard-actions">
+                    <a class="dash-link" href="/purchases.html">Purchases ↗</a>
+                    <a class="dash-link" href="/sales.html">Sales ↗</a>
+                </div>
             </div>
-
-        </div>
-
-
-
-        <!-- INVENTORY STATUS -->
-
-        <div class="card">
-
-            <div class="card-header">
-
-                <div>
-
-                    <h2 class="card-title">
-                        Inventory Status
-                    </h2>
-
-                    <p class="card-subtitle">
-                        Current stock condition
-                    </p>
-
-                </div>
-
-                <a
-                    href="/inventory.html"
-                    class="btn btn-secondary btn-sm"
-                >
-                    View Inventory
-                </a>
-
+            <div class="dash-table-wrap">
+                <table class="dash-table">
+                    <thead><tr><th>Transaction</th><th>Type</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+                    <tbody><tr><td colspan="5" class="dash-empty"><strong>No transactions to display yet</strong>When transaction records are available, recent activity will be listed here.</td></tr></tbody>
+                </table>
             </div>
+        </section>
 
-
-            <div class="card-body">
-
-                <div class="inventory-status">
-
-
-                    <div class="stat-card">
-
-                        <div class="stat-label">
-                            Normal
-                        </div>
-
-                        <div class="stat-value text-success">
-                            112
-                        </div>
-
-                        <div class="stat-description">
-                            Products
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat-card">
-
-                        <div class="stat-label">
-                            Low Stock
-                        </div>
-
-                        <div class="stat-value text-warning">
-                            9
-                        </div>
-
-                        <div class="stat-description">
-                            Products
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat-card">
-
-                        <div class="stat-label">
-                            Out of Stock
-                        </div>
-
-                        <div class="stat-value text-danger">
-                            3
-                        </div>
-
-                        <div class="stat-description">
-                            Products
-                        </div>
-
-                    </div>
-
-                </div>
-
+        <section aria-label="All modules">
+            <div style="margin-bottom:14px"><h2 class="dash-section-title">All modules</h2><p class="dash-section-sub">Everything you need to manage day-to-day operations</p></div>
+            <div class="dash-modules">
+                <a class="dash-card dash-module" href="/categories.html"><span class="dash-module-icon">▦</span><span><span class="dash-module-name">Categories</span><span class="dash-module-desc">Organise product groups</span></span></a>
+                <a class="dash-card dash-module" href="/units.html"><span class="dash-module-icon">◫</span><span><span class="dash-module-name">Units</span><span class="dash-module-desc">Manage measurement units</span></span></a>
+                <a class="dash-card dash-module" href="/products.html"><span class="dash-module-icon">▣</span><span><span class="dash-module-name">Products</span><span class="dash-module-desc">Maintain your catalogue</span></span></a>
+                <a class="dash-card dash-module" href="/inventory.html"><span class="dash-module-icon">▤</span><span><span class="dash-module-name">Inventory</span><span class="dash-module-desc">Track available stock</span></span></a>
+                <a class="dash-card dash-module" href="/suppliers.html"><span class="dash-module-icon">♧</span><span><span class="dash-module-name">Suppliers</span><span class="dash-module-desc">Manage supplier details</span></span></a>
+                <a class="dash-card dash-module" href="/customers.html"><span class="dash-module-icon">♙</span><span><span class="dash-module-name">Customers</span><span class="dash-module-desc">Manage customer details</span></span></a>
+                <a class="dash-card dash-module" href="/purchases.html"><span class="dash-module-icon">↙</span><span><span class="dash-module-name">Purchases</span><span class="dash-module-desc">Record incoming purchases</span></span></a>
+                <a class="dash-card dash-module" href="/sales.html"><span class="dash-module-icon">↗</span><span><span class="dash-module-name">Sales</span><span class="dash-module-desc">Record customer sales</span></span></a>
             </div>
-
-        </div>
-
-
-
-        <!-- RECENT PURCHASES + SALES -->
-
-        <div class="dashboard-grid">
-
-
-            <!-- RECENT PURCHASES -->
-
-            <div class="card">
-
-                <div class="card-header">
-
-                    <div>
-
-                        <h2 class="card-title">
-                            Recent Purchases
-                        </h2>
-
-                        <p class="card-subtitle">
-                            Latest purchase transactions
-                        </p>
-
-                    </div>
-
-                    <a
-                        href="/purchases.html"
-                        class="btn btn-secondary btn-sm"
-                    >
-                        View All
-                    </a>
-
-                </div>
-
-
-                <div class="card-body">
-
-                    <div class="table-wrapper">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        Purchase No.
-                                    </th>
-
-                                    <th>
-                                        Supplier
-                                    </th>
-
-                                    <th>
-                                        Date
-                                    </th>
-
-                                    <th>
-                                        Amount
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody>
-
-                                <tr>
-
-                                    <td colspan="4">
-
-                                        <div class="empty-state">
-
-                                            <strong>
-                                                No purchase records yet
-                                            </strong>
-
-                                            Purchase transactions will
-                                            appear here.
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- RECENT SALES -->
-
-            <div class="card">
-
-                <div class="card-header">
-
-                    <div>
-
-                        <h2 class="card-title">
-                            Recent Sales
-                        </h2>
-
-                        <p class="card-subtitle">
-                            Latest sales transactions
-                        </p>
-
-                    </div>
-
-                    <a
-                        href="/sales.html"
-                        class="btn btn-secondary btn-sm"
-                    >
-                        View All
-                    </a>
-
-                </div>
-
-
-                <div class="card-body">
-
-                    <div class="table-wrapper">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        Sale No.
-                                    </th>
-
-                                    <th>
-                                        Customer
-                                    </th>
-
-                                    <th>
-                                        Date
-                                    </th>
-
-                                    <th>
-                                        Amount
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody>
-
-                                <tr>
-
-                                    <td colspan="4">
-
-                                        <div class="empty-state">
-
-                                            <strong>
-                                                No sales records yet
-                                            </strong>
-
-                                            Sales transactions will
-                                            appear here.
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- QUICK ACTIONS -->
-
-        <div class="card">
-
-            <div class="card-header">
-
-                <div>
-
-                    <h2 class="card-title">
-                        Quick Actions
-                    </h2>
-
-                    <p class="card-subtitle">
-                        Quickly access common operations
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="card-body">
-
-                <div class="quick-actions">
-
-
-                    <!-- PRODUCT - RED -->
-
-                    <a
-                        href="/products.html"
-                        class="quick-action product-action"
-                    >
-
-                        <div class="quick-action-icon">
-                            +
-                        </div>
-
-                        <div>
-                            Add Product
-                        </div>
-
-                    </a>
-
-
-
-                    <!-- CUSTOMER - DARK BLUE -->
-
-                    <a
-                        href="/customers.html"
-                        class="quick-action customer-action"
-                    >
-
-                        <div class="quick-action-icon">
-                            +
-                        </div>
-
-                        <div>
-                            Add Customer
-                        </div>
-
-                    </a>
-
-
-
-                    <!-- SUPPLIER - LIGHT GREEN -->
-
-                    <a
-                        href="/suppliers.html"
-                        class="quick-action supplier-action"
-                    >
-
-                        <div class="quick-action-icon">
-                            +
-                        </div>
-
-                        <div>
-                            Add Supplier
-                        </div>
-
-                    </a>
-
-
-
-                    <!-- PAYMENT - YELLOW -->
-
-                    <a
-                        href="/payments.html"
-                        class="quick-action payment-action"
-                    >
-
-                        <div class="quick-action-icon">
-                            +
-                        </div>
-
-                        <div>
-                            Add Payment
-                        </div>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-</main>
-
-
-
-<!-- FOOTER -->
-
-<footer class="site-footer">
-
-    <div class="container">
-
-        LADO Manufacturing Management System
-        &nbsp;|&nbsp;
-        College Project
-
-    </div>
-
-</footer>
-
-
+        </section>
+
+        <footer class="dash-footer">LADO Manufacturing Management System <span aria-hidden="true">·</span> Dashboard workspace</footer>
+    </main>
+</div>
 
 <script>
-
 function logoutUser(event) {
-
     event.preventDefault();
-
-    const confirmed = confirm(
-        "Are you sure you want to logout?"
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
+    if (!confirm("Are you sure you want to log out?")) return;
     const form = document.createElement("form");
-
     form.method = "POST";
     form.action = "/logout";
-
     document.body.appendChild(form);
-
     form.submit();
 }
 
+(function () {
+    var dateElement = document.getElementById("todayDate");
+    if (dateElement) {
+        dateElement.textContent = new Intl.DateTimeFormat("en-IN", {
+            weekday: "short", day: "numeric", month: "short", year: "numeric"
+        }).format(new Date());
+    }
+})();
 </script>
-
-
 </body>
 </html>
