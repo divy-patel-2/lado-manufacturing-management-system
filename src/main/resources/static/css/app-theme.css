@@ -51,3 +51,10 @@ body:has(#loginForm) .card{border:1px solid rgba(233,235,243,.9);border-radius:2
 body:has(#loginForm) button{background:var(--ui-purple)!important}
 @media(max-width:900px){.header-inner{align-items:flex-start!important;flex-direction:column!important}.main-nav{width:100%;overflow-x:auto;flex-wrap:nowrap!important;padding-bottom:4px}.main-nav a{flex:0 0 auto}.page-header,.page-head,.page-heading{align-items:flex-start!important;flex-direction:column!important}body:not(.dashboard-page) .container{width:min(calc(100% - 28px),1500px)!important}}
 @media(max-width:600px){.stats-grid,.summary-grid,.summary-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}.stat-card{padding:14px!important}.stat-value{font-size:22px!important}th,td{padding:10px 9px!important}}
+
+
+/* Navigation consistency: keep every module visible and allow rows to wrap. */
+.site-header .header-inner{display:flex!important;flex-wrap:wrap!important;gap:12px!important}
+.site-header .main-nav{display:flex!important;flex:1 1 100%!important;width:100%!important;justify-content:flex-start!important;align-items:center!important;gap:5px!important;flex-wrap:wrap!important;overflow:visible!important;max-height:none!important;padding-bottom:0!important}
+.site-header .main-nav a{flex:0 0 auto!important;white-space:nowrap!important}
+@media(max-width:900px){.site-header .header-inner{align-items:flex-start!important;flex-direction:column!important}.site-header .main-nav{width:100%!important;flex-wrap:wrap!important;overflow:visible!important;max-height:none!important}.site-header .main-nav a{flex:0 0 auto!important}}
