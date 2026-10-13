@@ -47,6 +47,9 @@
             </p>
         </div>
         <div class="page-actions">
+            <button type="button" class="btn-secondary" onclick="showCreateAccountForm()">
+                + Add Account
+            </button>
             <button type="button" class="btn-primary" onclick="showAccountEntry()">
                 + New Entry
             </button>
@@ -79,6 +82,38 @@
             <div class="stat-label">Total Expenses</div>
             <div class="stat-value" id="totalExpenses">₹0.00</div>
             <div class="stat-description">Recorded expense entries</div>
+        </div>
+    </section>
+
+    <!-- Create Cash/Bank account -->
+    <section id="createAccountForm" class="card" style="display:none;">
+        <div class="card-header">
+            <div>
+                <h2 class="card-title">Add Cash or Bank Account</h2>
+                <p class="card-subtitle">Create an account that can be used for entries, payments and transfers.</p>
+            </div>
+        </div>
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="newAccountName">Account Name *</label>
+                <input id="newAccountName" type="text" maxlength="100" placeholder="e.g. Cash in Hand or HDFC Bank" required>
+            </div>
+            <div class="form-group">
+                <label for="newAccountType">Account Type *</label>
+                <select id="newAccountType" required>
+                    <option value="CASH">Cash</option>
+                    <option value="BANK">Bank</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="newOpeningBalance">Opening Balance (₹)</label>
+                <input id="newOpeningBalance" type="number" min="0" step="0.01" value="0" required>
+                <small>Use 0 if you are setting up the account for the first time.</small>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="saveNewAccountButton" class="btn-primary" onclick="saveNewAccount()">Save Account</button>
+            <button type="button" class="btn-secondary" onclick="hideCreateAccountForm()">Cancel</button>
         </div>
     </section>
 
@@ -362,6 +397,59 @@ async function fetchJson(url, options = {}) {
     }
 
     return data;
+}
+
+function showCreateAccountForm() {
+    clearMessage();
+    document.getElementById("createAccountForm").style.display = "block";
+    document.getElementById("accountEntryForm").style.display = "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("newAccountName").focus();
+}
+
+function hideCreateAccountForm() {
+    document.getElementById("createAccountForm").style.display = "none";
+}
+
+async function saveNewAccount() {
+    clearMessage();
+    const accountName = document.getElementById("newAccountName").value.trim();
+    const accountType = document.getElementById("newAccountType").value;
+    const openingBalance = Number(document.getElementById("newOpeningBalance").value);
+
+    if (!accountName) {
+        showMessage("Please enter an account name.", true);
+        return;
+    }
+    if (!Number.isFinite(openingBalance) || openingBalance < 0) {
+        showMessage("Opening balance must be zero or greater.", true);
+        return;
+    }
+
+    const button = document.getElementById("saveNewAccountButton");
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try {
+        await fetchJson(API_BASE, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ accountName, accountType, openingBalance })
+        });
+
+        document.getElementById("newAccountName").value = "";
+        document.getElementById("newAccountType").value = "CASH";
+        document.getElementById("newOpeningBalance").value = "0";
+        hideCreateAccountForm();
+        await loadAccounts();
+        showMessage("Account created successfully. It is now available for entries and payments.");
+    } catch (error) {
+        console.error("Create account error:", error);
+        showMessage("Could not create account: " + error.message, true);
+    } finally {
+        button.disabled = false;
+        button.textContent = "Save Account";
+    }
 }
 
 function showAccountEntry() {
