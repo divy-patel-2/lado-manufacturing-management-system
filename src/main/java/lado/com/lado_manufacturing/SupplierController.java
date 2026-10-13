@@ -25,7 +25,8 @@ public class SupplierController {
             String address,
             String city,
             String state,
-            String pincode
+            String pincode,
+            String isActive
     ) {}
 
     public record SupplierDto(
@@ -81,7 +82,7 @@ public class SupplierController {
         supplier.setCity(clean(request.city()));
         supplier.setState(clean(request.state()));
         supplier.setPincode(clean(request.pincode()));
-        supplier.setIsActive("Y");
+        supplier.setIsActive(normalizeStatus(request.isActive()));
 
         return toDto(supplierRepository.save(supplier));
     }
@@ -121,6 +122,7 @@ public class SupplierController {
         supplier.setCity(clean(request.city()));
         supplier.setState(clean(request.state()));
         supplier.setPincode(clean(request.pincode()));
+        supplier.setIsActive(normalizeStatus(request.isActive()));
 
         return toDto(supplierRepository.save(supplier));
     }
@@ -237,5 +239,19 @@ public class SupplierController {
 
     private String clean(String value) {
         return value == null ? null : value.trim();
+    }
+
+    private String normalizeStatus(String value) {
+        if (value == null || value.isBlank()) {
+            return "Y";
+        }
+        String status = value.trim();
+        if ("Y".equalsIgnoreCase(status) || "ACTIVE".equalsIgnoreCase(status)) {
+            return "Y";
+        }
+        if ("N".equalsIgnoreCase(status) || "INACTIVE".equalsIgnoreCase(status)) {
+            return "N";
+        }
+        throw new IllegalArgumentException("Supplier status must be Active or Inactive.");
     }
 }
