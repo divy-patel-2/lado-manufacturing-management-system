@@ -418,8 +418,8 @@ byId("productTableBody").addEventListener("click", async function(event) {
         if (!confirm('Delete product "' + (product.name || product.code) + '"? If it is already used in a transaction, the database may prevent deletion.')) return;
         try {
             await apiRequest(API_PRODUCTS + "/" + id, { method: "DELETE" });
-            showMessage("Product deleted successfully.", "success");
             await loadProducts();
+            showMessage("Product deleted successfully.", "success");
         } catch (error) {
             showMessage(error.message || "Could not delete product.", "error");
         }
@@ -456,8 +456,8 @@ byId("productForm").addEventListener("submit", async function(event) {
             body: JSON.stringify(payload)
         });
         resetForm();
-        showMessage(id ? "Product updated successfully." : "Product added successfully.", "success");
         await loadProducts();
+        showMessage(id ? "Product updated successfully." : "Product added successfully.", "success");
     } catch (error) {
         showMessage(error.message || "Could not save product.", "error");
     } finally {
