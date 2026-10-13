@@ -1,0 +1,53 @@
+/* LADO Manufacturing — unified visual system
+   Additive UI polish only: existing forms, IDs, API calls and business logic remain untouched. */
+:root{--ui-bg:#f6f7fb;--ui-surface:#fff;--ui-ink:#20243a;--ui-muted:#85899d;--ui-line:#e9ebf3;--ui-purple:#6257e8;--ui-purple-soft:#f0efff;--ui-radius:16px;--ui-shadow:0 8px 28px rgba(32,36,58,.045)}
+html{background:var(--ui-bg)}
+body:not(.dashboard-page){background:var(--ui-bg)!important;color:var(--ui-ink)!important;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;font-size:14px}
+a{transition:color .18s ease,background .18s ease,border-color .18s ease,transform .18s ease}
+.site-header{position:sticky!important;top:0;z-index:100;background:rgba(255,255,255,.94)!important;border-bottom:1px solid var(--ui-line)!important;box-shadow:0 4px 18px rgba(32,36,58,.035)!important;backdrop-filter:blur(14px)}
+.header-inner{gap:22px!important;padding-top:13px!important;padding-bottom:13px!important}
+.brand{gap:11px!important}
+.brand-icon{display:grid!important;place-items:center;border-radius:13px!important;background:linear-gradient(145deg,#786df4,#5144d7)!important;color:white!important;box-shadow:0 7px 18px #6257e82c}
+.brand-name{color:var(--ui-ink)!important;font-weight:800!important;letter-spacing:-.35px}
+.brand-subtitle{color:var(--ui-muted)!important}
+.main-nav{gap:5px!important}
+.main-nav a{border-radius:10px!important;padding:9px 11px!important;color:#73788d!important;font-weight:650!important;font-size:12px!important}
+.main-nav a:hover,.main-nav a.active{background:var(--ui-purple-soft)!important;color:var(--ui-purple)!important}
+.container,.reports-container,.payments-page{max-width:1500px!important}
+main.container,.reports-container,.payments-page{padding-bottom:36px!important}
+.page-header,.page-head,.page-heading{align-items:center!important;gap:18px!important;margin:25px 0 22px!important}
+.page-title,.page-header h1,.page-head h1,.page-heading h1{color:var(--ui-ink)!important;font-size:clamp(24px,2.5vw,32px)!important;font-weight:800!important;letter-spacing:-.9px!important;line-height:1.2}
+.page-subtitle,.page-header p,.page-head p,.page-heading p{color:var(--ui-muted)!important;font-size:13px!important;line-height:1.6}
+.stats-grid,.summary-grid,.summary-cards{gap:15px!important;margin-bottom:22px!important}
+.stat-card,.summary-card,.card,.panel,.section-card,.payment-section,.report-panel,.purchase-form-card,.table-card,.content-card{background:var(--ui-surface)!important;border:1px solid var(--ui-line)!important;border-radius:var(--ui-radius)!important;box-shadow:var(--ui-shadow)!important}
+.stat-card{padding:20px!important}
+.stat-label{color:#777c91!important;font-size:12px!important;font-weight:700!important}
+.stat-value{color:var(--ui-ink)!important;font-size:27px!important;font-weight:800!important;letter-spacing:-.7px}
+.stat-description{color:#9699aa!important;font-size:11px!important}
+button,.btn,[class*="btn-"],input[type="submit"]{border-radius:10px!important;font-weight:700!important;transition:transform .16s ease,box-shadow .16s ease,background .16s ease}
+button:hover,.btn:hover,[class*="btn-"]:hover,input[type="submit"]:hover{transform:translateY(-1px)}
+.btn-primary,button.btn-primary{background:var(--ui-purple)!important;border-color:var(--ui-purple)!important;color:#fff!important;box-shadow:0 5px 13px rgba(98,87,232,.18)}
+.btn-secondary,.btn-outline,.btn-light{background:#fff!important;border-color:var(--ui-line)!important;color:#555a70!important}
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),select,textarea,.filter-control{border:1px solid #dfe2ec!important;border-radius:10px!important;background:#fff!important;color:var(--ui-ink)!important;min-height:40px;transition:border-color .16s ease,box-shadow .16s ease}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:#8a81f0!important;box-shadow:0 0 0 3px rgba(98,87,232,.12)!important}
+label,.form-group label{color:#4e5369!important;font-weight:700!important;font-size:12px!important}
+.form-group{min-width:0}
+table{width:100%;border-collapse:separate!important;border-spacing:0!important}
+thead th,table thead th{background:#fafafe!important;color:#85899d!important;text-transform:uppercase;font-size:10px!important;letter-spacing:.55px;font-weight:800!important;border-bottom:1px solid var(--ui-line)!important}
+th,td{padding:13px 14px!important;border-color:#f0f1f6!important}
+tbody tr:hover{background:#fafaff!important}
+.page-message,#pageMessage,#msg{border-radius:10px}
+.badge,.pill,.status-badge,.status-pill{border-radius:999px!important;font-weight:750!important}
+hr{border:0;border-top:1px solid var(--ui-line)}
+.topbar{background:#fff!important;color:var(--ui-ink)!important;border-bottom:1px solid var(--ui-line);box-shadow:0 4px 18px rgba(32,36,58,.035)}
+.topbar .nav-links a{color:#73788d!important;border-radius:10px!important}
+.topbar .nav-links a:hover,.topbar .nav-links a.active{color:var(--ui-purple)!important;background:var(--ui-purple-soft)!important}
+.reports-container{padding-top:12px!important}
+.report-panel{padding:22px!important}
+body:not(.dashboard-page) .container{width:min(1500px,calc(100% - 48px))!important}
+body:not(.dashboard-page) .empty-state,body:not(.dashboard-page) .empty{color:var(--ui-muted)!important}
+body:has(#loginForm){background:radial-gradient(circle at top left,#eeecff 0,#f6f7fb 42%,#eef5ff 100%)!important}
+body:has(#loginForm) .card{border:1px solid rgba(233,235,243,.9);border-radius:20px!important;box-shadow:0 20px 60px rgba(32,36,58,.10)!important}
+body:has(#loginForm) button{background:var(--ui-purple)!important}
+@media(max-width:900px){.header-inner{align-items:flex-start!important;flex-direction:column!important}.main-nav{width:100%;overflow-x:auto;flex-wrap:nowrap!important;padding-bottom:4px}.main-nav a{flex:0 0 auto}.page-header,.page-head,.page-heading{align-items:flex-start!important;flex-direction:column!important}body:not(.dashboard-page) .container{width:min(calc(100% - 28px),1500px)!important}}
+@media(max-width:600px){.stats-grid,.summary-grid,.summary-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}.stat-card{padding:14px!important}.stat-value{font-size:22px!important}th,td{padding:10px 9px!important}}
