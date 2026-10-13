@@ -34,6 +34,60 @@ public class AccountController {
         );
     }
 
+    @PostMapping
+    public ResponseEntity<?> createAccount(
+            @AuthenticationPrincipal CompanyUserDetails user,
+            @RequestBody Map<String, Object> request) {
+
+        if (!isValidUser(user)) {
+            return unauthorized();
+        }
+
+        try {
+            String accountName = optionalText(request, "accountName");
+            String accountType = optionalText(request, "accountType");
+            Object rawOpeningBalance = request.get("openingBalance");
+
+            if (accountName == null || accountName.isBlank()) {
+                throw new IllegalArgumentException("Account name is required.");
+            }
+            if (accountName.length() > 100) {
+                throw new IllegalArgumentException("Account name cannot exceed 100 characters.");
+            }
+            if (accountType == null) {
+                throw new IllegalArgumentException("Account type is required.");
+            }
+            accountType = accountType.toUpperCase();
+            if (!"CASH".equals(accountType) && !"BANK".equals(accountType)) {
+                throw new IllegalArgumentException("Account type must be Cash or Bank.");
+            }
+
+            BigDecimal openingBalance;
+            try {
+                openingBalance = new BigDecimal(
+                    rawOpeningBalance == null || rawOpeningBalance.toString().isBlank()
+                        ? "0" : rawOpeningBalance.toString()
+                );
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException("Opening balance must be a valid number.");
+            }
+            if (openingBalance.signum() < 0) {
+                throw new IllegalArgumentException("Opening balance cannot be negative.");
+            }
+
+            accountRepository.createAccount(
+                user.getCompanyId(), accountName.trim(), accountType, openingBalance
+            );
+            return ResponseEntity.status(HttpStatus.CREATED)
+                .body(success("Account created successfully."));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(error(ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(error("Unable to create account. Check whether an account with this name already exists."));
+        }
+    }
+
     @GetMapping("/payment-accounts")
     public ResponseEntity<?> getPaymentAccounts(
             @AuthenticationPrincipal CompanyUserDetails user) {
