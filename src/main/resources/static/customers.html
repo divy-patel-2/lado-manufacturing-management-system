@@ -1,1008 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Customers - LADO Manufacturing</title>
-
     <link rel="stylesheet" href="/css/common.css">
 </head>
-
 <body>
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
 <header class="site-header">
-
     <div class="container header-inner">
-
         <div class="brand">
-
-            <div class="brand-icon">
-                L
-            </div>
-
-            <div>
-                <div class="brand-name">
-                    LADO Manufacturing
-                </div>
-
-                <div class="brand-subtitle">
-                    Management System
-                </div>
-            </div>
-
+            <div class="brand-icon">L</div>
+            <div><div class="brand-name">LADO Manufacturing</div><div class="brand-subtitle">Management System</div></div>
         </div>
-
-
         <nav class="main-nav">
-
             <a href="/dashboard.html">Dashboard</a>
+            <a href="/categories.html">Categories</a>
+            <a href="/units.html">Units</a>
             <a href="/products.html">Products</a>
+            <a href="/suppliers.html">Suppliers</a>
+            <a href="/customers.html">Customers</a>
             <a href="/purchases.html">Purchases</a>
             <a href="/sales.html">Sales</a>
             <a href="/inventory.html">Inventory</a>
             <a href="/accounts.html">Accounts</a>
             <a href="/reports.html">Reports</a>
-
         </nav>
-
     </div>
-
 </header>
 
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
 <main class="container">
-
-
-    <!-- PAGE HEADER -->
-
     <div class="page-header">
-
-        <div>
-
-            <div class="page-title">
-                Customers
-            </div>
-
-            <div class="page-subtitle">
-                Manage customer information used for sales,
-                invoices and payments.
-            </div>
-
-        </div>
-
-
-        <div class="page-actions">
-
-            <button
-                class="btn-primary"
-                onclick="showCustomerForm()"
-            >
-                + Add Customer
-            </button>
-
-        </div>
-
+        <div><div class="page-title">Customers</div><div class="page-subtitle">Manage customer records used for sales and invoices.</div></div>
+        <div class="page-actions"><button type="button" class="btn-primary" onclick="showCustomerForm()">+ Add Customer</button></div>
     </div>
 
-
-    <!-- =================================================
-         SUMMARY CARDS
-    ================================================== -->
+    <div id="pageMessage" role="status" aria-live="polite" style="margin:12px 0;"></div>
 
     <div class="stats-grid">
-
-
-        <div class="stat-card blue">
-
-            <div class="stat-label">
-                Total Customers
-            </div>
-
-            <div class="stat-value">
-                46
-            </div>
-
-            <div class="stat-description">
-                Customers registered
-            </div>
-
-        </div>
-
-
-        <div class="stat-card green">
-
-            <div class="stat-label">
-                Active Customers
-            </div>
-
-            <div class="stat-value">
-                42
-            </div>
-
-            <div class="stat-description">
-                Currently buying products
-            </div>
-
-        </div>
-
-
-        <div class="stat-card orange">
-
-            <div class="stat-label">
-                This Month
-            </div>
-
-            <div class="stat-value">
-                18
-            </div>
-
-            <div class="stat-description">
-                Customers with sales
-            </div>
-
-        </div>
-
-
-        <div class="stat-card purple">
-
-            <div class="stat-label">
-                Receivables
-            </div>
-
-            <div class="stat-value">
-                ₹2.46L
-            </div>
-
-            <div class="stat-description">
-                Amount pending from customers
-            </div>
-
-        </div>
-
+        <div class="stat-card blue"><div class="stat-label">Total Customers</div><div class="stat-value" id="totalCustomers">—</div><div class="stat-description">Customer records in database</div></div>
+        <div class="stat-card green"><div class="stat-label">Active Customers</div><div class="stat-value" id="activeCustomers">—</div><div class="stat-description">Currently marked active</div></div>
+        <div class="stat-card orange"><div class="stat-label">Inactive Customers</div><div class="stat-value" id="inactiveCustomers">—</div><div class="stat-description">Not currently active</div></div>
     </div>
 
-
-    <!-- =================================================
-         ADD CUSTOMER FORM
-    ================================================== -->
-
-    <section
-        class="card"
-        id="customerForm"
-        style="display: none;"
-    >
-
-        <div class="card-header">
-
-            <div>
-
-                <div class="card-title">
-                    Add New Customer
-                </div>
-
-                <div class="card-subtitle">
-                    Enter customer contact and business details.
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <form onsubmit="addCustomer(event)">
-
-
-            <!-- CUSTOMER CODE + NAME -->
-
+    <section class="card" id="customerForm" style="display:none;">
+        <div class="card-header"><div><div class="card-title" id="formTitle">Add New Customer</div><div class="card-subtitle">Customer details are saved to Oracle through the backend API.</div></div></div>
+        <form id="customerEditor" onsubmit="saveCustomer(event)">
             <div class="grid grid-2">
-
-
-                <div class="form-group">
-
-                    <label for="customerCode">
-                        Customer Code
-                    </label>
-
-                    <input
-                        type="text"
-                        id="customerCode"
-                        placeholder="Example: CUS-001"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="customerName">
-                        Customer Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="customerName"
-                        placeholder="Enter customer/company name"
-                        required
-                    >
-
-                </div>
-
+                <div class="form-group"><label for="customerCode">Customer Code</label><input id="customerCode" type="text" maxlength="50" placeholder="Example: CUS-001" required></div>
+                <div class="form-group"><label for="customerName">Customer Name</label><input id="customerName" type="text" maxlength="200" placeholder="Customer or company name" required></div>
             </div>
-
-
-            <!-- CONTACT + PHONE -->
-
             <div class="grid grid-2">
-
-
-                <div class="form-group">
-
-                    <label for="contactPerson">
-                        Contact Person
-                    </label>
-
-                    <input
-                        type="text"
-                        id="contactPerson"
-                        placeholder="Enter contact person"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="phone">
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="phone"
-                        placeholder="Enter phone number"
-                    >
-
-                </div>
-
+                <div class="form-group"><label for="customerPhone">Phone Number</label><input id="customerPhone" type="tel" maxlength="50" placeholder="Enter phone number"></div>
+                <div class="form-group"><label for="customerEmail">Email</label><input id="customerEmail" type="email" maxlength="200" placeholder="customer@example.com"></div>
             </div>
-
-
-            <!-- EMAIL + GST -->
-
             <div class="grid grid-2">
-
-
-                <div class="form-group">
-
-                    <label for="email">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="customer@example.com"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="gstNumber">
-                        GST Number
-                    </label>
-
-                    <input
-                        type="text"
-                        id="gstNumber"
-                        placeholder="Enter GST number"
-                    >
-
-                </div>
-
+                <div class="form-group"><label for="customerCity">City</label><input id="customerCity" type="text" maxlength="100" placeholder="Enter city"></div>
+                <div class="form-group"><label for="customerState">State</label><input id="customerState" type="text" maxlength="100" placeholder="Enter state"></div>
             </div>
-
-
-            <!-- CITY + STATE -->
-
             <div class="grid grid-2">
-
-
-                <div class="form-group">
-
-                    <label for="city">
-                        City
-                    </label>
-
-                    <input
-                        type="text"
-                        id="city"
-                        placeholder="Enter city"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="state">
-                        State
-                    </label>
-
-                    <input
-                        type="text"
-                        id="state"
-                        placeholder="Enter state"
-                    >
-
-                </div>
-
+                <div class="form-group"><label for="customerPincode">PIN Code</label><input id="customerPincode" type="text" maxlength="20" placeholder="Enter PIN code"></div>
+                <div class="form-group"><label for="customerStatus">Status</label><select id="customerStatus"><option value="Y">Active</option><option value="N">Inactive</option></select></div>
             </div>
-
-
-            <!-- ADDRESS -->
-
-            <div class="form-group">
-
-                <label for="address">
-                    Address
-                </label>
-
-                <textarea
-                    id="address"
-                    rows="3"
-                    placeholder="Enter complete customer address"
-                ></textarea>
-
-            </div>
-
-
-            <!-- CREDIT LIMIT + PAYMENT TERMS -->
-
-            <div class="grid grid-2">
-
-
-                <div class="form-group">
-
-                    <label for="creditLimit">
-                        Credit Limit
-                    </label>
-
-                    <input
-                        type="number"
-                        id="creditLimit"
-                        placeholder="0.00"
-                        min="0"
-                        step="0.01"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="paymentTerms">
-                        Payment Terms
-                    </label>
-
-                    <select id="paymentTerms">
-
-                        <option value="Cash">
-                            Cash
-                        </option>
-
-                        <option value="15 Days">
-                            15 Days
-                        </option>
-
-                        <option value="30 Days">
-                            30 Days
-                        </option>
-
-                        <option value="45 Days">
-                            45 Days
-                        </option>
-
-                        <option value="60 Days">
-                            60 Days
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-
-            <!-- STATUS -->
-
-            <div class="form-group">
-
-                <label for="customerStatus">
-                    Status
-                </label>
-
-                <select id="customerStatus">
-
-                    <option value="Active">
-                        Active
-                    </option>
-
-                    <option value="Inactive">
-                        Inactive
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- BUTTONS -->
-
+            <div class="form-group"><label for="customerAddress">Address</label><textarea id="customerAddress" rows="3" maxlength="500" placeholder="Enter complete customer address"></textarea></div>
             <div class="form-actions">
-
-                <button
-                    type="submit"
-                    class="btn-success"
-                >
-                    Save Customer
-                </button>
-
-                <button
-                    type="button"
-                    class="btn-secondary"
-                    onclick="hideCustomerForm()"
-                >
-                    Cancel
-                </button>
-
+                <button type="submit" class="btn-success" id="saveCustomerButton">Save Customer</button>
+                <button type="button" class="btn-secondary" onclick="hideCustomerForm()">Cancel</button>
             </div>
-
         </form>
-
     </section>
-
-
-    <!-- =================================================
-         CUSTOMER LIST
-    ================================================== -->
 
     <section class="card">
-
-
-        <div class="card-header">
-
-            <div>
-
-                <div class="card-title">
-                    Customer List
-                </div>
-
-                <div class="card-subtitle">
-                    View and manage registered customers.
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- SEARCH / FILTER -->
-
+        <div class="card-header"><div><div class="card-title">Customer List</div><div class="card-subtitle">Records are loaded from the customer API.</div></div></div>
         <div class="toolbar">
-
-
-            <div class="search-box">
-
-                <input
-                    type="text"
-                    id="searchCustomer"
-                    placeholder="Search customers..."
-                    onkeyup="searchCustomers()"
-                >
-
-            </div>
-
-
-            <select
-                id="customerStatusFilter"
-                onchange="filterCustomers()"
-            >
-
-                <option value="All">
-                    All Status
-                </option>
-
-                <option value="Active">
-                    Active
-                </option>
-
-                <option value="Inactive">
-                    Inactive
-                </option>
-
-            </select>
-
+            <div class="search-box"><input id="searchCustomer" type="search" placeholder="Search by code, name, phone, email or city..." oninput="renderCustomers()"></div>
+            <select id="customerStatusFilter" onchange="renderCustomers()"><option value="All">All Status</option><option value="Y">Active</option><option value="N">Inactive</option></select>
         </div>
-
-
-        <!-- =================================================
-             TABLE
-        ================================================== -->
-
         <div class="table-container">
-
             <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-                        <th>Customer Code</th>
-                        <th>Customer Name</th>
-                        <th>Contact Person</th>
-                        <th>Phone</th>
-                        <th>City</th>
-                        <th>Credit Limit</th>
-                        <th>Receivable</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="customerTableBody">
-
-
-                    <!-- CUSTOMER 1 -->
-
-                    <tr>
-
-                        <td>1</td>
-
-                        <td>CUS-001</td>
-
-                        <td>Shree Industries</td>
-
-                        <td>Rahul Shah</td>
-
-                        <td>9876543210</td>
-
-                        <td>Ahmedabad</td>
-
-                        <td>₹1,00,000</td>
-
-                        <td>₹24,500</td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editCustomer(1)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteCustomer(1)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- CUSTOMER 2 -->
-
-                    <tr>
-
-                        <td>2</td>
-
-                        <td>CUS-002</td>
-
-                        <td>Patel Engineering</td>
-
-                        <td>Dhruv Patel</td>
-
-                        <td>9825012345</td>
-
-                        <td>Vadodara</td>
-
-                        <td>₹2,00,000</td>
-
-                        <td>₹68,200</td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editCustomer(2)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteCustomer(2)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- CUSTOMER 3 -->
-
-                    <tr>
-
-                        <td>3</td>
-
-                        <td>CUS-003</td>
-
-                        <td>Modern Electrical Works</td>
-
-                        <td>Jay Mehta</td>
-
-                        <td>9909012345</td>
-
-                        <td>Surat</td>
-
-                        <td>₹75,000</td>
-
-                        <td>₹12,800</td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editCustomer(3)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteCustomer(3)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- CUSTOMER 4 -->
-
-                    <tr>
-
-                        <td>4</td>
-
-                        <td>CUS-004</td>
-
-                        <td>Industrial Solutions</td>
-
-                        <td>Karan Joshi</td>
-
-                        <td>9812345678</td>
-
-                        <td>Rajkot</td>
-
-                        <td>₹50,000</td>
-
-                        <td>₹0</td>
-
-                        <td>
-
-                            <span class="badge badge-warning">
-                                Inactive
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editCustomer(4)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteCustomer(4)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                </tbody>
-
+                <thead><tr><th>ID</th><th>Customer Code</th><th>Customer Name</th><th>Phone</th><th>Email</th><th>City</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="customerTableBody"><tr><td colspan="8">Loading customers...</td></tr></tbody>
             </table>
-
         </div>
-
     </section>
-
 </main>
 
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer class="footer">
-
-    <div class="container">
-
-        LADO Manufacturing Management System
-        © 2026
-
-    </div>
-
-</footer>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
+<footer class="footer"><div class="container">LADO Manufacturing Management System © 2026</div></footer>
 
 <script>
+"use strict";
 
+const CUSTOMER_API = "/api/customers";
+let customers = [];
+let editingCustomerId = null;
 
-/* =====================================================
-   SHOW FORM
-===================================================== */
+function showMessage(message, isError = false) {
+    const element = document.getElementById("pageMessage");
+    element.textContent = message;
+    element.style.color = isError ? "#b42318" : "#18794e";
+}
 
-function showCustomerForm() {
-
-    document.getElementById("customerForm").style.display = "block";
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {})
+        }
     });
 
+    const contentType = response.headers.get("content-type") || "";
+    let payload = null;
+    if (contentType.includes("application/json")) {
+        payload = await response.json();
+    } else if (response.status !== 204) {
+        const responseText = await response.text();
+        if (response.redirected || responseText.trim().startsWith("<!DOCTYPE html") || responseText.trim().startsWith("<html")) {
+            throw new Error("Your session may have expired. Please sign in again and reopen Customers.");
+        }
+        payload = responseText ? { error: responseText } : null;
+    }
+    if (!response.ok) {
+        const message = payload && typeof payload === "object"
+            ? (payload.error || payload.message || "Request failed (" + response.status + ").")
+            : "Request failed (" + response.status + ").";
+        throw new Error(message);
+    }
+    return payload;
 }
 
-
-/* =====================================================
-   HIDE FORM
-===================================================== */
-
-function hideCustomerForm() {
-
-    document.getElementById("customerForm").style.display = "none";
-
+async function loadCustomers() {
+    const body = document.getElementById("customerTableBody");
+    body.innerHTML = '<tr><td colspan="8">Loading customers...</td></tr>';
+    try {
+        const result = await apiRequest(CUSTOMER_API);
+        customers = Array.isArray(result) ? result : [];
+        updateSummary();
+        renderCustomers();
+        showMessage("Customer records loaded from the database.");
+    } catch (error) {
+        customers = [];
+        updateSummary();
+        body.innerHTML = '<tr><td colspan="8">Could not load customers. ' + escapeHtml(error.message) + '</td></tr>';
+        showMessage(error.message, true);
+    }
 }
 
-
-/* =====================================================
-   ADD CUSTOMER
-===================================================== */
-
-function addCustomer(event) {
-
-    event.preventDefault();
-
-
-    const code =
-        document.getElementById("customerCode").value;
-
-    const name =
-        document.getElementById("customerName").value;
-
-    const contact =
-        document.getElementById("contactPerson").value;
-
-
-    alert(
-        "Customer added successfully!\n\n" +
-
-        "Customer Code: " +
-        code +
-
-        "\nCustomer Name: " +
-        name +
-
-        "\nContact Person: " +
-        contact
-    );
-
-
-    document
-        .querySelector("#customerForm form")
-        .reset();
-
-
-    hideCustomerForm();
-
+function updateSummary() {
+    document.getElementById("totalCustomers").textContent = customers.length;
+    document.getElementById("activeCustomers").textContent = customers.filter(customer => customer.isActive === "Y").length;
+    document.getElementById("inactiveCustomers").textContent = customers.filter(customer => customer.isActive !== "Y").length;
 }
 
+function renderCustomers() {
+    const body = document.getElementById("customerTableBody");
+    const search = document.getElementById("searchCustomer").value.trim().toLowerCase();
+    const status = document.getElementById("customerStatusFilter").value;
+    const filtered = customers.filter(customer => {
+        const matchesSearch = [
+            customer.id, customer.code, customer.name, customer.phone,
+            customer.email, customer.address, customer.city, customer.state, customer.pincode
+        ].some(value => String(value ?? "").toLowerCase().includes(search));
+        return matchesSearch && (status === "All" || customer.isActive === status);
+    });
 
-/* =====================================================
-   EDIT CUSTOMER
-===================================================== */
-
-function editCustomer(id) {
-
-    alert(
-        "Edit Customer ID: " +
-        id +
-
-        "\n\n" +
-
-        "Database editing will be connected later."
-    );
-
-}
-
-
-/* =====================================================
-   DELETE CUSTOMER
-===================================================== */
-
-function deleteCustomer(id) {
-
-    const confirmDelete =
-        confirm(
-            "Are you sure you want to delete Customer ID " +
-            id +
-            "?"
-        );
-
-
-    if (confirmDelete) {
-
-        alert(
-            "Customer ID " +
-            id +
-
-            " selected for deletion.\n\n" +
-
-            "Database deletion will be connected later."
-        );
-
+    if (filtered.length === 0) {
+        body.innerHTML = '<tr><td colspan="8">' +
+            (customers.length === 0 ? "No customers in the database yet. Select Add Customer to create one." : "No matching customers found.") +
+            '</td></tr>';
+        return;
     }
 
+    body.innerHTML = filtered.map(customer => {
+        const id = Number(customer.id);
+        const active = customer.isActive === "Y";
+        return '<tr>' +
+            '<td>' + escapeHtml(customer.id) + '</td>' +
+            '<td>' + escapeHtml(customer.code || "—") + '</td>' +
+            '<td>' + escapeHtml(customer.name || "—") + '</td>' +
+            '<td>' + escapeHtml(customer.phone || "—") + '</td>' +
+            '<td>' + escapeHtml(customer.email || "—") + '</td>' +
+            '<td>' + escapeHtml(customer.city || "—") + '</td>' +
+            '<td><span class="badge ' + (active ? "badge-success" : "badge-warning") + '">' + (active ? "Active" : "Inactive") + '</span></td>' +
+            '<td><button type="button" class="btn-edit btn-sm" onclick="editCustomer(' + id + ')">Edit</button> ' +
+            '<button type="button" class="btn-danger btn-sm" onclick="deleteCustomer(' + id + ')">Delete</button></td>' +
+            '</tr>';
+    }).join("");
 }
 
-
-/* =====================================================
-   SEARCH CUSTOMERS
-===================================================== */
-
-function searchCustomers() {
-
-    const search =
-        document
-            .getElementById("searchCustomer")
-            .value
-            .toLowerCase();
-
-
-    const rows =
-        document.querySelectorAll(
-            "#customerTableBody tr"
-        );
-
-
-    rows.forEach(function(row) {
-
-        const text =
-            row.textContent.toLowerCase();
-
-
-        if (text.includes(search)) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
-        }
-
-    });
-
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[character]);
 }
 
-
-/* =====================================================
-   FILTER CUSTOMERS
-===================================================== */
-
-function filterCustomers() {
-
-    const filter =
-        document
-            .getElementById("customerStatusFilter")
-            .value;
-
-
-    const rows =
-        document.querySelectorAll(
-            "#customerTableBody tr"
-        );
-
-
-    rows.forEach(function(row) {
-
-        const status =
-            row.cells[8]
-                .textContent
-                .trim();
-
-
-        if (
-            filter === "All" ||
-            status === filter
-        ) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
-        }
-
-    });
-
+function showCustomerForm() {
+    editingCustomerId = null;
+    document.getElementById("customerEditor").reset();
+    document.getElementById("formTitle").textContent = "Add New Customer";
+    document.getElementById("saveCustomerButton").textContent = "Save Customer";
+    document.getElementById("customerForm").style.display = "block";
+    document.getElementById("customerCode").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function hideCustomerForm() {
+    document.getElementById("customerForm").style.display = "none";
+    editingCustomerId = null;
+}
 
+function getCustomerFormData() {
+    return {
+        code: document.getElementById("customerCode").value.trim(),
+        name: document.getElementById("customerName").value.trim(),
+        phone: document.getElementById("customerPhone").value.trim(),
+        email: document.getElementById("customerEmail").value.trim(),
+        city: document.getElementById("customerCity").value.trim(),
+        state: document.getElementById("customerState").value.trim(),
+        pincode: document.getElementById("customerPincode").value.trim(),
+        address: document.getElementById("customerAddress").value.trim(),
+        isActive: document.getElementById("customerStatus").value
+    };
+}
+
+async function saveCustomer(event) {
+    event.preventDefault();
+    const button = document.getElementById("saveCustomerButton");
+    const data = getCustomerFormData();
+    if (!data.code || !data.name) {
+        showMessage("Customer code and name are required.", true);
+        return;
+    }
+
+    const isEditing = editingCustomerId !== null;
+    button.disabled = true;
+    button.textContent = "Saving...";
+    try {
+        await apiRequest(isEditing ? CUSTOMER_API + "/" + editingCustomerId : CUSTOMER_API, {
+            method: isEditing ? "PUT" : "POST",
+            body: JSON.stringify(data)
+        });
+        hideCustomerForm();
+        await loadCustomers();
+        showMessage(isEditing ? "Customer updated successfully." : "Customer added successfully.");
+    } catch (error) {
+        showMessage(error.message, true);
+    } finally {
+        button.disabled = false;
+        button.textContent = editingCustomerId === null ? "Save Customer" : "Update Customer";
+    }
+}
+
+function editCustomer(id) {
+    const customer = customers.find(item => Number(item.id) === Number(id));
+    if (!customer) {
+        showMessage("Customer not found. Refresh the list and try again.", true);
+        return;
+    }
+    editingCustomerId = Number(id);
+    document.getElementById("customerCode").value = customer.code || "";
+    document.getElementById("customerName").value = customer.name || "";
+    document.getElementById("customerPhone").value = customer.phone || "";
+    document.getElementById("customerEmail").value = customer.email || "";
+    document.getElementById("customerCity").value = customer.city || "";
+    document.getElementById("customerState").value = customer.state || "";
+    document.getElementById("customerPincode").value = customer.pincode || "";
+    document.getElementById("customerAddress").value = customer.address || "";
+    document.getElementById("customerStatus").value = customer.isActive === "N" ? "N" : "Y";
+    document.getElementById("formTitle").textContent = "Edit Customer";
+    document.getElementById("saveCustomerButton").textContent = "Update Customer";
+    document.getElementById("customerForm").style.display = "block";
+    document.getElementById("customerCode").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function deleteCustomer(id) {
+    const customer = customers.find(item => Number(item.id) === Number(id));
+    if (!customer) return;
+    if (!confirm('Delete customer "' + customer.name + '" (' + customer.code + ')? If sales reference this customer, the database may reject deletion.')) return;
+    try {
+        await apiRequest(CUSTOMER_API + "/" + id, { method: "DELETE" });
+        await loadCustomers();
+        showMessage("Customer deleted successfully.");
+    } catch (error) {
+        showMessage(error.message, true);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadCustomers);
 </script>
-
 </body>
-
 </html>
