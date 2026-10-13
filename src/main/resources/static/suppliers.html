@@ -1,1082 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Suppliers - LADO Manufacturing</title>
-
     <link rel="stylesheet" href="/css/common.css">
 </head>
-
 <body>
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
 <header class="site-header">
-
     <div class="container header-inner">
-
         <div class="brand">
-
-            <div class="brand-icon">
-                L
-            </div>
-
-            <div>
-                <div class="brand-name">
-                    LADO Manufacturing
-                </div>
-
-                <div class="brand-subtitle">
-                    Management System
-                </div>
-            </div>
-
+            <div class="brand-icon">L</div>
+            <div><div class="brand-name">LADO Manufacturing</div><div class="brand-subtitle">Management System</div></div>
         </div>
-
-
         <nav class="main-nav">
-
-            <a href="/dashboard.html">
-                Dashboard
-            </a>
-
-            <a href="/products.html">
-                Products
-            </a>
-
-            <a href="/purchases.html">
-                Purchases
-            </a>
-
-            <a href="/sales.html">
-                Sales
-            </a>
-
-            <a href="/inventory.html">
-                Inventory
-            </a>
-
-            <a href="/accounts.html">
-                Accounts
-            </a>
-
-            <a href="/reports.html">
-                Reports
-            </a>
-
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/categories.html">Categories</a>
+            <a href="/units.html">Units</a>
+            <a href="/products.html">Products</a>
+            <a href="/suppliers.html">Suppliers</a>
+            <a href="/customers.html">Customers</a>
+            <a href="/purchases.html">Purchases</a>
+            <a href="/sales.html">Sales</a>
+            <a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html">Accounts</a>
+            <a href="/reports.html">Reports</a>
         </nav>
-
     </div>
-
 </header>
 
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
 <main class="container">
-
-
-    <!-- PAGE HEADER -->
-
     <div class="page-header">
-
         <div>
-
-            <div class="page-title">
-                Suppliers
-            </div>
-
-            <div class="page-subtitle">
-                Manage supplier information used for
-                purchases and procurement.
-            </div>
-
+            <div class="page-title">Suppliers</div>
+            <div class="page-subtitle">Manage supplier records stored in the database.</div>
         </div>
-
-
-        <div class="page-actions">
-
-            <button
-                class="btn-primary"
-                onclick="showSupplierForm()"
-            >
-                + Add Supplier
-            </button>
-
-        </div>
-
+        <div class="page-actions"><button class="btn-primary" type="button" onclick="showSupplierForm()">+ Add Supplier</button></div>
     </div>
 
-
-    <!-- =================================================
-         SUMMARY CARDS
-    ================================================== -->
+    <div id="pageMessage" role="status" aria-live="polite" style="margin:12px 0;"></div>
 
     <div class="stats-grid">
-
-
-        <div class="stat-card blue">
-
-            <div class="stat-label">
-                Total Suppliers
-            </div>
-
-            <div class="stat-value">
-                32
-            </div>
-
-            <div class="stat-description">
-                Suppliers registered
-            </div>
-
-        </div>
-
-
-        <div class="stat-card green">
-
-            <div class="stat-label">
-                Active Suppliers
-            </div>
-
-            <div class="stat-value">
-                29
-            </div>
-
-            <div class="stat-description">
-                Currently supplying materials
-            </div>
-
-        </div>
-
-
-        <div class="stat-card orange">
-
-            <div class="stat-label">
-                This Month
-            </div>
-
-            <div class="stat-value">
-                14
-            </div>
-
-            <div class="stat-description">
-                Suppliers with purchases
-            </div>
-
-        </div>
-
-
-        <div class="stat-card purple">
-
-            <div class="stat-label">
-                Pending Payments
-            </div>
-
-            <div class="stat-value">
-                ₹1.82L
-            </div>
-
-            <div class="stat-description">
-                Amount payable to suppliers
-            </div>
-
-        </div>
-
+        <div class="stat-card blue"><div class="stat-label">Total Suppliers</div><div class="stat-value" id="totalSuppliers">—</div><div class="stat-description">Supplier records in database</div></div>
+        <div class="stat-card green"><div class="stat-label">Active Suppliers</div><div class="stat-value" id="activeSuppliers">—</div><div class="stat-description">Currently marked active</div></div>
+        <div class="stat-card orange"><div class="stat-label">Inactive Suppliers</div><div class="stat-value" id="inactiveSuppliers">—</div><div class="stat-description">Not currently active</div></div>
     </div>
 
-
-    <!-- =================================================
-         ADD SUPPLIER FORM
-    ================================================== -->
-
-    <section
-        class="card"
-        id="supplierForm"
-        style="display: none;"
-    >
-
+    <section class="card" id="supplierForm" style="display:none;">
         <div class="card-header">
-
-            <div>
-
-                <div class="card-title">
-                    Add New Supplier
-                </div>
-
-                <div class="card-subtitle">
-                    Enter supplier contact and business details.
-                </div>
-
-            </div>
-
+            <div><div class="card-title" id="formTitle">Add New Supplier</div><div class="card-subtitle">Supplier details are saved to Oracle through the backend API.</div></div>
         </div>
-
-
-        <form onsubmit="addSupplier(event)">
-
-
-            <!-- SUPPLIER CODE + NAME -->
-
+        <form id="supplierEditor" onsubmit="saveSupplier(event)">
             <div class="grid grid-2">
-
-
                 <div class="form-group">
-
-                    <label for="supplierCode">
-                        Supplier Code
-                    </label>
-
-                    <input
-                        type="text"
-                        id="supplierCode"
-                        placeholder="Example: SUP-001"
-                        required
-                    >
-
+                    <label for="supplierCode">Supplier Code</label>
+                    <input type="text" id="supplierCode" maxlength="50" placeholder="Example: SUP-001" required>
                 </div>
-
-
                 <div class="form-group">
-
-                    <label for="supplierName">
-                        Supplier Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="supplierName"
-                        placeholder="Enter supplier/company name"
-                        required
-                    >
-
+                    <label for="supplierName">Supplier Name</label>
+                    <input type="text" id="supplierName" maxlength="200" placeholder="Supplier or company name" required>
                 </div>
-
             </div>
-
-
-            <!-- CONTACT PERSON + PHONE -->
-
             <div class="grid grid-2">
-
-
                 <div class="form-group">
-
-                    <label for="contactPerson">
-                        Contact Person
-                    </label>
-
-                    <input
-                        type="text"
-                        id="contactPerson"
-                        placeholder="Enter contact person"
-                    >
-
+                    <label for="supplierPhone">Phone Number</label>
+                    <input type="tel" id="supplierPhone" maxlength="50" placeholder="Enter phone number">
                 </div>
-
-
                 <div class="form-group">
-
-                    <label for="phone">
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="phone"
-                        placeholder="Enter phone number"
-                    >
-
+                    <label for="supplierEmail">Email</label>
+                    <input type="email" id="supplierEmail" maxlength="200" placeholder="supplier@example.com">
                 </div>
-
             </div>
-
-
-            <!-- EMAIL + GST -->
-
             <div class="grid grid-2">
-
-
                 <div class="form-group">
-
-                    <label for="email">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="supplier@example.com"
-                    >
-
+                    <label for="supplierCity">City</label>
+                    <input type="text" id="supplierCity" maxlength="100" placeholder="Enter city">
                 </div>
-
-
                 <div class="form-group">
-
-                    <label for="gstNumber">
-                        GST Number
-                    </label>
-
-                    <input
-                        type="text"
-                        id="gstNumber"
-                        placeholder="Enter GST number"
-                    >
-
+                    <label for="supplierState">State</label>
+                    <input type="text" id="supplierState" maxlength="100" placeholder="Enter state">
                 </div>
-
             </div>
-
-
-            <!-- CITY + STATE -->
-
             <div class="grid grid-2">
-
-
                 <div class="form-group">
-
-                    <label for="city">
-                        City
-                    </label>
-
-                    <input
-                        type="text"
-                        id="city"
-                        placeholder="Enter city"
-                    >
-
+                    <label for="supplierPincode">PIN Code</label>
+                    <input type="text" id="supplierPincode" maxlength="20" placeholder="Enter PIN code">
                 </div>
-
-
                 <div class="form-group">
-
-                    <label for="state">
-                        State
-                    </label>
-
-                    <input
-                        type="text"
-                        id="state"
-                        placeholder="Enter state"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <!-- ADDRESS -->
-
-            <div class="form-group">
-
-                <label for="address">
-                    Address
-                </label>
-
-                <textarea
-                    id="address"
-                    rows="3"
-                    placeholder="Enter complete supplier address"
-                ></textarea>
-
-            </div>
-
-
-            <!-- PAYMENT TERMS + STATUS -->
-
-            <div class="grid grid-2">
-
-
-                <div class="form-group">
-
-                    <label for="paymentTerms">
-                        Payment Terms
-                    </label>
-
-                    <select id="paymentTerms">
-
-                        <option value="Cash">
-                            Cash
-                        </option>
-
-                        <option value="15 Days">
-                            15 Days
-                        </option>
-
-                        <option value="30 Days">
-                            30 Days
-                        </option>
-
-                        <option value="45 Days">
-                            45 Days
-                        </option>
-
-                        <option value="60 Days">
-                            60 Days
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="supplierStatus">
-                        Status
-                    </label>
-
+                    <label for="supplierStatus">Status</label>
                     <select id="supplierStatus">
-
-                        <option value="Active">
-                            Active
-                        </option>
-
-                        <option value="Inactive">
-                            Inactive
-                        </option>
-
+                        <option value="Y">Active</option>
+                        <option value="N">Inactive</option>
                     </select>
-
                 </div>
-
             </div>
-
-
-            <!-- BUTTONS -->
-
+            <div class="form-group">
+                <label for="supplierAddress">Address</label>
+                <textarea id="supplierAddress" rows="3" maxlength="500" placeholder="Enter complete supplier address"></textarea>
+            </div>
             <div class="form-actions">
-
-                <button
-                    type="submit"
-                    class="btn-success"
-                >
-                    Save Supplier
-                </button>
-
-                <button
-                    type="button"
-                    class="btn-secondary"
-                    onclick="hideSupplierForm()"
-                >
-                    Cancel
-                </button>
-
+                <button type="submit" class="btn-success" id="saveSupplierButton">Save Supplier</button>
+                <button type="button" class="btn-secondary" onclick="hideSupplierForm()">Cancel</button>
             </div>
-
         </form>
-
     </section>
-
-
-    <!-- =================================================
-         SUPPLIER LIST
-    ================================================== -->
 
     <section class="card">
-
-
         <div class="card-header">
-
-            <div>
-
-                <div class="card-title">
-                    Supplier List
-                </div>
-
-                <div class="card-subtitle">
-                    View and manage registered suppliers.
-                </div>
-
-            </div>
-
+            <div><div class="card-title">Supplier List</div><div class="card-subtitle">Records are loaded from the supplier API.</div></div>
         </div>
-
-
-        <!-- SEARCH / FILTER -->
-
         <div class="toolbar">
-
-
-            <div class="search-box">
-
-                <input
-                    type="text"
-                    id="searchSupplier"
-                    placeholder="Search suppliers..."
-                    onkeyup="searchSuppliers()"
-                >
-
-            </div>
-
-
-            <select
-                id="supplierStatusFilter"
-                onchange="filterSuppliers()"
-            >
-
-                <option value="All">
-                    All Status
-                </option>
-
-                <option value="Active">
-                    Active
-                </option>
-
-                <option value="Inactive">
-                    Inactive
-                </option>
-
+            <div class="search-box"><input type="search" id="searchSupplier" placeholder="Search by code, name, phone, email or city..." oninput="renderSuppliers()"></div>
+            <select id="supplierStatusFilter" onchange="renderSuppliers()">
+                <option value="All">All Status</option>
+                <option value="Y">Active</option>
+                <option value="N">Inactive</option>
             </select>
-
         </div>
-
-
-        <!-- =================================================
-             TABLE
-        ================================================== -->
-
         <div class="table-container">
-
             <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            ID
-                        </th>
-
-                        <th>
-                            Supplier Code
-                        </th>
-
-                        <th>
-                            Supplier Name
-                        </th>
-
-                        <th>
-                            Contact Person
-                        </th>
-
-                        <th>
-                            Phone
-                        </th>
-
-                        <th>
-                            City
-                        </th>
-
-                        <th>
-                            Payment Terms
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Actions
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="supplierTableBody">
-
-
-                    <!-- SUPPLIER 1 -->
-
-                    <tr>
-
-                        <td>
-                            1
-                        </td>
-
-                        <td>
-                            SUP-001
-                        </td>
-
-                        <td>
-                            ABC Electricals
-                        </td>
-
-                        <td>
-                            Rajesh Patel
-                        </td>
-
-                        <td>
-                            9876543210
-                        </td>
-
-                        <td>
-                            Ahmedabad
-                        </td>
-
-                        <td>
-                            30 Days
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editSupplier(1)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteSupplier(1)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- SUPPLIER 2 -->
-
-                    <tr>
-
-                        <td>
-                            2
-                        </td>
-
-                        <td>
-                            SUP-002
-                        </td>
-
-                        <td>
-                            Gujarat Metals
-                        </td>
-
-                        <td>
-                            Amit Shah
-                        </td>
-
-                        <td>
-                            9876501234
-                        </td>
-
-                        <td>
-                            Vadodara
-                        </td>
-
-                        <td>
-                            45 Days
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editSupplier(2)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteSupplier(2)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- SUPPLIER 3 -->
-
-                    <tr>
-
-                        <td>
-                            3
-                        </td>
-
-                        <td>
-                            SUP-003
-                        </td>
-
-                        <td>
-                            Precision Components
-                        </td>
-
-                        <td>
-                            Mehul Joshi
-                        </td>
-
-                        <td>
-                            9825012345
-                        </td>
-
-                        <td>
-                            Rajkot
-                        </td>
-
-                        <td>
-                            30 Days
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editSupplier(3)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteSupplier(3)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- SUPPLIER 4 -->
-
-                    <tr>
-
-                        <td>
-                            4
-                        </td>
-
-                        <td>
-                            SUP-004
-                        </td>
-
-                        <td>
-                            Industrial Packaging
-                        </td>
-
-                        <td>
-                            Karan Mehta
-                        </td>
-
-                        <td>
-                            9909012345
-                        </td>
-
-                        <td>
-                            Surat
-                        </td>
-
-                        <td>
-                            Cash
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-warning">
-                                Inactive
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editSupplier(4)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteSupplier(4)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                </tbody>
-
+                <thead><tr><th>ID</th><th>Supplier Code</th><th>Supplier Name</th><th>Phone</th><th>Email</th><th>City</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="supplierTableBody"><tr><td colspan="8">Loading suppliers...</td></tr></tbody>
             </table>
-
         </div>
-
     </section>
-
 </main>
 
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer class="footer">
-
-    <div class="container">
-
-        LADO Manufacturing Management System
-        © 2026
-
-    </div>
-
-</footer>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
+<footer class="footer"><div class="container">LADO Manufacturing Management System © 2026</div></footer>
 
 <script>
+"use strict";
 
+const SUPPLIER_API = "/api/suppliers";
+let suppliers = [];
+let editingSupplierId = null;
 
-/* =====================================================
-   SHOW FORM
-===================================================== */
+function showMessage(message, isError = false) {
+    const element = document.getElementById("pageMessage");
+    element.textContent = message;
+    element.style.color = isError ? "#b42318" : "#18794e";
+}
 
-function showSupplierForm() {
-
-    document.getElementById("supplierForm").style.display = "block";
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {})
+        }
     });
 
-}
-
-
-/* =====================================================
-   HIDE FORM
-===================================================== */
-
-function hideSupplierForm() {
-
-    document.getElementById("supplierForm").style.display = "none";
-
-}
-
-
-/* =====================================================
-   ADD SUPPLIER
-===================================================== */
-
-function addSupplier(event) {
-
-    event.preventDefault();
-
-
-    const code =
-        document.getElementById("supplierCode").value;
-
-    const name =
-        document.getElementById("supplierName").value;
-
-    const contact =
-        document.getElementById("contactPerson").value;
-
-
-    alert(
-        "Supplier added successfully!\n\n" +
-
-        "Supplier Code: " +
-        code +
-
-        "\nSupplier Name: " +
-        name +
-
-        "\nContact Person: " +
-        contact
-    );
-
-
-    document
-        .querySelector("#supplierForm form")
-        .reset();
-
-
-    hideSupplierForm();
-
-}
-
-
-/* =====================================================
-   EDIT SUPPLIER
-===================================================== */
-
-function editSupplier(id) {
-
-    alert(
-        "Edit Supplier ID: " +
-        id +
-
-        "\n\n" +
-
-        "Database editing will be connected later."
-    );
-
-}
-
-
-/* =====================================================
-   DELETE SUPPLIER
-===================================================== */
-
-function deleteSupplier(id) {
-
-    const confirmDelete =
-        confirm(
-            "Are you sure you want to delete Supplier ID " +
-            id +
-            "?"
-        );
-
-
-    if (confirmDelete) {
-
-        alert(
-            "Supplier ID " +
-            id +
-
-            " selected for deletion.\n\n" +
-
-            "Database deletion will be connected later."
-        );
-
+    const contentType = response.headers.get("content-type") || "";
+    let payload = null;
+    if (contentType.includes("application/json")) {
+        payload = await response.json();
+    } else if (response.status !== 204) {
+        const responseText = await response.text();
+        if (response.redirected || responseText.trim().startsWith("<!DOCTYPE html") || responseText.trim().startsWith("<html")) {
+            throw new Error("Your session may have expired. Please sign in again and reopen Suppliers.");
+        }
+        payload = responseText ? { error: responseText } : null;
     }
 
+    if (!response.ok) {
+        const message = payload && typeof payload === "object"
+            ? (payload.error || payload.message || "Request failed (" + response.status + ").")
+            : "Request failed (" + response.status + ").";
+        throw new Error(message);
+    }
+    return payload;
 }
 
+async function loadSuppliers() {
+    const body = document.getElementById("supplierTableBody");
+    body.innerHTML = '<tr><td colspan="8">Loading suppliers...</td></tr>';
+    try {
+        const result = await apiRequest(SUPPLIER_API);
+        suppliers = Array.isArray(result) ? result : [];
+        updateSummary();
+        renderSuppliers();
+        showMessage("Supplier records loaded from the database.");
+    } catch (error) {
+        suppliers = [];
+        updateSummary();
+        body.innerHTML = '<tr><td colspan="8">Could not load suppliers. ' + escapeHtml(error.message) + '</td></tr>';
+        showMessage(error.message, true);
+    }
+}
 
-/* =====================================================
-   SEARCH SUPPLIERS
-===================================================== */
+function updateSummary() {
+    document.getElementById("totalSuppliers").textContent = suppliers.length;
+    document.getElementById("activeSuppliers").textContent = suppliers.filter(supplier => supplier.isActive === "Y").length;
+    document.getElementById("inactiveSuppliers").textContent = suppliers.filter(supplier => supplier.isActive !== "Y").length;
+}
 
-function searchSuppliers() {
-
-    const search =
-        document
-            .getElementById("searchSupplier")
-            .value
-            .toLowerCase();
-
-
-    const rows =
-        document.querySelectorAll(
-            "#supplierTableBody tr"
-        );
-
-
-    rows.forEach(function(row) {
-
-        const text =
-            row.textContent.toLowerCase();
-
-
-        if (text.includes(search)) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
-        }
-
+function renderSuppliers() {
+    const body = document.getElementById("supplierTableBody");
+    const search = document.getElementById("searchSupplier").value.trim().toLowerCase();
+    const status = document.getElementById("supplierStatusFilter").value;
+    const filtered = suppliers.filter(supplier => {
+        const matchesSearch = [
+            supplier.id, supplier.code, supplier.name, supplier.phone,
+            supplier.email, supplier.address, supplier.city, supplier.state, supplier.pincode
+        ].some(value => String(value ?? "").toLowerCase().includes(search));
+        return matchesSearch && (status === "All" || supplier.isActive === status);
     });
 
+    if (filtered.length === 0) {
+        body.innerHTML = '<tr><td colspan="8">' +
+            (suppliers.length === 0 ? "No suppliers in the database yet. Select Add Supplier to create one." : "No matching suppliers found.") +
+            '</td></tr>';
+        return;
+    }
+
+    body.innerHTML = filtered.map(supplier => {
+        const id = Number(supplier.id);
+        const active = supplier.isActive === "Y";
+        return '<tr>' +
+            '<td>' + escapeHtml(supplier.id) + '</td>' +
+            '<td>' + escapeHtml(supplier.code || "—") + '</td>' +
+            '<td>' + escapeHtml(supplier.name || "—") + '</td>' +
+            '<td>' + escapeHtml(supplier.phone || "—") + '</td>' +
+            '<td>' + escapeHtml(supplier.email || "—") + '</td>' +
+            '<td>' + escapeHtml(supplier.city || "—") + '</td>' +
+            '<td><span class="badge ' + (active ? "badge-success" : "badge-warning") + '">' + (active ? "Active" : "Inactive") + '</span></td>' +
+            '<td><button type="button" class="btn-edit btn-sm" onclick="editSupplier(' + id + ')">Edit</button> ' +
+            '<button type="button" class="btn-danger btn-sm" onclick="deleteSupplier(' + id + ')">Delete</button></td>' +
+            '</tr>';
+    }).join("");
 }
 
-
-/* =====================================================
-   FILTER SUPPLIERS
-===================================================== */
-
-function filterSuppliers() {
-
-    const filter =
-        document
-            .getElementById("supplierStatusFilter")
-            .value;
-
-
-    const rows =
-        document.querySelectorAll(
-            "#supplierTableBody tr"
-        );
-
-
-    rows.forEach(function(row) {
-
-        const status =
-            row.cells[7]
-                .textContent
-                .trim();
-
-
-        if (
-            filter === "All" ||
-            status === filter
-        ) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
-        }
-
-    });
-
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[character]);
 }
 
+function showSupplierForm() {
+    editingSupplierId = null;
+    document.getElementById("supplierEditor").reset();
+    document.getElementById("formTitle").textContent = "Add New Supplier";
+    document.getElementById("saveSupplierButton").textContent = "Save Supplier";
+    document.getElementById("supplierForm").style.display = "block";
+    document.getElementById("supplierCode").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
+function hideSupplierForm() {
+    document.getElementById("supplierForm").style.display = "none";
+    editingSupplierId = null;
+}
+
+function getSupplierFormData() {
+    return {
+        code: document.getElementById("supplierCode").value.trim(),
+        name: document.getElementById("supplierName").value.trim(),
+        phone: document.getElementById("supplierPhone").value.trim(),
+        email: document.getElementById("supplierEmail").value.trim(),
+        city: document.getElementById("supplierCity").value.trim(),
+        state: document.getElementById("supplierState").value.trim(),
+        pincode: document.getElementById("supplierPincode").value.trim(),
+        address: document.getElementById("supplierAddress").value.trim(),
+        isActive: document.getElementById("supplierStatus").value
+    };
+}
+
+async function saveSupplier(event) {
+    event.preventDefault();
+    const button = document.getElementById("saveSupplierButton");
+    const data = getSupplierFormData();
+    if (!data.code || !data.name) {
+        showMessage("Supplier code and name are required.", true);
+        return;
+    }
+
+    const isEditing = editingSupplierId !== null;
+    button.disabled = true;
+    button.textContent = "Saving...";
+    try {
+        await apiRequest(isEditing ? SUPPLIER_API + "/" + editingSupplierId : SUPPLIER_API, {
+            method: isEditing ? "PUT" : "POST",
+            body: JSON.stringify(data)
+        });
+        hideSupplierForm();
+        await loadSuppliers();
+        showMessage(isEditing ? "Supplier updated successfully." : "Supplier added successfully.");
+    } catch (error) {
+        showMessage(error.message, true);
+    } finally {
+        button.disabled = false;
+        button.textContent = editingSupplierId === null ? "Save Supplier" : "Update Supplier";
+    }
+}
+
+function editSupplier(id) {
+    const supplier = suppliers.find(item => Number(item.id) === Number(id));
+    if (!supplier) {
+        showMessage("Supplier not found. Refresh the list and try again.", true);
+        return;
+    }
+    editingSupplierId = Number(id);
+    document.getElementById("supplierCode").value = supplier.code || "";
+    document.getElementById("supplierName").value = supplier.name || "";
+    document.getElementById("supplierPhone").value = supplier.phone || "";
+    document.getElementById("supplierEmail").value = supplier.email || "";
+    document.getElementById("supplierCity").value = supplier.city || "";
+    document.getElementById("supplierState").value = supplier.state || "";
+    document.getElementById("supplierPincode").value = supplier.pincode || "";
+    document.getElementById("supplierAddress").value = supplier.address || "";
+    document.getElementById("supplierStatus").value = supplier.isActive === "N" ? "N" : "Y";
+    document.getElementById("formTitle").textContent = "Edit Supplier";
+    document.getElementById("saveSupplierButton").textContent = "Update Supplier";
+    document.getElementById("supplierForm").style.display = "block";
+    document.getElementById("supplierCode").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function deleteSupplier(id) {
+    const supplier = suppliers.find(item => Number(item.id) === Number(id));
+    if (!supplier) return;
+    if (!confirm('Delete supplier "' + supplier.name + '" (' + supplier.code + ')? If it has purchase records, the database may reject deletion.')) return;
+
+    try {
+        await apiRequest(SUPPLIER_API + "/" + id, { method: "DELETE" });
+        await loadSuppliers();
+        showMessage("Supplier deleted successfully.");
+    } catch (error) {
+        showMessage(error.message, true);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadSuppliers);
 </script>
-
 </body>
-
 </html>
