@@ -3,1118 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Units - LADO Manufacturing</title>
-
     <link rel="stylesheet" href="/css/common.css">
 </head>
-
 <body>
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
 <header class="site-header">
-
     <div class="container header-inner">
-
         <div class="brand">
-
-            <div class="brand-icon">
-                L
-            </div>
-
+            <div class="brand-icon">L</div>
             <div>
-                <div class="brand-name">
-                    LADO Manufacturing
-                </div>
-
-                <div class="brand-subtitle">
-                    Management System
-                </div>
+                <div class="brand-name">LADO Manufacturing</div>
+                <div class="brand-subtitle">Management System</div>
             </div>
-
         </div>
-
-
         <nav class="main-nav">
-
-            <a href="/dashboard.html">
-                Dashboard
-            </a>
-
-            <a href="/products.html">
-                Products
-            </a>
-
-            <a href="/purchases.html">
-                Purchases
-            </a>
-
-            <a href="/sales.html">
-                Sales
-            </a>
-
-            <a href="/inventory.html">
-                Inventory
-            </a>
-
-            <a href="/accounts.html">
-                Accounts
-            </a>
-
-            <a href="/reports.html">
-                Reports
-            </a>
-
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/categories.html">Categories</a>
+            <a href="/units.html">Units</a>
+            <a href="/products.html">Products</a>
+            <a href="/suppliers.html">Suppliers</a>
+            <a href="/customers.html">Customers</a>
+            <a href="/purchases.html">Purchases</a>
+            <a href="/sales.html">Sales</a>
+            <a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html">Accounts</a>
+            <a href="/reports.html">Reports</a>
         </nav>
-
     </div>
-
 </header>
 
-
-<!-- =====================================================
-     MAIN CONTENT
-===================================================== -->
-
 <main class="container">
-
-
-    <!-- PAGE HEADER -->
-
     <div class="page-header">
-
         <div>
-
-            <div class="page-title">
-                Units
-            </div>
-
-            <div class="page-subtitle">
-                Manage measurement units used for products,
-                purchases, sales and inventory.
-            </div>
-
+            <div class="page-title">Units</div>
+            <div class="page-subtitle">Manage measurement units stored in the database.</div>
         </div>
-
-
         <div class="page-actions">
-
-            <button
-                class="btn-primary"
-                onclick="showUnitForm()"
-            >
-                + Add Unit
-            </button>
-
+            <button class="btn-primary" type="button" onclick="showUnitForm()">+ Add Unit</button>
         </div>
-
     </div>
 
-
-    <!-- =================================================
-         SUMMARY CARDS
-    ================================================== -->
+    <div id="pageMessage" role="status" aria-live="polite" style="margin:12px 0;"></div>
 
     <div class="stats-grid">
-
-
-        <!-- TOTAL UNITS -->
-
         <div class="stat-card blue">
-
-            <div class="stat-label">
-                Total Units
-            </div>
-
-            <div
-                class="stat-value"
-                id="totalUnits"
-            >
-                8
-            </div>
-
-            <div class="stat-description">
-                Measurement units available
-            </div>
-
+            <div class="stat-label">Total Units</div>
+            <div class="stat-value" id="totalUnits">—</div>
+            <div class="stat-description">Units in the database</div>
         </div>
-
-
-        <!-- ACTIVE -->
-
-        <div class="stat-card green">
-
-            <div class="stat-label">
-                Active Units
-            </div>
-
-            <div
-                class="stat-value"
-                id="activeUnits"
-            >
-                7
-            </div>
-
-            <div class="stat-description">
-                Currently in use
-            </div>
-
-        </div>
-
-
-        <!-- PRODUCTS -->
-
         <div class="stat-card orange">
-
-            <div class="stat-label">
-                Products Using Units
-            </div>
-
-            <div class="stat-value">
-                124
-            </div>
-
-            <div class="stat-description">
-                Products with defined units
-            </div>
-
+            <div class="stat-label">Products Using Units</div>
+            <div class="stat-value" id="productsWithUnits">—</div>
+            <div class="stat-description">Products linked to a unit</div>
         </div>
-
-
-        <!-- INACTIVE -->
-
-        <div class="stat-card purple">
-
-            <div class="stat-label">
-                Inactive Units
-            </div>
-
-            <div
-                class="stat-value"
-                id="inactiveUnits"
-            >
-                1
-            </div>
-
-            <div class="stat-description">
-                Units currently disabled
-            </div>
-
-        </div>
-
     </div>
 
-
-    <!-- =================================================
-         ADD UNIT FORM
-    ================================================== -->
-
-    <section
-        class="card"
-        id="unitForm"
-        style="display: none;"
-    >
-
+    <section class="card" id="unitForm" style="display:none;">
         <div class="card-header">
-
             <div>
-
-                <div class="card-title">
-                    Add New Unit
-                </div>
-
-                <div class="card-subtitle">
-                    Create a measurement unit for your
-                    manufacturing products.
-                </div>
-
+                <div class="card-title" id="formTitle">Add New Unit</div>
+                <div class="card-subtitle">Save measurement unit details to Oracle.</div>
             </div>
-
         </div>
-
-
-        <form onsubmit="addUnit(event)">
-
-
-            <!-- UNIT NAME + SYMBOL -->
-
+        <form id="unitEditor" onsubmit="saveUnit(event)">
             <div class="grid grid-2">
-
-
                 <div class="form-group">
-
-                    <label for="unitName">
-                        Unit Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="unitName"
-                        placeholder="Example: Kilogram"
-                        required
-                    >
-
+                    <label for="unitName">Unit Name</label>
+                    <input type="text" id="unitName" maxlength="50" placeholder="Example: Kilogram" required>
                 </div>
-
-
                 <div class="form-group">
-
-                    <label for="unitSymbol">
-                        Symbol
-                    </label>
-
-                    <input
-                        type="text"
-                        id="unitSymbol"
-                        placeholder="Example: kg"
-                        maxlength="10"
-                        required
-                    >
-
+                    <label for="unitSymbol">Symbol</label>
+                    <input type="text" id="unitSymbol" maxlength="20" placeholder="Example: kg">
                 </div>
-
             </div>
-
-
-            <!-- DESCRIPTION -->
-
-            <div class="form-group">
-
-                <label for="unitDescription">
-                    Description
-                </label>
-
-                <textarea
-                    id="unitDescription"
-                    rows="3"
-                    placeholder="Enter unit description"
-                ></textarea>
-
-            </div>
-
-
-            <!-- STATUS -->
-
-            <div class="form-group">
-
-                <label for="unitStatus">
-                    Status
-                </label>
-
-                <select id="unitStatus">
-
-                    <option value="Active">
-                        Active
-                    </option>
-
-                    <option value="Inactive">
-                        Inactive
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- BUTTONS -->
-
             <div class="form-actions">
-
-                <button
-                    type="submit"
-                    class="btn-success"
-                >
-                    Save Unit
-                </button>
-
-                <button
-                    type="button"
-                    class="btn-secondary"
-                    onclick="hideUnitForm()"
-                >
-                    Cancel
-                </button>
-
+                <button type="submit" class="btn-success" id="saveUnitButton">Save Unit</button>
+                <button type="button" class="btn-secondary" onclick="hideUnitForm()">Cancel</button>
             </div>
-
         </form>
-
     </section>
-
-
-    <!-- =================================================
-         UNIT LIST
-    ================================================== -->
 
     <section class="card">
-
-
-        <!-- CARD HEADER -->
-
         <div class="card-header">
-
             <div>
-
-                <div class="card-title">
-                    Unit List
-                </div>
-
-                <div class="card-subtitle">
-                    View and manage all measurement units.
-                </div>
-
+                <div class="card-title">Unit List</div>
+                <div class="card-subtitle">This list is loaded from the backend API.</div>
             </div>
-
+            <button class="btn-secondary" type="button" onclick="loadUnits()">Refresh</button>
         </div>
-
-
-        <!-- =================================================
-             SEARCH + FILTER
-        ================================================== -->
-
         <div class="toolbar">
-
-
             <div class="search-box">
-
-                <input
-                    type="text"
-                    id="searchUnit"
-                    placeholder="Search units..."
-                    onkeyup="searchUnits()"
-                >
-
+                <input type="search" id="searchUnit" placeholder="Search units..." oninput="renderUnits()">
             </div>
-
-
-            <select
-                id="statusFilter"
-                onchange="filterUnits()"
-            >
-
-                <option value="All">
-                    All Status
-                </option>
-
-                <option value="Active">
-                    Active
-                </option>
-
-                <option value="Inactive">
-                    Inactive
-                </option>
-
-            </select>
-
-
         </div>
-
-
-        <!-- =================================================
-             TABLE
-        ================================================== -->
-
         <div class="table-container">
-
             <table>
-
                 <thead>
-
                     <tr>
-
-                        <th>
-                            ID
-                        </th>
-
-                        <th>
-                            Unit Name
-                        </th>
-
-                        <th>
-                            Symbol
-                        </th>
-
-                        <th>
-                            Description
-                        </th>
-
-                        <th>
-                            Products
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Actions
-                        </th>
-
+                        <th>ID</th>
+                        <th>Unit Name</th>
+                        <th>Symbol</th>
+                        <th>Products</th>
+                        <th>Actions</th>
                     </tr>
-
                 </thead>
-
-
                 <tbody id="unitTableBody">
-
-
-                    <!-- UNIT 1 -->
-
-                    <tr>
-
-                        <td>
-                            1
-                        </td>
-
-                        <td>
-                            Piece
-                        </td>
-
-                        <td>
-                            pcs
-                        </td>
-
-                        <td>
-                            Individual product or item
-                        </td>
-
-                        <td>
-                            48
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(1)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(1)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- UNIT 2 -->
-
-                    <tr>
-
-                        <td>
-                            2
-                        </td>
-
-                        <td>
-                            Kilogram
-                        </td>
-
-                        <td>
-                            kg
-                        </td>
-
-                        <td>
-                            Weight measurement
-                        </td>
-
-                        <td>
-                            25
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(2)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(2)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- UNIT 3 -->
-
-                    <tr>
-
-                        <td>
-                            3
-                        </td>
-
-                        <td>
-                            Gram
-                        </td>
-
-                        <td>
-                            g
-                        </td>
-
-                        <td>
-                            Small weight measurement
-                        </td>
-
-                        <td>
-                            12
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(3)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(3)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- UNIT 4 -->
-
-                    <tr>
-
-                        <td>
-                            4
-                        </td>
-
-                        <td>
-                            Meter
-                        </td>
-
-                        <td>
-                            m
-                        </td>
-
-                        <td>
-                            Length measurement
-                        </td>
-
-                        <td>
-                            14
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(4)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(4)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- UNIT 5 -->
-
-                    <tr>
-
-                        <td>
-                            5
-                        </td>
-
-                        <td>
-                            Millimeter
-                        </td>
-
-                        <td>
-                            mm
-                        </td>
-
-                        <td>
-                            Small length measurement
-                        </td>
-
-                        <td>
-                            18
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(5)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(5)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- UNIT 6 -->
-
-                    <tr>
-
-                        <td>
-                            6
-                        </td>
-
-                        <td>
-                            Liter
-                        </td>
-
-                        <td>
-                            L
-                        </td>
-
-                        <td>
-                            Volume measurement
-                        </td>
-
-                        <td>
-                            5
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(6)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(6)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- UNIT 7 -->
-
-                    <tr>
-
-                        <td>
-                            7
-                        </td>
-
-                        <td>
-                            Set
-                        </td>
-
-                        <td>
-                            set
-                        </td>
-
-                        <td>
-                            Group of products
-                        </td>
-
-                        <td>
-                            8
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-success">
-                                Active
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(7)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(7)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- UNIT 8 -->
-
-                    <tr>
-
-                        <td>
-                            8
-                        </td>
-
-                        <td>
-                            Box
-                        </td>
-
-                        <td>
-                            box
-                        </td>
-
-                        <td>
-                            Packaging unit
-                        </td>
-
-                        <td>
-                            4
-                        </td>
-
-                        <td>
-
-                            <span class="badge badge-warning">
-                                Inactive
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="editUnit(8)"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deleteUnit(8)"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
+                    <tr><td colspan="5">Loading units...</td></tr>
                 </tbody>
-
             </table>
-
         </div>
-
     </section>
-
 </main>
 
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
 <footer class="footer">
-
-    <div class="container">
-
-        LADO Manufacturing Management System
-        © 2026
-
-    </div>
-
+    <div class="container">LADO Manufacturing Management System © 2026</div>
 </footer>
 
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
 <script>
+"use strict";
 
+const UNIT_API = "/api/units";
+const PRODUCT_API = "/api/products";
+let units = [];
+let products = [];
+let editingUnitId = null;
 
-/* =====================================================
-   SHOW FORM
-===================================================== */
+function showMessage(message, isError = false) {
+    const element = document.getElementById("pageMessage");
+    element.textContent = message;
+    element.style.color = isError ? "#b42318" : "#18794e";
+}
 
-function showUnitForm() {
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[character]);
+}
 
-    document.getElementById("unitForm").style.display = "block";
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            "Accept": "application/json",
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {})
+        }
     });
 
-}
+    const contentType = response.headers.get("content-type") || "";
+    let payload = null;
 
-
-/* =====================================================
-   HIDE FORM
-===================================================== */
-
-function hideUnitForm() {
-
-    document.getElementById("unitForm").style.display = "none";
-
-}
-
-
-/* =====================================================
-   ADD UNIT
-===================================================== */
-
-function addUnit(event) {
-
-    event.preventDefault();
-
-
-    const name =
-        document.getElementById("unitName").value;
-
-    const symbol =
-        document.getElementById("unitSymbol").value;
-
-    const status =
-        document.getElementById("unitStatus").value;
-
-
-    alert(
-        "Unit '" +
-        name +
-        "' added successfully.\n\n" +
-        "Symbol: " +
-        symbol +
-        "\nStatus: " +
-        status
-    );
-
-
-    document
-        .querySelector("#unitForm form")
-        .reset();
-
-
-    hideUnitForm();
-
-}
-
-
-/* =====================================================
-   EDIT UNIT
-===================================================== */
-
-function editUnit(id) {
-
-    alert(
-        "Edit Unit ID: " +
-        id +
-        "\n\n" +
-        "Database editing will be connected later."
-    );
-
-}
-
-
-/* =====================================================
-   DELETE UNIT
-===================================================== */
-
-function deleteUnit(id) {
-
-    const confirmDelete =
-        confirm(
-            "Are you sure you want to delete Unit ID " +
-            id +
-            "?"
-        );
-
-
-    if (confirmDelete) {
-
-        alert(
-            "Unit ID " +
-            id +
-            " selected for deletion.\n\n" +
-            "Database deletion will be connected later."
-        );
-
+    if (response.status !== 204) {
+        if (contentType.includes("application/json")) {
+            payload = await response.json();
+        } else {
+            const text = await response.text();
+            if (response.redirected || /^\s*<!doctype html|^\s*<html/i.test(text)) {
+                throw new Error("Your login session may have expired. Sign in again and reopen Units.");
+            }
+            if (text) payload = { error: text };
+        }
     }
 
+    if (!response.ok) {
+        throw new Error(payload?.error || payload?.message || "Request failed (" + response.status + ").");
+    }
+    return payload;
 }
 
+async function loadUnits() {
+    const body = document.getElementById("unitTableBody");
+    body.innerHTML = '<tr><td colspan="5">Loading units...</td></tr>';
 
-/* =====================================================
-   SEARCH UNITS
-===================================================== */
+    try {
+        const result = await apiRequest(UNIT_API);
+        units = Array.isArray(result) ? result : [];
 
-function searchUnits() {
-
-    const search =
-        document
-            .getElementById("searchUnit")
-            .value
-            .toLowerCase();
-
-
-    const rows =
-        document.querySelectorAll(
-            "#unitTableBody tr"
-        );
-
-
-    rows.forEach(function(row) {
-
-        const text =
-            row.textContent.toLowerCase();
-
-
-        if (text.includes(search)) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
+        try {
+            const productResult = await apiRequest(PRODUCT_API);
+            products = Array.isArray(productResult) ? productResult : [];
+        } catch (error) {
+            products = [];
+            console.warn("Product counts could not be loaded:", error);
         }
 
-    });
+        document.getElementById("totalUnits").textContent = units.length;
+        document.getElementById("productsWithUnits").textContent =
+            products.filter(product => product.unitId !== null && product.unitId !== undefined).length;
 
+        renderUnits();
+        showMessage("Units loaded from the database.");
+    } catch (error) {
+        units = [];
+        products = [];
+        document.getElementById("totalUnits").textContent = "—";
+        document.getElementById("productsWithUnits").textContent = "—";
+        body.innerHTML = '<tr><td colspan="5">Could not load units: ' + escapeHtml(error.message) + '</td></tr>';
+        showMessage(error.message, true);
+    }
 }
 
+function renderUnits() {
+    const body = document.getElementById("unitTableBody");
+    const search = document.getElementById("searchUnit").value.trim().toLowerCase();
 
-/* =====================================================
-   FILTER UNITS
-===================================================== */
+    const filtered = units.filter(unit =>
+        String(unit.id ?? "").includes(search) ||
+        String(unit.name ?? "").toLowerCase().includes(search) ||
+        String(unit.symbol ?? "").toLowerCase().includes(search)
+    );
 
-function filterUnits() {
+    if (!filtered.length) {
+        body.innerHTML = '<tr><td colspan="5">' +
+            (units.length ? "No matching units found." : "No units are in the database yet. Use Add Unit to create one.") +
+            '</td></tr>';
+        return;
+    }
 
-    const filter =
-        document
-            .getElementById("statusFilter")
-            .value;
-
-
-    const rows =
-        document.querySelectorAll(
-            "#unitTableBody tr"
-        );
-
-
-    rows.forEach(function(row) {
-
-        const status =
-            row.cells[5]
-                .textContent
-                .trim();
-
-
-        if (
-            filter === "All" ||
-            status === filter
-        ) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
-        }
-
-    });
-
+    body.innerHTML = filtered.map(unit => {
+        const count = products.filter(product => Number(product.unitId) === Number(unit.id)).length;
+        return '<tr>' +
+            '<td>' + escapeHtml(unit.id) + '</td>' +
+            '<td>' + escapeHtml(unit.name || "") + '</td>' +
+            '<td>' + escapeHtml(unit.symbol || "—") + '</td>' +
+            '<td>' + count + '</td>' +
+            '<td>' +
+                '<button type="button" class="btn-edit btn-sm" onclick="editUnit(' + Number(unit.id) + ')">Edit</button> ' +
+                '<button type="button" class="btn-danger btn-sm" onclick="deleteUnit(' + Number(unit.id) + ')">Delete</button>' +
+            '</td>' +
+        '</tr>';
+    }).join("");
 }
 
+function showUnitForm() {
+    editingUnitId = null;
+    document.getElementById("unitEditor").reset();
+    document.getElementById("formTitle").textContent = "Add New Unit";
+    document.getElementById("saveUnitButton").textContent = "Save Unit";
+    document.getElementById("unitForm").style.display = "block";
+    document.getElementById("unitName").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
+function hideUnitForm() {
+    document.getElementById("unitForm").style.display = "none";
+    editingUnitId = null;
+    document.getElementById("unitEditor").reset();
+    document.getElementById("formTitle").textContent = "Add New Unit";
+    document.getElementById("saveUnitButton").textContent = "Save Unit";
+}
+
+function editUnit(id) {
+    const unit = units.find(item => Number(item.id) === Number(id));
+    if (!unit) {
+        showMessage("Unit not found. Refresh the list and try again.", true);
+        return;
+    }
+
+    editingUnitId = Number(id);
+    document.getElementById("unitName").value = unit.name || "";
+    document.getElementById("unitSymbol").value = unit.symbol || "";
+    document.getElementById("formTitle").textContent = "Edit Unit";
+    document.getElementById("saveUnitButton").textContent = "Update Unit";
+    document.getElementById("unitForm").style.display = "block";
+    document.getElementById("unitName").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function saveUnit(event) {
+    event.preventDefault();
+
+    const button = document.getElementById("saveUnitButton");
+    const name = document.getElementById("unitName").value.trim();
+    const symbol = document.getElementById("unitSymbol").value.trim();
+
+    if (!name) {
+        showMessage("Unit name is required.", true);
+        return;
+    }
+
+    const isEditing = editingUnitId !== null;
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try {
+        await apiRequest(isEditing ? UNIT_API + "/" + editingUnitId : UNIT_API, {
+            method: isEditing ? "PUT" : "POST",
+            body: JSON.stringify({ name, symbol })
+        });
+
+        hideUnitForm();
+        await loadUnits();
+        showMessage(isEditing ? "Unit updated successfully." : "Unit added successfully.");
+    } catch (error) {
+        showMessage(error.message, true);
+    } finally {
+        button.disabled = false;
+        button.textContent = editingUnitId === null ? "Save Unit" : "Update Unit";
+    }
+}
+
+async function deleteUnit(id) {
+    const unit = units.find(item => Number(item.id) === Number(id));
+    if (!unit) return;
+
+    if (!confirm('Delete unit "' + unit.name + '"? Units used by products cannot be deleted.')) return;
+
+    try {
+        await apiRequest(UNIT_API + "/" + id, { method: "DELETE" });
+        await loadUnits();
+        showMessage("Unit deleted successfully.");
+    } catch (error) {
+        showMessage(error.message, true);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadUnits);
 </script>
-
 </body>
 </html>
