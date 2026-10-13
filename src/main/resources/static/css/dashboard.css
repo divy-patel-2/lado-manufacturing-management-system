@@ -141,3 +141,8 @@ body.dashboard-page {
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; }
 }
+
+/* Use the shared top navigation instead of the dashboard sidebar. */
+.dashboard-sidebar{display:none!important}
+.dashboard-main{margin-left:0!important;padding-top:24px!important}
+.dashboard-shell{display:block!important;min-height:100vh}
