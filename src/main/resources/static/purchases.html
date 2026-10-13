@@ -3,1712 +3,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Purchases - LADO Manufacturing</title>
-
     <link rel="stylesheet" href="/css/common.css">
+    <style>
+        .purchase-message { margin: 14px 0; padding: 12px 14px; border-radius: 8px; display: none; }
+        .purchase-message.error { display: block; background: #fff0f0; color: #9b1c1c; border: 1px solid #f2c5c5; }
+        .purchase-message.success { display: block; background: #edf9f0; color: #176b31; border: 1px solid #bde5c7; }
+        .empty-state { text-align: center; padding: 28px 14px; color: #667085; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        .form-grid .form-group { margin-bottom: 0; }
+        .purchase-form-card { margin-bottom: 18px; }
+        .purchase-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .summary-row { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; }
+        .total-row { font-size: 1.1rem; }
+        .muted-note { color: #667085; font-size: .9rem; }
+        @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
+    </style>
 </head>
-
 <body>
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
 <header class="site-header">
-
     <div class="container header-inner">
-
         <div class="brand">
             <div class="brand-icon">L</div>
-
-            <div>
-                <div class="brand-name">LADO Manufacturing</div>
-                <div class="brand-subtitle">Management System</div>
-            </div>
+            <div><div class="brand-name">LADO Manufacturing</div><div class="brand-subtitle">Management System</div></div>
         </div>
-
         <nav class="main-nav">
-
-            <a href="/dashboard.html">Dashboard</a>
-            <a href="/categories.html">Categories</a>
-            <a href="/units.html">Units</a>
-            <a href="/products.html">Products</a>
-            <a href="/suppliers.html">Suppliers</a>
-            <a href="/customers.html">Customers</a>
-            <a href="/purchases.html" class="active">Purchases</a>
-            <a href="/sales.html">Sales</a>
-            <a href="/inventory.html">Inventory</a>
-            <a href="/accounts.html">Accounts</a>
-            <a href="/payments.html">Payments</a>
-            <a href="/reports.html">Reports</a>
-            <a href="/users.html">Users</a>
-
+            <a href="/dashboard.html">Dashboard</a><a href="/categories.html">Categories</a><a href="/units.html">Units</a>
+            <a href="/products.html">Products</a><a href="/suppliers.html">Suppliers</a><a href="/customers.html">Customers</a>
+            <a href="/purchases.html" class="active">Purchases</a><a href="/sales.html">Sales</a><a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html">Accounts</a><a href="/payments.html">Payments</a><a href="/reports.html">Reports</a><a href="/users.html">Users</a>
         </nav>
-
     </div>
-
 </header>
 
-
-<!-- =====================================================
-     MAIN CONTENT
-===================================================== -->
-
 <main class="container">
-
-    <!-- PAGE HEADER -->
-
     <section class="page-header">
-
-        <div>
-            <h1 class="page-title">Purchases</h1>
-
-            <p class="page-subtitle">
-                Manage supplier purchases, purchased items and payment status.
-            </p>
-        </div>
-
-        <div class="page-actions">
-
-            <button
-                class="btn-primary"
-                onclick="showPurchaseForm()">
-                + New Purchase
-            </button>
-
-        </div>
-
+        <div><h1 class="page-title">Purchases</h1><p class="page-subtitle">Manage supplier purchases and purchased items.</p></div>
+        <div class="page-actions"><button class="btn-primary" type="button" onclick="showPurchaseForm()">+ New Purchase</button></div>
     </section>
 
-
-    <!-- =================================================
-         SUMMARY CARDS
-    ================================================== -->
+    <div id="pageMessage" class="purchase-message" role="status" aria-live="polite"></div>
 
     <section class="stats-grid">
-
-        <div class="stat-card blue">
-
-            <div class="stat-label">
-                Total Purchases
-            </div>
-
-            <div class="stat-value">
-                286
-            </div>
-
-            <div class="stat-description">
-                All purchase transactions
-            </div>
-
-        </div>
-
-
-        <div class="stat-card green">
-
-            <div class="stat-label">
-                This Month
-            </div>
-
-            <div class="stat-value">
-                ₹4.82L
-            </div>
-
-            <div class="stat-description">
-                Purchase value this month
-            </div>
-
-        </div>
-
-
-        <div class="stat-card orange">
-
-            <div class="stat-label">
-                Pending Payments
-            </div>
-
-            <div class="stat-value">
-                ₹1.82L
-            </div>
-
-            <div class="stat-description">
-                Amount payable to suppliers
-            </div>
-
-        </div>
-
-
-        <div class="stat-card purple">
-
-            <div class="stat-label">
-                Items Purchased
-            </div>
-
-            <div class="stat-value">
-                1,428
-            </div>
-
-            <div class="stat-description">
-                Total quantity purchased
-            </div>
-
-        </div>
-
+        <div class="stat-card blue"><div class="stat-label">Total Purchases</div><div class="stat-value" id="statPurchaseCount">0</div><div class="stat-description">Saved purchase transactions</div></div>
+        <div class="stat-card green"><div class="stat-label">This Month</div><div class="stat-value" id="statThisMonth">₹0.00</div><div class="stat-description">Purchase value this month</div></div>
+        <div class="stat-card orange"><div class="stat-label">Unpaid Purchase Value</div><div class="stat-value" id="statPending">₹0.00</div><div class="stat-description">Purchases marked Partial or Pending</div></div>
+        <div class="stat-card purple"><div class="stat-label">Quantity Purchased</div><div class="stat-value" id="statQuantity">0</div><div class="stat-description">Total quantity across saved items</div></div>
     </section>
 
-
-    <!-- =================================================
-         PURCHASE FORM
-    ================================================== -->
-
-    <section
-        id="purchaseForm"
-        class="card"
-        style="display: none;">
-
-        <div class="card-header">
-
-            <div>
-                <h2 class="card-title">
-                    New Purchase
-                </h2>
-
-                <p class="card-subtitle">
-                    Enter purchase details and add purchased products.
-                </p>
-            </div>
-
+    <section id="purchaseForm" class="card purchase-form-card" style="display:none;">
+        <div class="card-header"><div><h2 class="card-title" id="purchaseFormTitle">New Purchase</h2><p class="card-subtitle">Choose a supplier and add the products on the supplier invoice.</p></div></div>
+        <div class="form-grid">
+            <div class="form-group"><label for="purchaseNumber">Purchase Number *</label><input id="purchaseNumber" type="text" maxlength="50" placeholder="Example: PUR-2026-001" required></div>
+            <div class="form-group"><label for="purchaseDate">Purchase Date *</label><input id="purchaseDate" type="date" required></div>
+            <div class="form-group"><label for="supplier">Supplier *</label><select id="supplier" required><option value="">Loading suppliers...</option></select></div>
+            <div class="form-group"><label for="paymentStatus">Payment Status *</label><select id="paymentStatus"><option value="PENDING">Pending</option><option value="PARTIAL">Partial</option><option value="PAID">Paid</option></select></div>
         </div>
 
-
-        <!-- PURCHASE HEADER -->
-
-        <div class="card">
-
-            <h3 class="card-title">
-                Purchase Information
-            </h3>
-
-            <br>
-
-            <div class="grid grid-2">
-
-                <div class="form-group">
-
-                    <label for="purchaseNumber">
-                        Purchase Number
-                    </label>
-
-                    <input
-                        type="text"
-                        id="purchaseNumber"
-                        placeholder="Example: PUR-2026-001"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="purchaseDate">
-                        Purchase Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="purchaseDate"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="supplier">
-                        Supplier
-                    </label>
-
-                    <select id="supplier">
-
-                        <option value="">
-                            Select Supplier
-                        </option>
-
-                        <option>
-                            ABC Electricals
-                        </option>
-
-                        <option>
-                            Gujarat Metals
-                        </option>
-
-                        <option>
-                            Precision Components
-                        </option>
-
-                        <option>
-                            Industrial Packaging
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="invoiceNumber">
-                        Supplier Invoice Number
-                    </label>
-
-                    <input
-                        type="text"
-                        id="invoiceNumber"
-                        placeholder="Example: INV-45821"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="paymentStatus">
-                        Payment Status
-                    </label>
-
-                    <select id="paymentStatus">
-
-                        <option value="Paid">
-                            Paid
-                        </option>
-
-                        <option value="Partial">
-                            Partial
-                        </option>
-
-                        <option value="Pending">
-                            Pending
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="paymentMethod">
-                        Payment Method
-                    </label>
-
-                    <select id="paymentMethod">
-
-                        <option value="">
-                            Select Payment Method
-                        </option>
-
-                        <option>
-                            Cash
-                        </option>
-
-                        <option>
-                            Bank Transfer
-                        </option>
-
-                        <option>
-                            UPI
-                        </option>
-
-                        <option>
-                            Cheque
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
+        <hr>
+        <h3 class="card-title">Add Purchase Item</h3>
+        <p class="muted-note">The unit is taken from the selected product to keep inventory units consistent.</p>
+        <div class="form-grid">
+            <div class="form-group"><label for="product">Product *</label><select id="product"><option value="">Loading products...</option></select></div>
+            <div class="form-group"><label for="itemUnit">Unit</label><input id="itemUnit" type="text" readonly placeholder="Selected product's unit"></div>
+            <div class="form-group"><label for="quantity">Quantity *</label><input id="quantity" type="number" min="0.001" step="0.001" placeholder="Enter quantity"></div>
+            <div class="form-group"><label for="unitPrice">Unit Price (₹) *</label><input id="unitPrice" type="number" min="0" step="0.01" placeholder="Enter price per unit"></div>
+            <div class="form-group"><label for="gst">GST (%)</label><select id="gst"><option value="0">0%</option><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option></select></div>
+            <div class="form-group"><label for="discount">Discount (₹)</label><input id="discount" type="number" min="0" step="0.01" value="0"></div>
         </div>
-
-
-        <!-- =================================================
-             ADD PURCHASE ITEM
-        ================================================== -->
-
-        <div class="card">
-
-            <h3 class="card-title">
-                Add Purchase Item
-            </h3>
-
-            <p class="card-subtitle">
-                Add products purchased from the selected supplier.
-            </p>
-
-            <br>
-
-
-            <div class="grid grid-2">
-
-                <div class="form-group">
-
-                    <label for="product">
-                        Product
-                    </label>
-
-                    <select id="product">
-
-                        <option value="">
-                            Select Product
-                        </option>
-
-                        <option value="Control Panel">
-                            Control Panel
-                        </option>
-
-                        <option value="Motor Housing">
-                            Motor Housing
-                        </option>
-
-                        <option value="Copper Wire">
-                            Copper Wire
-                        </option>
-
-                        <option value="Terminal Connector">
-                            Terminal Connector
-                        </option>
-
-                        <option value="Mounting Bolt">
-                            Mounting Bolt
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="itemUnit">
-                        Unit
-                    </label>
-
-                    <select id="itemUnit">
-
-                        <option value="">
-                            Select Unit
-                        </option>
-
-                        <option value="pcs">
-                            Piece (pcs)
-                        </option>
-
-                        <option value="kg">
-                            Kilogram (kg)
-                        </option>
-
-                        <option value="g">
-                            Gram (g)
-                        </option>
-
-                        <option value="m">
-                            Meter (m)
-                        </option>
-
-                        <option value="set">
-                            Set
-                        </option>
-
-                        <option value="box">
-                            Box
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="quantity">
-                        Quantity
-                    </label>
-
-                    <input
-                        type="number"
-                        id="quantity"
-                        min="1"
-                        step="0.01"
-                        placeholder="Enter quantity"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="unitPrice">
-                        Unit Price (₹)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="unitPrice"
-                        min="0"
-                        step="0.01"
-                        placeholder="Enter unit price"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="gst">
-                        GST (%)
-                    </label>
-
-                    <select id="gst">
-
-                        <option value="0">
-                            0%
-                        </option>
-
-                        <option value="5">
-                            5%
-                        </option>
-
-                        <option value="12">
-                            12%
-                        </option>
-
-                        <option value="18" selected>
-                            18%
-                        </option>
-
-                        <option value="28">
-                            28%
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="discount">
-                        Discount (₹)
-                    </label>
-
-                    <input
-                        type="number"
-                        id="discount"
-                        min="0"
-                        step="0.01"
-                        value="0"
-                        placeholder="Enter discount"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <div class="form-actions">
-
-                <button
-                    type="button"
-                    class="btn-success"
-                    onclick="addPurchaseItem()">
-
-                    + Add Item
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             PURCHASE ITEMS TABLE
-        ================================================== -->
-
-        <div class="card">
-
-            <div class="card-header">
-
-                <div>
-
-                    <h3 class="card-title">
-                        Purchase Items
-                    </h3>
-
-                    <p class="card-subtitle">
-                        Products currently added to this purchase.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="table-container">
-
-                <table id="purchaseItemsTable">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>#</th>
-                            <th>Product</th>
-                            <th>Qty</th>
-                            <th>Unit</th>
-                            <th>Unit Price</th>
-                            <th>GST</th>
-                            <th>Discount</th>
-                            <th>Total</th>
-                            <th>Action</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="purchaseItemsBody">
-
-                        <tr id="emptyItemsRow">
-
-                            <td colspan="9" style="text-align: center;">
-
-                                No items added yet.
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             PURCHASE TOTAL
-        ================================================== -->
-
-        <div class="card">
-
-            <h3 class="card-title">
-                Purchase Summary
-            </h3>
-
-            <br>
-
-
-            <div class="grid grid-2">
-
-                <div></div>
-
-                <div>
-
-                    <div class="summary-row">
-
-                        <span>
-                            Subtotal
-                        </span>
-
-                        <strong id="subtotal">
-                            ₹0.00
-                        </strong>
-
-                    </div>
-
-
-                    <div class="summary-row">
-
-                        <span>
-                            Discount
-                        </span>
-
-                        <strong id="totalDiscount">
-                            ₹0.00
-                        </strong>
-
-                    </div>
-
-
-                    <div class="summary-row">
-
-                        <span>
-                            GST / Tax
-                        </span>
-
-                        <strong id="totalTax">
-                            ₹0.00
-                        </strong>
-
-                    </div>
-
-
-                    <hr>
-
-
-                    <div class="summary-row total-row">
-
-                        <span>
-                            Grand Total
-                        </span>
-
-                        <strong id="grandTotal">
-                            ₹0.00
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             NOTES
-        ================================================== -->
-
-        <div class="form-group">
-
-            <label for="purchaseNotes">
-                Notes
-            </label>
-
-            <textarea
-                id="purchaseNotes"
-                rows="4"
-                placeholder="Enter additional purchase notes..."
-            ></textarea>
-
-        </div>
-
-
-        <!-- FORM ACTIONS -->
-
-        <div class="form-actions">
-
-            <button
-                type="button"
-                class="btn-primary"
-                onclick="savePurchase()">
-
-                Save Purchase
-
-            </button>
-
-            <button
-                type="button"
-                class="btn-secondary"
-                onclick="hidePurchaseForm()">
-
-                Cancel
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         PURCHASE HISTORY
-    ================================================== -->
-
-    <section class="card">
-
-        <div class="card-header">
-
-            <div>
-
-                <h2 class="card-title">
-                    Purchase History
-                </h2>
-
-                <p class="card-subtitle">
-                    View and manage previous purchase transactions.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- TOOLBAR -->
-
-        <div class="toolbar">
-
-            <div class="search-box">
-
-                <input
-                    type="text"
-                    id="purchaseSearch"
-                    placeholder="Search purchase number or supplier..."
-                    onkeyup="searchPurchases()"
-                >
-
-            </div>
-
-
-            <div>
-
-                <select
-                    id="statusFilter"
-                    onchange="filterPurchases()">
-
-                    <option value="all">
-                        All Payment Status
-                    </option>
-
-                    <option value="Paid">
-                        Paid
-                    </option>
-
-                    <option value="Partial">
-                        Partial
-                    </option>
-
-                    <option value="Pending">
-                        Pending
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <!-- PURCHASE TABLE -->
+        <div class="form-actions"><button class="btn-success" type="button" onclick="addPurchaseItem()">+ Add Item</button></div>
 
         <div class="table-container">
-
-            <table id="purchasesTable">
-
-                <thead>
-
-                    <tr>
-
-                        <th>Purchase No.</th>
-                        <th>Date</th>
-                        <th>Supplier</th>
-                        <th>Items</th>
-                        <th>Subtotal</th>
-                        <th>Tax</th>
-                        <th>Total</th>
-                        <th>Payment</th>
-                        <th>Actions</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    <tr>
-
-                        <td>
-                            PUR-2026-001
-                        </td>
-
-                        <td>
-                            05-Oct-2026
-                        </td>
-
-                        <td>
-                            ABC Electricals
-                        </td>
-
-                        <td>
-                            8
-                        </td>
-
-                        <td>
-                            ₹42,500
-                        </td>
-
-                        <td>
-                            ₹7,650
-                        </td>
-
-                        <td>
-                            ₹50,150
-                        </td>
-
-                        <td>
-                            <span class="badge-success">
-                                Paid
-                            </span>
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="viewPurchase('PUR-2026-001')">
-
-                                View
-
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deletePurchase('PUR-2026-001')">
-
-                                Delete
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-                            PUR-2026-002
-                        </td>
-
-                        <td>
-                            06-Oct-2026
-                        </td>
-
-                        <td>
-                            Gujarat Metals
-                        </td>
-
-                        <td>
-                            12
-                        </td>
-
-                        <td>
-                            ₹68,000
-                        </td>
-
-                        <td>
-                            ₹12,240
-                        </td>
-
-                        <td>
-                            ₹80,240
-                        </td>
-
-                        <td>
-                            <span class="badge-warning">
-                                Partial
-                            </span>
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="viewPurchase('PUR-2026-002')">
-
-                                View
-
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deletePurchase('PUR-2026-002')">
-
-                                Delete
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-                            PUR-2026-003
-                        </td>
-
-                        <td>
-                            07-Oct-2026
-                        </td>
-
-                        <td>
-                            Precision Components
-                        </td>
-
-                        <td>
-                            6
-                        </td>
-
-                        <td>
-                            ₹31,500
-                        </td>
-
-                        <td>
-                            ₹5,670
-                        </td>
-
-                        <td>
-                            ₹37,170
-                        </td>
-
-                        <td>
-                            <span class="badge-danger">
-                                Pending
-                            </span>
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="viewPurchase('PUR-2026-003')">
-
-                                View
-
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deletePurchase('PUR-2026-003')">
-
-                                Delete
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-                            PUR-2026-004
-                        </td>
-
-                        <td>
-                            07-Oct-2026
-                        </td>
-
-                        <td>
-                            Industrial Packaging
-                        </td>
-
-                        <td>
-                            15
-                        </td>
-
-                        <td>
-                            ₹24,800
-                        </td>
-
-                        <td>
-                            ₹4,464
-                        </td>
-
-                        <td>
-                            ₹29,264
-                        </td>
-
-                        <td>
-                            <span class="badge-success">
-                                Paid
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="btn-edit btn-sm"
-                                onclick="viewPurchase('PUR-2026-004')">
-
-                                View
-
-                            </button>
-
-                            <button
-                                class="btn-danger btn-sm"
-                                onclick="deletePurchase('PUR-2026-004')">
-
-                                Delete
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
+            <table id="purchaseItemsTable">
+                <thead><tr><th>#</th><th>Product</th><th>Qty</th><th>Unit</th><th>Unit Price</th><th>GST</th><th>Discount</th><th>Total</th><th>Action</th></tr></thead>
+                <tbody id="purchaseItemsBody"><tr><td colspan="9" class="empty-state">No items added yet.</td></tr></tbody>
             </table>
-
         </div>
 
+        <div class="grid grid-2">
+            <div class="form-group"><label for="purchaseNotes">Notes (optional)</label><textarea id="purchaseNotes" rows="3" maxlength="1000" placeholder="Additional notes for this purchase"></textarea></div>
+            <div>
+                <div class="summary-row"><span>Subtotal</span><strong id="subtotal">₹0.00</strong></div>
+                <div class="summary-row"><span>Discount</span><strong id="totalDiscount">₹0.00</strong></div>
+                <div class="summary-row"><span>GST / Tax</span><strong id="totalTax">₹0.00</strong></div>
+                <hr><div class="summary-row total-row"><span>Grand Total</span><strong id="grandTotal">₹0.00</strong></div>
+            </div>
+        </div>
+        <div class="form-actions"><button id="savePurchaseButton" class="btn-primary" type="button" onclick="savePurchase()">Save Purchase</button><button class="btn-secondary" type="button" onclick="hidePurchaseForm()">Cancel</button></div>
     </section>
 
+    <section class="card">
+        <div class="card-header"><div><h2 class="card-title">Purchase History</h2><p class="card-subtitle">Only purchases saved in the database appear here.</p></div></div>
+        <div class="toolbar">
+            <div class="search-box"><input type="search" id="purchaseSearch" placeholder="Search purchase number or supplier..." oninput="renderPurchases()"></div>
+            <div><select id="statusFilter" onchange="renderPurchases()"><option value="ALL">All Payment Status</option><option value="PAID">Paid</option><option value="PARTIAL">Partial</option><option value="PENDING">Pending</option></select></div>
+        </div>
+        <div class="table-container">
+            <table id="purchasesTable">
+                <thead><tr><th>Purchase No.</th><th>Date</th><th>Supplier</th><th>Item Lines</th><th>Subtotal</th><th>Tax</th><th>Total</th><th>Payment</th><th>Actions</th></tr></thead>
+                <tbody id="purchasesBody"><tr><td colspan="9" class="empty-state">Loading purchases...</td></tr></tbody>
+            </table>
+        </div>
+    </section>
 </main>
 
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer class="footer">
-
-    <div class="container">
-
-        LADO Manufacturing Management System
-
-        <br>
-
-        <small>
-            Purchase Management Module
-        </small>
-
-    </div>
-
-</footer>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
+<footer class="footer"><div class="container">LADO Manufacturing Management System<br><small>Purchase Management Module</small></div></footer>
 
 <script>
-
+    const API = "/api";
+    let purchases = [];
+    let suppliers = [];
+    let products = [];
+    let units = [];
     let purchaseItems = [];
+    let editingPurchaseId = null;
 
+    function money(value) {
+        return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(value) || 0);
+    }
 
-    /* =================================================
-       SHOW / HIDE PURCHASE FORM
-    ================================================= */
+    function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+        });
+    }
+
+    async function apiRequest(url, options) {
+        const response = await fetch(url, Object.assign({ headers: { "Content-Type": "application/json" } }, options || {}));
+        if (response.status === 204) return null;
+        const raw = await response.text();
+        let data = null;
+        if (raw) {
+            try { data = JSON.parse(raw); } catch (_) { data = raw; }
+        }
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) throw new Error("Your session may have expired or you do not have permission. Please sign in again.");
+            const message = data && typeof data === "object" ? (data.error || data.message || data.detail) : data;
+            throw new Error(message || ("Request failed (HTTP " + response.status + ")."));
+        }
+        return data;
+    }
+
+    function showMessage(message, type) {
+        const el = document.getElementById("pageMessage");
+        el.textContent = message;
+        el.className = "purchase-message " + (type || "success");
+        el.style.display = "block";
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function clearMessage() {
+        const el = document.getElementById("pageMessage");
+        el.textContent = "";
+        el.className = "purchase-message";
+        el.style.display = "none";
+    }
+
+    function setTodayIfBlank() {
+        const el = document.getElementById("purchaseDate");
+        if (!el.value) {
+            const now = new Date();
+            el.value = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+        }
+    }
+
+    function getSupplierName(id) {
+        const item = suppliers.find(function(s) { return Number(s.id) === Number(id); });
+        return item ? item.name : "Unknown supplier";
+    }
+
+    function getProduct(id) {
+        return products.find(function(p) { return Number(p.id) === Number(id); });
+    }
+
+    function getUnitForProduct(productId) {
+        const product = getProduct(productId);
+        if (!product) return "";
+        const unit = units.find(function(u) { return Number(u.id) === Number(product.unitId); });
+        if (!unit) return "";
+        return unit.symbol ? unit.name + " (" + unit.symbol + ")" : unit.name;
+    }
+
+    function loadSupplierOptions(selectedId) {
+        const select = document.getElementById("supplier");
+        const available = suppliers.filter(function(s) { return String(s.isActive == null ? "Y" : s.isActive).toUpperCase() !== "N" && String(s.isActive == null ? "Y" : s.isActive).toUpperCase() !== "INACTIVE"; });
+        select.innerHTML = '<option value="">Select supplier</option>' + available.map(function(s) {
+            return '<option value="' + Number(s.id) + '">' + escapeHtml(s.name) + (s.code ? " (" + escapeHtml(s.code) + ")" : "") + '</option>';
+        }).join("");
+        if (selectedId != null) select.value = String(selectedId);
+        if (available.length === 0) select.innerHTML = '<option value="">Add an active supplier first</option>';
+    }
+
+    function loadProductOptions(selectedId) {
+        const select = document.getElementById("product");
+        const available = products.filter(function(p) { return String(p.isActive == null ? "Y" : p.isActive).toUpperCase() !== "N" && String(p.isActive == null ? "Y" : p.isActive).toUpperCase() !== "INACTIVE"; });
+        select.innerHTML = '<option value="">Select product</option>' + available.map(function(p) {
+            return '<option value="' + Number(p.id) + '">' + escapeHtml(p.name) + (p.code ? " (" + escapeHtml(p.code) + ")" : "") + '</option>';
+        }).join("");
+        if (selectedId != null) select.value = String(selectedId);
+        if (available.length === 0) select.innerHTML = '<option value="">Add an active product first</option>';
+        updateSelectedUnit();
+    }
+
+    function updateSelectedUnit() {
+        document.getElementById("itemUnit").value = getUnitForProduct(document.getElementById("product").value);
+    }
 
     function showPurchaseForm() {
-
+        clearMessage();
+        editingPurchaseId = null;
+        clearPurchaseForm();
+        document.getElementById("purchaseFormTitle").textContent = "New Purchase";
+        document.getElementById("savePurchaseButton").textContent = "Save Purchase";
         document.getElementById("purchaseForm").style.display = "block";
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-        setDefaultDate();
-
+        setTodayIfBlank();
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
-
 
     function hidePurchaseForm() {
-
         document.getElementById("purchaseForm").style.display = "none";
-
         clearPurchaseForm();
-
+        editingPurchaseId = null;
     }
-
-
-    /* =================================================
-       DEFAULT DATE
-    ================================================= */
-
-    function setDefaultDate() {
-
-        const dateInput =
-            document.getElementById("purchaseDate");
-
-        if (!dateInput.value) {
-
-            const today = new Date();
-
-            const year = today.getFullYear();
-
-            const month =
-                String(today.getMonth() + 1)
-                .padStart(2, "0");
-
-            const day =
-                String(today.getDate())
-                .padStart(2, "0");
-
-            dateInput.value =
-                `${year}-${month}-${day}`;
-
-        }
-
-    }
-
-
-    /* =================================================
-       ADD PURCHASE ITEM
-    ================================================= */
-
-    function addPurchaseItem() {
-
-        const product =
-            document.getElementById("product").value;
-
-        const unit =
-            document.getElementById("itemUnit").value;
-
-        const quantity =
-            parseFloat(
-                document.getElementById("quantity").value
-            );
-
-        const unitPrice =
-            parseFloat(
-                document.getElementById("unitPrice").value
-            );
-
-        const gst =
-            parseFloat(
-                document.getElementById("gst").value
-            );
-
-        const discount =
-            parseFloat(
-                document.getElementById("discount").value
-            ) || 0;
-
-
-        if (!product) {
-
-            alert("Please select a product.");
-
-            return;
-
-        }
-
-
-        if (!unit) {
-
-            alert("Please select a unit.");
-
-            return;
-
-        }
-
-
-        if (!quantity || quantity <= 0) {
-
-            alert("Please enter a valid quantity.");
-
-            return;
-
-        }
-
-
-        if (isNaN(unitPrice) || unitPrice < 0) {
-
-            alert("Please enter a valid unit price.");
-
-            return;
-
-        }
-
-
-        const grossAmount =
-            quantity * unitPrice;
-
-
-        const taxableAmount =
-            Math.max(
-                grossAmount - discount,
-                0
-            );
-
-
-        const taxAmount =
-            taxableAmount * gst / 100;
-
-
-        const total =
-            taxableAmount + taxAmount;
-
-
-        const item = {
-
-            product: product,
-
-            unit: unit,
-
-            quantity: quantity,
-
-            unitPrice: unitPrice,
-
-            gst: gst,
-
-            discount: discount,
-
-            subtotal: grossAmount,
-
-            tax: taxAmount,
-
-            total: total
-
-        };
-
-
-        purchaseItems.push(item);
-
-
-        renderPurchaseItems();
-
-
-        clearItemInputs();
-
-    }
-
-
-    /* =================================================
-       DISPLAY PURCHASE ITEMS
-    ================================================= */
-
-    function renderPurchaseItems() {
-
-        const body =
-            document.getElementById(
-                "purchaseItemsBody"
-            );
-
-
-        body.innerHTML = "";
-
-
-        if (purchaseItems.length === 0) {
-
-            body.innerHTML = `
-
-                <tr id="emptyItemsRow">
-
-                    <td colspan="9"
-                        style="text-align:center;">
-
-                        No items added yet.
-
-                    </td>
-
-                </tr>
-
-            `;
-
-            updateTotals();
-
-            return;
-
-        }
-
-
-        purchaseItems.forEach(
-            function(item, index) {
-
-                const row =
-                    document.createElement("tr");
-
-
-                row.innerHTML = `
-
-                    <td>
-                        ${index + 1}
-                    </td>
-
-                    <td>
-                        ${item.product}
-                    </td>
-
-                    <td>
-                        ${item.quantity}
-                    </td>
-
-                    <td>
-                        ${item.unit}
-                    </td>
-
-                    <td>
-                        ₹${item.unitPrice.toFixed(2)}
-                    </td>
-
-                    <td>
-                        ${item.gst}%
-                    </td>
-
-                    <td>
-                        ₹${item.discount.toFixed(2)}
-                    </td>
-
-                    <td>
-                        ₹${item.total.toFixed(2)}
-                    </td>
-
-                    <td>
-
-                        <button
-                            type="button"
-                            class="btn-danger btn-sm"
-                            onclick="removePurchaseItem(${index})">
-
-                            Remove
-
-                        </button>
-
-                    </td>
-
-                `;
-
-
-                body.appendChild(row);
-
-            }
-        );
-
-
-        updateTotals();
-
-    }
-
-
-    /* =================================================
-       REMOVE ITEM
-    ================================================= */
-
-    function removePurchaseItem(index) {
-
-        purchaseItems.splice(index, 1);
-
-        renderPurchaseItems();
-
-    }
-
-
-    /* =================================================
-       UPDATE TOTALS
-    ================================================= */
-
-    function updateTotals() {
-
-        let subtotal = 0;
-
-        let discount = 0;
-
-        let tax = 0;
-
-        let grandTotal = 0;
-
-
-        purchaseItems.forEach(
-            function(item) {
-
-                subtotal += item.subtotal;
-
-                discount += item.discount;
-
-                tax += item.tax;
-
-                grandTotal += item.total;
-
-            }
-        );
-
-
-        document.getElementById("subtotal")
-            .textContent =
-            "₹" + subtotal.toFixed(2);
-
-
-        document.getElementById("totalDiscount")
-            .textContent =
-            "₹" + discount.toFixed(2);
-
-
-        document.getElementById("totalTax")
-            .textContent =
-            "₹" + tax.toFixed(2);
-
-
-        document.getElementById("grandTotal")
-            .textContent =
-            "₹" + grandTotal.toFixed(2);
-
-    }
-
-
-    /* =================================================
-       CLEAR ITEM INPUTS
-    ================================================= */
-
-    function clearItemInputs() {
-
-        document.getElementById("product").value = "";
-
-        document.getElementById("itemUnit").value = "";
-
-        document.getElementById("quantity").value = "";
-
-        document.getElementById("unitPrice").value = "";
-
-        document.getElementById("gst").value = "18";
-
-        document.getElementById("discount").value = "0";
-
-    }
-
-
-    /* =================================================
-       CLEAR COMPLETE PURCHASE FORM
-    ================================================= */
 
     function clearPurchaseForm() {
-
         purchaseItems = [];
-
         document.getElementById("purchaseNumber").value = "";
-
         document.getElementById("purchaseDate").value = "";
-
         document.getElementById("supplier").value = "";
-
-        document.getElementById("invoiceNumber").value = "";
-
-        document.getElementById("paymentStatus").value = "Paid";
-
-        document.getElementById("paymentMethod").value = "";
-
+        document.getElementById("paymentStatus").value = "PENDING";
         document.getElementById("purchaseNotes").value = "";
-
-        clearItemInputs();
-
+        document.getElementById("product").value = "";
+        document.getElementById("quantity").value = "";
+        document.getElementById("unitPrice").value = "";
+        document.getElementById("gst").value = "18";
+        document.getElementById("discount").value = "0";
+        updateSelectedUnit();
         renderPurchaseItems();
-
     }
 
+    function addPurchaseItem() {
+        clearMessage();
+        const productId = Number(document.getElementById("product").value);
+        const quantity = Number(document.getElementById("quantity").value);
+        const unitPrice = Number(document.getElementById("unitPrice").value);
+        const gst = Number(document.getElementById("gst").value);
+        const discount = Number(document.getElementById("discount").value || 0);
+        const product = getProduct(productId);
 
-    /* =================================================
-       SAVE PURCHASE
-    ================================================= */
+        if (!product) return showMessage("Please select a valid product.", "error");
+        if (!Number.isFinite(quantity) || quantity <= 0) return showMessage("Quantity must be greater than zero.", "error");
+        if (!Number.isFinite(unitPrice) || unitPrice < 0) return showMessage("Unit price cannot be negative.", "error");
+        if (!Number.isFinite(discount) || discount < 0) return showMessage("Discount cannot be negative.", "error");
 
-    function savePurchase() {
+        const subtotal = quantity * unitPrice;
+        if (discount > subtotal) return showMessage("Discount cannot be greater than the item's subtotal.", "error");
+        const taxAmount = (subtotal - discount) * gst / 100;
+        purchaseItems.push({
+            productId: productId,
+            productName: product.name,
+            unit: getUnitForProduct(productId),
+            quantity: quantity,
+            unitPrice: unitPrice,
+            gst: gst,
+            discountAmount: discount,
+            subtotal: subtotal,
+            taxAmount: taxAmount,
+            lineTotal: subtotal + taxAmount - discount
+        });
+        renderPurchaseItems();
+        document.getElementById("product").value = "";
+        document.getElementById("quantity").value = "";
+        document.getElementById("unitPrice").value = "";
+        document.getElementById("gst").value = "18";
+        document.getElementById("discount").value = "0";
+        updateSelectedUnit();
+    }
 
-        const purchaseNumber =
-            document.getElementById(
-                "purchaseNumber"
-            ).value.trim();
+    function removePurchaseItem(index) {
+        purchaseItems.splice(index, 1);
+        renderPurchaseItems();
+    }
 
-
-        const purchaseDate =
-            document.getElementById(
-                "purchaseDate"
-            ).value;
-
-
-        const supplier =
-            document.getElementById(
-                "supplier"
-            ).value;
-
-
-        if (!purchaseNumber) {
-
-            alert("Please enter purchase number.");
-
-            return;
-
-        }
-
-
-        if (!purchaseDate) {
-
-            alert("Please select purchase date.");
-
-            return;
-
-        }
-
-
-        if (!supplier) {
-
-            alert("Please select supplier.");
-
-            return;
-
-        }
-
-
+    function renderPurchaseItems() {
+        const body = document.getElementById("purchaseItemsBody");
         if (purchaseItems.length === 0) {
-
-            alert("Please add at least one purchase item.");
-
-            return;
-
+            body.innerHTML = '<tr><td colspan="9" class="empty-state">No items added yet.</td></tr>';
+        } else {
+            body.innerHTML = purchaseItems.map(function(item, index) {
+                return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(item.productName) + '</td><td>' + escapeHtml(item.quantity) +
+                    '</td><td>' + escapeHtml(item.unit) + '</td><td>' + money(item.unitPrice) + '</td><td>' + escapeHtml(item.gst) +
+                    '%</td><td>' + money(item.discountAmount) + '</td><td>' + money(item.lineTotal) +
+                    '</td><td><button type="button" class="btn-danger btn-sm" onclick="removePurchaseItem(' + index + ')">Remove</button></td></tr>';
+            }).join("");
         }
-
-
-        const grandTotal =
-            document.getElementById(
-                "grandTotal"
-            ).textContent;
-
-
-        alert(
-            "Purchase " +
-            purchaseNumber +
-            " saved successfully.\n\n" +
-            "Supplier: " +
-            supplier +
-            "\n" +
-            "Total: " +
-            grandTotal
-        );
-
-
-        hidePurchaseForm();
-
+        updateTotals();
     }
 
-
-    /* =================================================
-       SEARCH PURCHASES
-    ================================================= */
-
-    function searchPurchases() {
-
-        const search =
-            document.getElementById(
-                "purchaseSearch"
-            ).value.toLowerCase();
-
-
-        const rows =
-            document.querySelectorAll(
-                "#purchasesTable tbody tr"
-            );
-
-
-        rows.forEach(
-            function(row) {
-
-                const text =
-                    row.textContent.toLowerCase();
-
-
-                row.style.display =
-                    text.includes(search)
-                    ? ""
-                    : "none";
-
-            }
-        );
-
+    function updateTotals() {
+        const totals = purchaseItems.reduce(function(acc, item) {
+            acc.subtotal += Number(item.subtotal) || 0;
+            acc.discount += Number(item.discountAmount) || 0;
+            acc.tax += Number(item.taxAmount) || 0;
+            acc.total += Number(item.lineTotal) || 0;
+            return acc;
+        }, { subtotal: 0, discount: 0, tax: 0, total: 0 });
+        document.getElementById("subtotal").textContent = money(totals.subtotal);
+        document.getElementById("totalDiscount").textContent = money(totals.discount);
+        document.getElementById("totalTax").textContent = money(totals.tax);
+        document.getElementById("grandTotal").textContent = money(totals.total);
     }
 
-
-    /* =================================================
-       FILTER PURCHASES
-    ================================================= */
-
-    function filterPurchases() {
-
-        const filter =
-            document.getElementById(
-                "statusFilter"
-            ).value;
-
-
-        const rows =
-            document.querySelectorAll(
-                "#purchasesTable tbody tr"
-            );
-
-
-        rows.forEach(
-            function(row) {
-
-                const status =
-                    row.cells[7]
-                        .textContent
-                        .trim();
-
-
-                if (
-                    filter === "all" ||
-                    status === filter
-                ) {
-
-                    row.style.display = "";
-
-                } else {
-
-                    row.style.display = "none";
-
-                }
-
-            }
-        );
-
+    function normalizeStatus(status) {
+        const value = String(status || "PENDING").toUpperCase();
+        if (value === "PAID") return "PAID";
+        if (value === "PARTIAL") return "PARTIAL";
+        return "PENDING";
     }
 
-
-    /* =================================================
-       VIEW PURCHASE
-    ================================================= */
-
-    function viewPurchase(purchaseNumber) {
-
-        alert(
-            "Viewing purchase: " +
-            purchaseNumber +
-            "\n\n" +
-            "Detailed purchase view will be connected " +
-            "to the database later."
-        );
-
+    function statusLabel(status) {
+        const normalized = normalizeStatus(status);
+        return normalized.charAt(0) + normalized.slice(1).toLowerCase();
     }
 
+    function calculatePurchase(purchase) {
+        const items = Array.isArray(purchase.items) ? purchase.items : [];
+        return items.reduce(function(acc, item) {
+            const qty = Number(item.quantity) || 0;
+            const price = Number(item.unitPrice) || 0;
+            const discount = Number(item.discountAmount) || 0;
+            const tax = Number(item.taxAmount) || 0;
+            acc.subtotal += qty * price;
+            acc.discount += discount;
+            acc.tax += tax;
+            acc.quantity += qty;
+            return acc;
+        }, { subtotal: 0, discount: 0, tax: 0, quantity: 0 });
+    }
 
-    /* =================================================
-       DELETE PURCHASE
-    ================================================= */
-
-    function deletePurchase(purchaseNumber) {
-
-        const confirmed =
-            confirm(
-                "Are you sure you want to delete " +
-                purchaseNumber +
-                "?"
-            );
-
-
-        if (confirmed) {
-
-            alert(
-                "Purchase " +
-                purchaseNumber +
-                " deleted successfully."
-            );
-
+    function renderPurchases() {
+        const search = document.getElementById("purchaseSearch").value.trim().toLowerCase();
+        const filter = document.getElementById("statusFilter").value;
+        const rows = purchases.filter(function(p) {
+            const searchable = (p.purchaseNo + " " + getSupplierName(p.supplierId)).toLowerCase();
+            return searchable.includes(search) && (filter === "ALL" || normalizeStatus(p.paymentStatus) === filter);
+        });
+        const body = document.getElementById("purchasesBody");
+        if (rows.length === 0) {
+            body.innerHTML = '<tr><td colspan="9" class="empty-state">' +
+                (purchases.length === 0 ? 'No purchases yet. Select <strong>+ New Purchase</strong> to record your first supplier purchase.' : 'No purchases match your search or payment filter.') +
+                '</td></tr>';
+        } else {
+            body.innerHTML = rows.map(function(p) {
+                const totals = calculatePurchase(p);
+                const grandTotal = Number(p.totalAmount) || totals.subtotal + totals.tax - totals.discount;
+                const status = normalizeStatus(p.paymentStatus);
+                return '<tr><td>' + escapeHtml(p.purchaseNo) + '</td><td>' + escapeHtml(p.purchaseDate || "") + '</td><td>' +
+                    escapeHtml(getSupplierName(p.supplierId)) + '</td><td>' + (Array.isArray(p.items) ? p.items.length : 0) +
+                    '</td><td>' + money(totals.subtotal - totals.discount) + '</td><td>' + money(totals.tax) + '</td><td>' + money(grandTotal) +
+                    '</td><td>' + escapeHtml(statusLabel(status)) + '</td><td><div class="purchase-actions">' +
+                    '<button type="button" class="btn-edit btn-sm" onclick="viewPurchase(' + Number(p.id) + ')">View</button>' +
+                    '<button type="button" class="btn-secondary btn-sm" onclick="editPurchase(' + Number(p.id) + ')">Edit</button>' +
+                    '<button type="button" class="btn-danger btn-sm" onclick="deletePurchase(' + Number(p.id) + ')">Delete</button>' +
+                    '</div></td></tr>';
+            }).join("");
         }
-
+        updateStats();
     }
 
+    function updateStats() {
+        const now = new Date();
+        let monthTotal = 0;
+        let unpaidTotal = 0;
+        let quantityTotal = 0;
+        purchases.forEach(function(p) {
+            const total = Number(p.totalAmount) || 0;
+            const date = p.purchaseDate ? new Date(p.purchaseDate + "T00:00:00") : null;
+            if (date && date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()) monthTotal += total;
+            if (normalizeStatus(p.paymentStatus) !== "PAID") unpaidTotal += total;
+            quantityTotal += calculatePurchase(p).quantity;
+        });
+        document.getElementById("statPurchaseCount").textContent = String(purchases.length);
+        document.getElementById("statThisMonth").textContent = money(monthTotal);
+        document.getElementById("statPending").textContent = money(unpaidTotal);
+        document.getElementById("statQuantity").textContent = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 3 }).format(quantityTotal);
+    }
+
+    async function refreshPurchases() {
+        const data = await apiRequest(API + "/purchases");
+        purchases = Array.isArray(data) ? data : [];
+        renderPurchases();
+    }
+
+    async function loadPageData() {
+        clearMessage();
+        try {
+            const results = await Promise.all([
+                apiRequest(API + "/suppliers"),
+                apiRequest(API + "/products"),
+                apiRequest(API + "/units"),
+                apiRequest(API + "/purchases")
+            ]);
+            suppliers = Array.isArray(results[0]) ? results[0] : [];
+            products = Array.isArray(results[1]) ? results[1] : [];
+            units = Array.isArray(results[2]) ? results[2] : [];
+            purchases = Array.isArray(results[3]) ? results[3] : [];
+            loadSupplierOptions();
+            loadProductOptions();
+            renderPurchases();
+            if (suppliers.length === 0) showMessage("Add a supplier on the Suppliers page before recording a purchase.", "error");
+            else if (products.length === 0) showMessage("Add a product on the Products page before recording a purchase.", "error");
+        } catch (error) {
+            document.getElementById("purchasesBody").innerHTML = '<tr><td colspan="9" class="empty-state">Could not load purchases. ' + escapeHtml(error.message) + '</td></tr>';
+            showMessage(error.message || "Unable to load purchase data.", "error");
+        }
+    }
+
+    function validatePurchaseForm() {
+        if (!document.getElementById("purchaseNumber").value.trim()) throw new Error("Purchase number is required.");
+        if (!document.getElementById("purchaseDate").value) throw new Error("Purchase date is required.");
+        if (!document.getElementById("supplier").value) throw new Error("Select a supplier.");
+        if (purchaseItems.length === 0) throw new Error("Add at least one purchase item.");
+    }
+
+    async function savePurchase() {
+        clearMessage();
+        const button = document.getElementById("savePurchaseButton");
+        try {
+            validatePurchaseForm();
+            button.disabled = true;
+            button.textContent = "Saving...";
+            const payload = {
+                purchaseNo: document.getElementById("purchaseNumber").value.trim(),
+                supplierId: Number(document.getElementById("supplier").value),
+                purchaseDate: document.getElementById("purchaseDate").value,
+                paymentStatus: document.getElementById("paymentStatus").value,
+                notes: document.getElementById("purchaseNotes").value.trim(),
+                items: purchaseItems.map(function(item) {
+                    return {
+                        productId: Number(item.productId),
+                        quantity: Number(item.quantity),
+                        unitPrice: Number(item.unitPrice),
+                        taxAmount: Number(item.taxAmount) || 0,
+                        discountAmount: Number(item.discountAmount) || 0
+                    };
+                })
+            };
+            if (editingPurchaseId == null) {
+                await apiRequest(API + "/purchases", { method: "POST", body: JSON.stringify(payload) });
+                showMessage("Purchase saved successfully.", "success");
+            } else {
+                await apiRequest(API + "/purchases/" + editingPurchaseId, { method: "PUT", body: JSON.stringify(payload) });
+                showMessage("Purchase updated successfully.", "success");
+            }
+            document.getElementById("purchaseForm").style.display = "none";
+            clearPurchaseForm();
+            editingPurchaseId = null;
+            await refreshPurchases();
+        } catch (error) {
+            showMessage(error.message || "Could not save the purchase.", "error");
+        } finally {
+            button.disabled = false;
+            button.textContent = editingPurchaseId == null ? "Save Purchase" : "Update Purchase";
+        }
+    }
+
+    function viewPurchase(id) {
+        const p = purchases.find(function(item) { return Number(item.id) === Number(id); });
+        if (!p) return showMessage("Purchase not found. Refresh the page and try again.", "error");
+        const totals = calculatePurchase(p);
+        const lines = (p.items || []).map(function(item, index) {
+            const product = getProduct(item.productId);
+            return (index + 1) + ". " + (product ? product.name : "Product #" + item.productId) +
+                " — Qty: " + item.quantity + " × " + money(item.unitPrice) +
+                ", Discount: " + money(item.discountAmount) + ", Tax: " + money(item.taxAmount) +
+                ", Total: " + money(item.lineTotal);
+        }).join("\n");
+        alert("Purchase: " + p.purchaseNo + "\nDate: " + (p.purchaseDate || "") + "\nSupplier: " + getSupplierName(p.supplierId) +
+            "\nPayment status: " + statusLabel(p.paymentStatus) + "\n\nItems:\n" + (lines || "No item details") +
+            "\n\nSubtotal: " + money(totals.subtotal) + "\nDiscount: " + money(totals.discount) +
+            "\nTax: " + money(totals.tax) + "\nGrand total: " + money(p.totalAmount) +
+            (p.notes ? "\n\nNotes: " + p.notes : ""));
+    }
+
+    async function editPurchase(id) {
+        clearMessage();
+        const p = purchases.find(function(item) { return Number(item.id) === Number(id); });
+        if (!p) return showMessage("Purchase not found. Refresh the page and try again.", "error");
+        if ((p.items || []).some(function(item) { return !getProduct(item.productId); })) {
+            return showMessage("One or more products in this purchase are no longer available. The purchase cannot be edited safely.", "error");
+        }
+        editingPurchaseId = Number(p.id);
+        document.getElementById("purchaseFormTitle").textContent = "Edit Purchase";
+        document.getElementById("savePurchaseButton").textContent = "Update Purchase";
+        document.getElementById("purchaseNumber").value = p.purchaseNo || "";
+        document.getElementById("purchaseDate").value = p.purchaseDate || "";
+        loadSupplierOptions(p.supplierId);
+        document.getElementById("paymentStatus").value = normalizeStatus(p.paymentStatus);
+        document.getElementById("purchaseNotes").value = p.notes || "";
+        purchaseItems = (p.items || []).map(function(item) {
+            const product = getProduct(item.productId);
+            const qty = Number(item.quantity) || 0;
+            const unitPrice = Number(item.unitPrice) || 0;
+            const discount = Number(item.discountAmount) || 0;
+            const tax = Number(item.taxAmount) || 0;
+            const subtotal = qty * unitPrice;
+            const taxable = Math.max(0, subtotal - discount);
+            return {
+                productId: Number(item.productId),
+                productName: product.name,
+                unit: getUnitForProduct(item.productId),
+                quantity: qty,
+                unitPrice: unitPrice,
+                gst: taxable > 0 ? Math.round((tax / taxable) * 10000) / 100 : 0,
+                discountAmount: discount,
+                subtotal: subtotal,
+                taxAmount: tax,
+                lineTotal: Number(item.lineTotal) || subtotal + tax - discount
+            };
+        });
+        renderPurchaseItems();
+        document.getElementById("purchaseForm").style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deletePurchase(id) {
+        const p = purchases.find(function(item) { return Number(item.id) === Number(id); });
+        if (!p) return showMessage("Purchase not found. Refresh the page and try again.", "error");
+        if (!confirm("Delete purchase " + p.purchaseNo + " and its saved item lines? This cannot be undone.")) return;
+        clearMessage();
+        try {
+            await apiRequest(API + "/purchases/" + id, { method: "DELETE" });
+            await refreshPurchases();
+            showMessage("Purchase " + p.purchaseNo + " deleted successfully.", "success");
+        } catch (error) {
+            showMessage(error.message || "Could not delete the purchase.", "error");
+        }
+    }
+
+    document.getElementById("product").addEventListener("change", updateSelectedUnit);
+    document.addEventListener("DOMContentLoaded", loadPageData);
 </script>
-
 </body>
 </html>
