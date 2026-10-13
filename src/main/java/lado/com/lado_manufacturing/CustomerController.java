@@ -25,7 +25,8 @@ public class CustomerController {
             String address,
             String city,
             String state,
-            String pincode
+            String pincode,
+            String isActive
     ) {}
 
     public record CustomerDto(
@@ -82,7 +83,7 @@ public class CustomerController {
         customer.setCity(clean(request.city()));
         customer.setState(clean(request.state()));
         customer.setPincode(clean(request.pincode()));
-        customer.setIsActive("Y");
+        customer.setIsActive(normalizeStatus(request.isActive()));
 
         return toDto(customerRepository.save(customer));
     }
@@ -122,6 +123,7 @@ public class CustomerController {
         customer.setCity(clean(request.city()));
         customer.setState(clean(request.state()));
         customer.setPincode(clean(request.pincode()));
+        customer.setIsActive(normalizeStatus(request.isActive()));
 
         return toDto(customerRepository.save(customer));
     }
@@ -238,5 +240,13 @@ public class CustomerController {
 
     private String clean(String value) {
         return value == null ? null : value.trim();
+    }
+
+    private String normalizeStatus(String value) {
+        if (value == null || value.isBlank()) return "Y";
+        String status = value.trim();
+        if ("Y".equalsIgnoreCase(status) || "ACTIVE".equalsIgnoreCase(status)) return "Y";
+        if ("N".equalsIgnoreCase(status) || "INACTIVE".equalsIgnoreCase(status)) return "N";
+        throw new IllegalArgumentException("Customer status must be Active or Inactive.");
     }
 }
