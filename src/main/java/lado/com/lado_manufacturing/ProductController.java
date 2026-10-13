@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -145,7 +146,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(
+    public org.springframework.http.ResponseEntity<?> delete(
             @PathVariable Long id,
             @AuthenticationPrincipal CompanyUserDetails user) {
 
@@ -153,18 +154,28 @@ public class ProductController {
 
         Product product = productRepository
                 .findByProductIdAndCompanyId(id, companyId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Product not found."));
+                .orElse(null);
+
+        if (product == null) {
+            return org.springframework.http.ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Product not found."));
+        }
 
         try {
             productRepository.delete(product);
             productRepository.flush();
 
         } catch (DataAccessException e) {
-            throw new IllegalArgumentException(
-                    "This product is already used in transactions and cannot be deleted.");
+            return org.springframework.http.ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of(
+                            "error",
+                            "This product is already used in a purchase, sale, or another transaction and cannot be deleted. Keep the product record so transaction history remains accurate."
+                    ));
         }
+
+        return org.springframework.http.ResponseEntity.noContent().build();
     }
 
     private void validate(ProductRequest request) {
