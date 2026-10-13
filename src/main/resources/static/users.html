@@ -2,7 +2,21 @@
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Users - LADO Manufacturing</title><link rel="stylesheet" href="/css/common.css">
 <style>.msg{display:none;padding:12px;margin:12px 0;border-radius:8px}.msg.error{display:block;background:#fff0f0;color:#8b1e1e}.msg.ok{display:block;background:#eefaf1;color:#176b35}.hidden{display:none!important}.empty{text-align:center;padding:24px;color:#667085}.pill{padding:4px 9px;border-radius:99px;font-size:12px}.on{background:#e8f7ed;color:#176b35}.off{background:#f1f2f4;color:#596273}.actions{display:flex;gap:6px;flex-wrap:wrap}.form-actions{display:flex;gap:10px;margin-top:16px}.hint{font-size:13px;color:#667085}</style>  <link rel="stylesheet" href="/css/app-theme.css">
 </head>
-<body><header class="site-header"><div class="container header-inner"><div class="brand"><div class="brand-icon">L</div><div><div class="brand-name">LADO Manufacturing</div><div class="brand-subtitle">Management System</div></div></div><nav class="main-nav"><a href="/dashboard.html">Dashboard</a><a href="/categories.html">Categories</a><a href="/units.html">Units</a><a href="/products.html">Products</a><a href="/suppliers.html">Suppliers</a><a href="/customers.html">Customers</a><a href="/purchases.html">Purchases</a><a href="/sales.html">Sales</a><a href="/inventory.html">Inventory</a><a href="/accounts.html">Accounts</a><a href="/payments.html">Payments</a><a href="/reports.html">Reports</a><a class="active" href="/users.html">Users</a></nav></div></header>
+<body><header class="site-header"><div class="container header-inner"><div class="brand"><div class="brand-icon">L</div><div><div class="brand-name">LADO Manufacturing</div><div class="brand-subtitle">Management System</div></div></div><nav class="main-nav" aria-label="Main navigation">
+            <a href="/dashboard.html">Dashboard</a>
+            <a href="/categories.html">Categories</a>
+            <a href="/units.html">Units</a>
+            <a href="/products.html">Products</a>
+            <a href="/suppliers.html">Suppliers</a>
+            <a href="/customers.html">Customers</a>
+            <a href="/purchases.html">Purchases</a>
+            <a href="/sales.html">Sales</a>
+            <a href="/inventory.html">Inventory</a>
+            <a href="/accounts.html">Accounts</a>
+            <a href="/payments.html">Payments</a>
+            <a href="/reports.html">Reports</a>
+            <a href="/users.html" class="active" aria-current="page">Users</a>
+        </nav></div></header>
 <main class="container"><section class="page-header"><div><h1 class="page-title">Users</h1><p class="page-subtitle">Manage user accounts for your company.</p></div><div class="page-actions"><button class="btn-primary" id="add">+ Add User</button></div></section>
 <div id="msg" class="msg" role="status"></div><section id="denied" class="card hidden"><h2 class="card-title">Administrator access required</h2><p class="card-subtitle">Only an administrator can manage accounts.</p></section><div id="workspace">
 <section class="stats-grid"><div class="stat-card blue"><div class="stat-label">Total Users</div><div class="stat-value" id="total">—</div></div><div class="stat-card green"><div class="stat-label">Active Users</div><div class="stat-value" id="active">—</div></div><div class="stat-card purple"><div class="stat-label">Administrators</div><div class="stat-value" id="admins">—</div></div><div class="stat-card orange"><div class="stat-label">Inactive Users</div><div class="stat-value" id="inactive">—</div></div></section>
