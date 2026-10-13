@@ -20,6 +20,40 @@ public class AccountRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Transactional
+    public void createAccount(
+            Long companyId,
+            String accountName,
+            String accountType,
+            BigDecimal openingBalance) {
+
+        String duplicateSql = """
+            SELECT COUNT(*)
+            FROM ACCOUNTS
+            WHERE COMPANY_ID = ?
+              AND UPPER(ACCOUNT_NAME) = UPPER(?)
+            """;
+        Integer duplicates = jdbcTemplate.queryForObject(
+            duplicateSql, Integer.class, companyId, accountName
+        );
+        if (duplicates != null && duplicates > 0) {
+            throw new IllegalArgumentException(
+                "An account with this name already exists."
+            );
+        }
+
+        String sql = """
+            INSERT INTO ACCOUNTS
+                (COMPANY_ID, ACCOUNT_NAME, ACCOUNT_TYPE,
+                 OPENING_BALANCE, CURRENT_BALANCE, IS_ACTIVE)
+            VALUES (?, ?, ?, ?, ?, 'Y')
+            """;
+        jdbcTemplate.update(
+            sql, companyId, accountName, accountType,
+            openingBalance, openingBalance
+        );
+    }
+
     public List<Account> findAllAccounts(Long companyId) {
         String sql = """
             SELECT ACCOUNT_ID, COMPANY_ID, ACCOUNT_NAME, ACCOUNT_TYPE,
