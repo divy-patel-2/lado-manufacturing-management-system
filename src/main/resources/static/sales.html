@@ -598,20 +598,6 @@
 
 
 
-                <div class="form-group">
-
-                    <label for="customerInvoice">
-                        Invoice Number
-                    </label>
-
-                    <input
-                        type="text"
-                        id="customerInvoice"
-                        placeholder="Example: SALE-INV-1025"
-                    >
-
-                </div>
-
 
 
                 <div class="form-group">
@@ -642,38 +628,6 @@
                 </div>
 
 
-
-                <div class="form-group">
-
-                    <label for="salePaymentMethod">
-                        Payment Method
-                    </label>
-
-                    <select id="salePaymentMethod">
-
-                        <option value="">
-                            Select Payment Method
-                        </option>
-
-                        <option value="Cash">
-                            Cash
-                        </option>
-
-                        <option value="Bank Transfer">
-                            Bank Transfer
-                        </option>
-
-                        <option value="UPI">
-                            UPI
-                        </option>
-
-                        <option value="Cheque">
-                            Cheque
-                        </option>
-
-                    </select>
-
-                </div>
 
             </div>
 
@@ -725,37 +679,7 @@
                         Unit
                     </label>
 
-                    <select id="saleUnit">
-
-                        <option value="">
-                            Select Unit
-                        </option>
-
-                        <option value="pcs">
-                            Piece (pcs)
-                        </option>
-
-                        <option value="kg">
-                            Kilogram (kg)
-                        </option>
-
-                        <option value="g">
-                            Gram (g)
-                        </option>
-
-                        <option value="m">
-                            Meter (m)
-                        </option>
-
-                        <option value="set">
-                            Set
-                        </option>
-
-                        <option value="box">
-                            Box
-                        </option>
-
-                    </select>
+                    <input id="saleUnit" type="text" readonly placeholder="Unit is loaded from the selected product">
 
                 </div>
 
@@ -1267,6 +1191,8 @@
 
     let productsData = [];
 
+    let unitsData = [];
+
     let editingSaleId = null;
 
 
@@ -1720,6 +1646,8 @@
 
             await loadProducts();
 
+            await loadUnits();
+
             await loadSales();
 
         }
@@ -1776,7 +1704,12 @@
 
 
 
-            customersData.forEach(
+            customersData
+                .filter(function (customer) {
+                    const status = String(customer.isActive == null ? "Y" : customer.isActive).toUpperCase();
+                    return status !== "N" && status !== "INACTIVE";
+                })
+                .forEach(
                 function (customer) {
 
                     const option =
@@ -1881,7 +1814,12 @@
 
 
 
-            productsData.forEach(
+            productsData
+                .filter(function (product) {
+                    const status = String(product.isActive == null ? "Y" : product.isActive).toUpperCase();
+                    return status !== "N" && status !== "INACTIVE";
+                })
+                .forEach(
                 function (product) {
 
                     const option =
@@ -1938,59 +1876,50 @@
 
 
     /* =================================================
+       LOAD UNITS FROM DATABASE
+    ================================================== */
+
+    async function loadUnits() {
+        try {
+            const response = await apiFetch("/api/units");
+            if (!response.ok) throw new Error(await getErrorMessage(response));
+            unitsData = await response.json();
+            updateSelectedProductFields();
+        } catch (error) {
+            console.error("Unit loading error:", error);
+            showNotification("error", "Unit Loading Failed", error.message);
+        }
+    }
+
+    function getProductUnit(productId) {
+        const product = productsData.find(function(p) {
+            return Number(p.id) === Number(productId);
+        });
+        if (!product) return "";
+        const unit = unitsData.find(function(u) {
+            return Number(u.id) === Number(product.unitId);
+        });
+        if (!unit) return "";
+        return unit.symbol ? unit.name + " (" + unit.symbol + ")" : unit.name;
+    }
+
+    function updateSelectedProductFields() {
+        const productId = Number(document.getElementById("saleProduct").value);
+        const product = productsData.find(function(p) {
+            return Number(p.id) === productId;
+        });
+        document.getElementById("saleUnit").value = product ? getProductUnit(productId) : "";
+        if (product && product.sellingPrice != null) {
+            document.getElementById("saleUnitPrice").value = product.sellingPrice;
+        }
+    }
+
+    /* =================================================
        PRODUCT SELECTION
        AUTO-FILL SELLING PRICE
     ================================================== */
 
-    document
-        .getElementById(
-            "saleProduct"
-        )
-        .addEventListener(
-            "change",
-            function () {
-
-                const productId =
-                    Number(
-                        this.value
-                    );
-
-
-
-                const product =
-                    productsData.find(
-                        function (p) {
-
-                            return Number(
-                                p.id
-                            ) === productId;
-
-                        }
-                    );
-
-
-
-                if (product) {
-
-                    if (
-                        product.sellingPrice !==
-                        undefined &&
-                        product.sellingPrice !==
-                        null
-                    ) {
-
-                        document.getElementById(
-                            "saleUnitPrice"
-                        ).value =
-                            product.sellingPrice;
-
-                    }
-
-                }
-
-            }
-        );
-
+    document.getElementById("saleProduct").addEventListener("change", updateSelectedProductFields);
 
 
     /* =================================================
@@ -2681,10 +2610,6 @@
 
 
 
-        document.getElementById(
-            "customerInvoice"
-        ).value = "";
-
 
 
         document.getElementById(
@@ -2693,10 +2618,6 @@
             "PENDING";
 
 
-
-        document.getElementById(
-            "salePaymentMethod"
-        ).value = "";
 
 
 
@@ -3874,23 +3795,6 @@
 
 
 
-            /*
-             * These two fields are currently not
-             * stored in SALES table.
-             */
-
-            document.getElementById(
-                "customerInvoice"
-            ).value = "";
-
-
-
-            document.getElementById(
-                "salePaymentMethod"
-            ).value = "";
-
-
-
             saleItems = [];
 
 
@@ -3965,7 +3869,7 @@
                                 : "Unknown Product",
 
                         unit:
-                            "",
+                            getProductUnit(item.productId),
 
                         quantity:
                             Number(
